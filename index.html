@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Muhammad Zareii – Portfolio</title>
+  <meta name="description" content="Portfolio of Muhammad Zareii — Electronics Engineer & WCE Master's student at the University of Oulu. Semiconductor devices, photonics, embedded hardware, and circuit design." />
+  <style>
+    :root{
+      --brand:#003366;
+      --ink:#222;
+      --bg:#fefefe;
+      --card:#f9f9f9;
+      --muted:#555;
+      --rule:#ddd;
+      --accent:#aaddff;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Georgia, serif;
+      margin:0; color:var(--ink); background:var(--bg); line-height:1.6;
+    }
+
+    /* Header */
+    header{
+      background:var(--brand); color:#fff; padding:2.25rem 1rem;
+    }
+    .header-flex{
+      display:flex; align-items:center; justify-content:center; gap:1.75rem; flex-wrap:wrap;
+      max-width:960px; margin:auto;
+    }
+    header h1{margin:0; font-size:2.15rem; letter-spacing:.2px}
+    header p{margin:.5rem 0 0; font-size:1.08rem}
+    .profile-pic{
+      width:160px; height:160px; border-radius:50%; object-fit:cover;
+      border:4px solid #fff; box-shadow:0 4px 10px rgba(0,0,0,0.25);
+    }
+    .cv-btn{
+      display:inline-block; margin-top:1rem; padding:.55rem 1.05rem;
+      background:#fff; color:var(--brand); border:2px solid #fff;
+      border-radius:6px; font-weight:700; text-decoration:none;
+    }
+    .cv-btn:hover{background:var(--accent); border-color:var(--accent); color:var(--brand)}
+
+    /* Layout */
+    .container{max-width:960px; margin:auto; padding:2rem 1rem}
+    h2{border-bottom:2px solid var(--brand); padding-bottom:.35rem; margin:2rem 0 1rem; letter-spacing:.2px;}
+    .subtle{color:var(--muted); font-size:.95rem}
+
+    .grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem 2rem;}
+    .list{margin:.25rem 0 0; padding-left:1.1rem;}
+    .list li{margin:.2rem 0}
+
+    /* Cards */
+    .card{background:var(--card); border:1px solid var(--rule); border-radius:6px; padding:1rem; margin:1.2rem 0;}
+
+    /* Gallery */
+    .project-gallery{display:flex; flex-wrap:wrap; gap:1.25rem; margin-top:.8rem;}
+    .project-gallery figure{
+      flex:1 1 45%; /* 2 per row */
+      margin:0; text-align:center; font-size:.92rem; color:var(--muted);
+      background:#fff; border:1px solid var(--rule); border-radius:6px; padding:.5rem;
+    }
+    .project-gallery .thumb{
+      display:block; width:100%; height:auto; max-height:240px; object-fit:contain;
+      border-radius:4px; margin:0 auto;
+    }
+    .project-gallery a{display:block; text-decoration:none}
+    .project-gallery a:hover .thumb{filter:brightness(0.97)}
+    .project-gallery figcaption{margin-top:.4rem}
+
+    /* Footer */
+    .meta{color:var(--muted); font-size:.95rem}
+    footer{background:var(--brand); color:#fff; text-align:center; padding:1rem; margin-top:2rem;}
+    footer a{color:var(--accent); text-decoration:none}
+    a{color:#0a4d9b; text-decoration:none}
+    a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-flex">
+    <img src="images/profile.jpg" alt="Muhammad Zareii" class="profile-pic">
+    <div>
+      <h1>Muhammad Zareii</h1>
+      <p>Electronics Engineer & Master’s Student in Wireless Communications Engineering, University of Oulu</p>
+      <p><a href="files/Muhammad_Zareii_CV.pdf" target="_blank" class="cv-btn" rel="noopener">Download CV</a></p>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- About -->
+  <h2>About Me</h2>
+  <p>
+    I am an <b>Electronics Engineer</b> and a <b>Master’s student in Wireless Communications Engineering (WCE)</b> at the
+    <b>University of Oulu, Finland</b>. My background focuses on <b>electronics, semiconductor device research, photonics, and embedded hardware systems</b>.
+    From 2022 to 2024, I worked as an <b>R&amp;D Engineer at Sepidgaman Parseh</b> (biomedical), contributing to the design and development of advanced electronic systems.
+    I hold a <b>B.Sc. in Electrical Engineering (Electronics)</b> from the <b>University of Tabriz</b>. I aim to bridge rigorous physical modeling with reliable hardware design.
+  </p>
+
+  <!-- Skills -->
+  <h2>Skills</h2>
+  <div class="grid-2 card">
+    <div>
+      <h3 class="subtle">Core Competencies</h3>
+      <ul class="list">
+        <li>Semiconductor devices &amp; optoelectronics</li>
+        <li>Analog electronics</li>
+        <li>Embedded hardware &amp; system integration</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="subtle">Design &amp; Simulation</h3>
+      <ul class="list">
+        <li>COMSOL Multiphysics (EM/photonic structures)</li>
+        <li>MATLAB (modeling &amp; analysis)</li>
+        <li>Altium Designer, Cadence (schematic/PCB)</li>
+        <li>Proteus (verification &amp; test)</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="subtle">Embedded &amp; Interfaces</h3>
+      <ul class="list">
+        <li>Microcontroller platforms</li>
+        <li>I²C / SPI / UART, USB-CDC</li>
+        <li>Sensor integration &amp; data logging</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="subtle">Communication</h3>
+      <ul class="list">
+        <li>English (IELTS 7.5: R 8.5 · L 8 · S 7 · W 6.5)</li>
+        <li>Technical documentation &amp; reporting</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Professional Experience -->
+  <h2>Professional Experience</h2>
+  <div class="card">
+    <h3>Electronics R&D Engineer — Sepidgaman Parseh, Shiraz, Iran <span class="meta">| 2022–2024</span></h3>
+    <p>
+      Worked as an R&D Engineer in biomedical electronics, contributing to product development and applied research. 
+      Focus areas included embedded systems, analog design, and optoelectronic circuits.
+    </p>
+
+    <h4 class="subtle">Notable Projects</h4>
+    <ul class="list">
+      <li><b>Continuous Passive Motion (CPM) Machines:</b> Motor driver modules for rehabilitation devices, enabling smooth and programmable limb movement.</li>
+      <li><b>Color Detection Sensors:</b> Optical sensing modules for biomedical and diagnostic applications.</li>
+      <li><b>Laser Drivers:</b> Precision circuits for laser diodes with regulated current and thermal protection.</li>
+      <li><b>Microcontroller Systems:</b> Embedded programming on AVR, ARM, and ESP32 platforms for control, data acquisition, and communication.</li>
+    </ul>
+
+    <p>
+      <b>Reference:</b> Mr. Reza Ghasemi — CEO, Sepidgaman Parseh  
+      📞 <a href="tel:+989170201266">+98 917 020 1266</a>
+    </p>
+  </div>
+
+  <!-- Education -->
+  <h2>Education</h2>
+  <div class="card">
+    <p>
+      <b>M.Sc., Wireless Communications Engineering (WCE)</b> — University of Oulu, Finland
+      <span class="meta">| 2025–present</span>
+    </p>
+    <hr style="border:0;border-top:1px solid #e6e6e6;margin:0.8rem 0">
+    <p>
+      <b>B.Sc., Electrical Engineering (Electronics)</b> — University of Tabriz, Iran
+      <span class="meta">| 2018–2023</span><br />
+      Emphasis on circuit design, semiconductor device fundamentals, and simulation.
+    </p>
+  </div>
+
+  <!-- Projects -->
+  <h2>Projects</h2>
+
+  <!-- SMPS -->
+  <div class="card project-card">
+    <h3>Switching Mode Power Supply (SMPS) Design <span class="meta">| 2023</span></h3>
+    <p>Designed Buck and Flyback converters with feedback and feedforward control for improved stability and transient response.</p>
+    <div class="project-gallery">
+      <figure>
+        <a href="images/smps_switching_waveform.jpg" target="_blank" rel="noopener">
+          <img src="images/smps_switching_waveform.jpg" alt="SMPS switching waveform" class="thumb">
+        </a>
+        <figcaption>Switching waveform under load</figcaption>
+      </figure>
+      <figure>
+        <a href="images/smps_bode_plot.png" target="_blank" rel="noopener">
+          <img src="images/smps_bode_plot.png" alt="SMPS Bode plot" class="thumb">
+        </a>
+        <figcaption>Bode diagram used for stability assessment</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Wireless Identity -->
+  <div class="card project-card">
+    <h3>Wireless Identity Verification System <span class="meta">| 2023</span></h3>
+    <p>Built a gesture-based identity system using ESP32 nodes and computer vision for local wireless control.</p>
+    <div class="project-gallery">
+      <figure>
+        <a href="images/identity_face_recognition.jpg" target="_blank" rel="noopener">
+          <img src="images/identity_face_recognition.jpg" alt="Face recognition" class="thumb">
+        </a>
+        <figcaption>Identity Tagging and Gesture recognition</figcaption>
+      </figure>
+      <figure>
+        <a href="images/identity_gesture_thumbs_down.jpg" target="_blank" rel="noopener">
+          <img src="images/identity_gesture_thumbs_down.jpg" alt="Thumbs down gesture" class="thumb">
+        </a>
+        <figcaption>Identity Tagging and Gesture recognition</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- COMSOL -->
+  <div class="card project-card">
+    <h3>Simulation of Photonic Crystal All-Optical Gates <span class="meta">| 2023</span></h3>
+    <p>Simulated 2D photonic-crystal logic gates in COMSOL Multiphysics (λ = 1.55 μm). Based on Rani et al., 2015.</p>
+    <div class="project-gallery">
+      <figure>
+        <a href="images/comsol_field_distribution.png" target="_blank" rel="noopener">
+          <img src="images/comsol_field_distribution.png" alt="Field distribution" class="thumb">
+        </a>
+        <figcaption>Field distribution</figcaption>
+      </figure>
+      <figure>
+        <a href="images/comsol_phc_structure.png" target="_blank" rel="noopener">
+          <img src="images/comsol_phc_structure.png" alt="PhC structure" class="thumb">
+        </a>
+        <figcaption>PhC structure: air-hole lattice in silicon</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Data Logger -->
+  <div class="card project-card">
+    <h3>Data Logger Board with Custom UI <span class="meta">| 2025</span></h3>
+    <p>Designed a modular embedded data-logger with SD storage, multi-sensor interfaces, and a custom UI for real-time telemetry.</p>
+    <div class="project-gallery">
+      <figure>
+        <a href="images/hardware.png" target="_blank" rel="noopener">
+          <img src="images/hardware.png" alt="Project hardware" class="thumb">
+        </a>
+        <figcaption>Project Hardware</figcaption>
+      </figure>
+      <figure>
+        <a href="images/datalogger_ui_dashboard.png" target="_blank" rel="noopener">
+          <img src="images/datalogger_ui_dashboard.png" alt="UI dashboard" class="thumb">
+        </a>
+        <figcaption>Dashboard — real-time telemetry panels</figcaption>
+      </figure>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 Muhammad Zareii — <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a></p>
+</footer>
+
+</body>
+</html>
