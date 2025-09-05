@@ -8,5 +8,5 @@ The site is built as a **static HTML/CSS page** and is hosted with **GitHub Page
 ---
 
 ## 🔗 Live Demo
-Once deployed, the site will be available at:
+Available at: https://muhammadzareii.github.io/me/
 
