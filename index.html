@@ -3,291 +3,598 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Muhammad Zareii – Portfolio</title>
-  <meta name="description" content="Portfolio of Muhammad Zareii — Electronics Engineer & WCE Master's student at the University of Oulu. Embedded hardware, signal processing, semiconductor devices, photonics, and circuit design." />
-  <style>
-    :root{
-      --brand:#003366;
-      --ink:#222;
-      --bg:#fefefe;
-      --card:#f9f9f9;
-      --muted:#555;
-      --rule:#ddd;
-      --accent:#aaddff;
-    }
-    *{box-sizing:border-box}
-    body{
-      font-family: Georgia, serif;
-      margin:0; color:var(--ink); background:var(--bg); line-height:1.6;
-    }
-
-    /* Header */
-    header{
-      background:var(--brand); color:#fff; padding:2.25rem 1rem;
-    }
-    .header-flex{
-      display:flex; align-items:center; justify-content:center; gap:1.75rem; flex-wrap:wrap;
-      max-width:960px; margin:auto;
-    }
-    header h1{margin:0; font-size:2.15rem; letter-spacing:.2px}
-    header p{margin:.5rem 0 0; font-size:1.08rem}
-    .profile-pic{
-      width:160px; height:160px; border-radius:50%; object-fit:cover;
-      border:4px solid #fff; box-shadow:0 4px 10px rgba(0,0,0,0.25);
-    }
-    .cv-btn{
-      display:inline-block; margin-top:1rem; padding:.55rem 1.05rem;
-      background:#fff; color:var(--brand); border:2px solid #fff;
-      border-radius:6px; font-weight:700; text-decoration:none;
-    }
-    .cv-btn:hover{background:var(--accent); border-color:var(--accent); color:var(--brand)}
-
-    /* Layout */
-    .container{max-width:960px; margin:auto; padding:2rem 1rem}
-    h2{border-bottom:2px solid var(--brand); padding-bottom:.35rem; margin:2rem 0 1rem; letter-spacing:.2px;}
-    .subtle{color:var(--muted); font-size:.95rem}
-
-    .grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem 2rem;}
-    .list{margin:.25rem 0 0; padding-left:1.1rem;}
-    .list li{margin:.2rem 0}
-
-    /* Cards */
-    .card{background:var(--card); border:1px solid var(--rule); border-radius:6px; padding:1rem; margin:1.2rem 0;}
-
-    /* Gallery */
-    .project-gallery{display:flex; flex-wrap:wrap; gap:1.25rem; margin-top:.8rem;}
-    .project-gallery figure{
-      flex:1 1 45%; /* 2 per row */
-      margin:0; text-align:center; font-size:.92rem; color:var(--muted);
-      background:#fff; border:1px solid var(--rule); border-radius:6px; padding:.5rem;
-    }
-    .project-gallery .thumb{
-      display:block; width:100%; height:auto; max-height:240px; object-fit:contain;
-      border-radius:4px; margin:0 auto;
-    }
-    .project-gallery a{display:block; text-decoration:none}
-    .project-gallery a:hover .thumb{filter:brightness(0.97)}
-    .project-gallery figcaption{margin-top:.4rem}
-
-    /* Footer */
-    .meta{color:var(--muted); font-size:.95rem}
-    footer{background:var(--brand); color:#fff; text-align:center; padding:1rem; margin-top:2rem;}
-    footer a{color:var(--accent); text-decoration:none}
-    a{color:#0a4d9b; text-decoration:none}
-    a:hover{text-decoration:underline}
-  </style>
+  <title>Muhammad Zareii — Electronics Engineer</title>
+  <meta name="description" content="Personal portfolio of Muhammad Zareii — electronics engineer working at the intersection of photonics, embedded systems, and applied intelligence." />
+  <link rel="stylesheet" href="css/style.css?v=3" />
 </head>
 <body>
 
-<header>
-  <div class="header-flex">
-    <img src="images/profile.jpg" alt="Muhammad Zareii" class="profile-pic">
-    <div>
-      <h1>Muhammad Zareii</h1>
-      <p>Electronics Engineer & Master’s Student in Wireless Communications Engineering, University of Oulu</p>
-      <p><a href="files/Muhammad_Zareii_CV.pdf" target="_blank" class="cv-btn" rel="noopener">Download CV</a></p>
-    </div>
+<!-- ══════════ STICKY NAV ══════════ -->
+<header class="site-header">
+  <div class="container">
+    <div class="logo">M. <span>Zareii</span></div>
+    <nav class="site-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="layer-physical.html">Physical &amp; Sim</a>
+      <a href="layer-circuit.html">Circuit &amp; HW</a>
+      <a href="layer-embedded.html">Embedded &amp; FW</a>
+      <a href="layer-intelligence.html">Intelligence</a>
+    </nav>
   </div>
 </header>
 
-<div class="container">
-
-  <!-- About -->
-  <h2>About Me</h2>
-  <p>
-    I am an <b>Electronics Engineer</b> and a <b>Master’s student in Wireless Communications Engineering (WCE)</b> at the
-    <b>University of Oulu, Finland</b>. My background focuses on <b>embedded hardware and electronics</b>, with experience in <b>analog design, wave simulations, and semiconductor device research</b>.
-    From 2022 to 2024, I worked as an <b>R&amp;D Engineer at Sepidgaman Parseh</b> (biomedical), contributing to the design and development of advanced embedded systems.
-    I hold a <b>B.Sc. in Electrical Engineering (Electronics)</b> from the <b>University of Tabriz</b>. My current focus is on <b>reliable hardware and software design for communication systems</b>, supported by research experience in <b>wave simulations and diffractive deep neural networks (D2NNs) for direction-of-arrival estimation</b>.
-  </p>
-
-  <!-- Skills -->
-  <h2>Skills</h2>
-  <div class="grid-2 card">
-    <div>
-      <h3 class="subtle">Programming &amp; Software Development</h3>
-      <ul class="list">
-        <li>C, C++ (embedded systems, firmware)</li>
-        <li>Python (testing, automation, data analysis)</li>
-        <li>MATLAB (signal processing, modeling)</li>
-        <li>Git/GitHub (version control, collaboration)</li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="subtle">Embedded Systems &amp; Tools</h3>
-      <ul class="list">
-        <li>STM32 (CubeIDE, FreeRTOS, peripheral drivers: I²C, SPI, UART)</li>
-        <li>Microcontroller firmware development</li>
-        <li>Real-time data logging and telemetry systems</li>
-        <li>Debugging tools (oscilloscope, logic analyzer, JTAG)</li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="subtle">Signal Processing &amp; Communications</h3>
-      <ul class="list">
-        <li>Modulation and demodulation (AM, PM)</li>
-        <li>Experience with ADSL modem design principles</li>
-        <li>Direction-of-arrival (DoA) estimation with D2NN</li>
-        <li>Wireless communications fundamentals (4G/5G PHY concepts)</li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="subtle">Electronics &amp; Simulation</h3>
-      <ul class="list">
-        <li>Analog and digital circuit design</li>
-        <li>Altium Designer, Proteus</li>
-        <li>Semiconductor device modeling (COMSOL Multiphysics)</li>
-        <li>Photonics and wave simulations</li>
-      </ul>
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-flex">
+      <img src="images/profile.jpg" alt="Muhammad Zareii" class="hero-photo" />
+      <div class="hero-text">
+        <h1>Muhammad Zareii</h1>
+        <div class="subtitle">Electronics Engineer</div>
+        <p style="color:rgba(255,255,255,.8); max-width:580px; margin-top:.5rem;">
+          M.Sc. student in Wireless Communications Engineering at the University of Oulu.
+          Previously M.Sc. Micro/Nano Electronics (Tarbiat Modares) and B.Sc. Electrical Engineering (Tabriz).
+          Two years of industry R&amp;D at Sepidgaman Parseh in Tehran.
+        </p>
+        <div class="hero-links">
+          <a class="btn btn-light" href="https://github.com/muhammadzareii" target="_blank">GitHub</a>
+          <a class="btn btn-ghost" href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Professional Experience -->
-  <h2>Professional Experience</h2>
-  <div class="card">
-    <h3>Electronics R&amp;D Engineer — Sepidgaman Parseh, Shiraz, Iran <span class="meta">| 2022–2024</span></h3>
-    <p>
-      Worked as an R&D Engineer in biomedical electronics, contributing to product development and applied research. 
-      Focus areas included embedded systems, analog design, and optoelectronic circuits.
-    </p>
-
-    <h4 class="subtle">Notable Projects</h4>
-    <ul class="list">
-      <li><b>Continuous Passive Motion (CPM) Machines:</b> Motor driver modules for rehabilitation devices, enabling smooth and programmable limb movement.</li>
-      <li><b>Color Detection Sensors:</b> Optical sensing modules for biomedical and diagnostic applications.</li>
-      <li><b>Laser Drivers:</b> Precision circuits for laser diodes with regulated current and thermal protection.</li>
-      <li><b>Microcontroller Systems:</b> Embedded programming on AVR, ARM, and ESP32 platforms for control, data acquisition, and communication.</li>
-    </ul>
-
-    <p>
-      <b>Reference:</b> Mr. Reza Ghasemi — CEO, Sepidgaman Parseh  
-      📞 <a href="tel:+989170201266">+98 917 020 1266</a>
-    </p>
-  </div>
-
-  <!-- Education -->
-  <h2>Education</h2>
-  <div class="card">
-    <p>
-      <b>M.Sc., Wireless Communications Engineering (WCE)</b> — University of Oulu, Finland
-      <span class="meta">| 2025–present</span>
-    </p>
-    <hr style="border:0;border-top:1px solid #e6e6e6;margin:0.8rem 0">
-    <p>
-      <b>B.Sc., Electrical Engineering (Electronics)</b> — University of Tabriz, Iran
-      <span class="meta">| 2018–2023</span><br />
-      Emphasis on circuit design, semiconductor device fundamentals, and simulation.
-    </p>
-  </div>
-
-  <!-- Projects -->
-  <h2>Projects</h2>
-
-  <!-- SMPS -->
-  <div class="card project-card">
-    <h3>Switching Mode Power Supply (SMPS) Design with UC3842 current-mode PWM controller and external gate driver <span class="meta">| 2023</span></h3>
-    <p>Designed Buck and Flyback converters with feedback and feedforward control for improved stability and transient response.</p>
-    <div class="project-gallery">
-      <figure>
-        <a href="images/smps_output_waveform.jpg" target="_blank" rel="noopener">
-          <img src="images/smps_output_waveform.jpg" alt="SMPS Output waveform" class="thumb">
-        </a>
-        <figcaption>Output Node</figcaption>
-      </figure>
-      <figure>
-        <a href="images/smps_switching_waveform.jpg" target="_blank" rel="noopener">
-          <img src="images/smps_switching_waveform.jpg" alt="SMPS Switching Wave From" class="thumb">
-        </a>
-        <figcaption>Switching Waveform</figcaption>
-      </figure>
+<!-- ══════════ ABOUT ══════════ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">About</h2>
+    <div class="about-grid">
+      <div>
+        <p>
+          I’ve always worked in electronics, but not in the narrow sense of just designing circuits. 
+          For me, it’s one continuous system that starts from physics and extends all the way to working machines — 
+          from the physics of devices, to circuit and hardware design, to embedded systems and higher-level algorithms.
+        </p>
+        <p>
+          What interests me is the connection between layers. 
+          The same electron that follows quantum mechanics in a material ends up shaping a signal on a PCB, 
+          a control loop in firmware, or data going into a model. I haven’t really switched fields over time — 
+          I’ve just worked at different levels of the same system, trying to understand how these layers fit together 
+          and influence one another.
+        </p>
+        <p>
+          My work reflects that. I’ve built optical and electromagnetic simulations, 
+          designed circuits and PCBs, developed embedded systems, and worked on perception 
+          and machine learning problems. Many of these ideas have been tested in real systems, 
+          from robotics platforms to sensing and communication setups, where constraints and imperfections 
+          matter as much as theory. Different tools, same mindset: understand the system from the ground up, 
+          and make sure it actually works in practice.
+        </p>
+        <p>
+          I care about physical correctness. Whether it’s checking energy conservation in an optical 
+          model or validating a hardware system on the bench, I don’t like treating simulations or abstractions 
+          as black boxes.
+        </p>
+        <p>
+          This portfolio is organized the same way I think — as a stack. 
+          From physics and simulation at the bottom, through hardware and embedded systems, 
+          up to higher-level intelligence. Each layer builds on the previous one, and understanding 
+          their interaction is a central part of how I work.
+        </p>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:1rem;">
+          <h3 style="margin-bottom:.7rem; color:var(--brand);">Education</h3>
+          <div style="font-size:.9rem; line-height:1.8;">
+            <div style="margin-bottom:.6rem;">
+              <strong>M.Sc. Wireless Communications Engineering</strong><br/>
+              University of Oulu, Finland · 2025–present
+            </div>
+            <div style="margin-bottom:.6rem;">
+              <strong>M.Sc. Micro/Nano Electronics</strong><br/>
+              Tarbiat Modares University · coursework completed<br/>
+              <span style="color:var(--muted); font-size:.85rem;">Quantum Electronics · Optoelectronics I–II · Advanced Solid State Physics · Advanced Optics</span>
+            </div>
+            <div>
+              <strong>B.Sc. Electrical Engineering</strong><br/>
+              University of Tabriz
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:.7rem; color:var(--brand);">Contact</h3>
+          <div style="font-size:.9rem; line-height:2;">
+            <div>📧 <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a></div>
+            <div>💻 <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></div>
+            <div>📍 Oulu, Finland</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Wireless Identity -->
-  <div class="card project-card">
-    <h3>Wireless Identity Verification System <span class="meta">| 2023</span></h3>
-    <p>Built a gesture-based identity system using ESP32 nodes and computer vision for local wireless control.</p>
-    <div class="project-gallery">
-      <figure>
-        <a href="images/identity_face_recognition.jpg" target="_blank" rel="noopener">
-          <img src="images/identity_face_recognition.jpg" alt="Face recognition" class="thumb">
-        </a>
-        <figcaption>Identity Tagging and Gesture recognition</figcaption>
-      </figure>
-      <figure>
-        <a href="images/identity_gesture_thumbs_down.jpg" target="_blank" rel="noopener">
-          <img src="images/identity_gesture_thumbs_down.jpg" alt="Thumbs down gesture" class="thumb">
-        </a>
-        <figcaption>Identity Tagging and Gesture recognition</figcaption>
-      </figure>
+<!-- ══════════ RESEARCH INTERESTS ══════════ -->
+<section style="background:var(--accent2);">
+  <div class="container">
+    <h2 class="section-title">Research Interests</h2>
+    <p class="section-subtitle">Two areas I am actively reading and thinking about.</p>
+    <div class="research-grid">
+      <div class="research-card">
+        <h3>D2NN &amp; Optical Analog Computing</h3>
+        <div class="ri-tag">Diffractive Deep Neural Networks · Angular Spectrum Method · Physical AI</div>
+        <p>
+          Diffractive Deep Neural Networks (D2NN, Lin et al. 2018) perform inference entirely in the optical
+          domain: phase masks replace weight matrices, and computation happens at the speed of light through
+          free-space diffraction. My interest is in the physical feasibility gap — the distance between a
+          network that converges in simulation and one that can actually be fabricated. This involves sampling
+          theory (ASM band-limit), energy conservation, photon-budget analysis, SNR under detector noise, and
+          Monte Carlo fabrication tolerance analysis. More broadly, I am interested in what it means to
+          implement neural network operations with physical substrates rather than transistors.
+        </p>
+        <div class="tags">
+          <span class="tag">Angular Spectrum Method</span>
+          <span class="tag">FDTD</span>
+          <span class="tag">Optical Computing</span>
+          <span class="tag">Physical AI</span>
+          <span class="tag">Wave Optics</span>
+        </div>
+      </div>
+      <div class="research-card">
+        <h3>QISAT — Quantum Integrated Sensing &amp; Communication</h3>
+        <div class="ri-tag">CV-QKD · Distributed Optical Fiber Sensing · ISAQN</div>
+        <p>
+          The Xu et al. 2024 ISAQN framework (Integrated Sensing And Quantum communication Networks)
+          demonstrates that quantum key distribution (CV-QKD) and distributed optical fiber sensing (DOFS)
+          can coexist on the same fiber through frequency-division multiplexing. The sensing channel uses
+          Rayleigh backscattering for vibration sensing, with pilot-tone phase recovery bringing it to the
+          quantum noise limit — meaning the sensing precision is bounded by quantum mechanics, not classical
+          electronics. I am interested in this convergence: using the same infrastructure for both secure
+          communication and physical-world sensing, and the signal processing that makes both work
+          simultaneously without mutual degradation.
+        </p>
+        <div class="tags">
+          <span class="tag">CV-QKD</span>
+          <span class="tag">DOFS</span>
+          <span class="tag">Quantum Sensing</span>
+          <span class="tag">Photonics</span>
+          <span class="tag">Signal Processing</span>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- COMSOL -->
-  <div class="card project-card">
-    <h3>Simulation of Photonic Crystal All-Optical Gates <span class="meta">| 2023</span></h3>
-    <p>Simulated 2D photonic-crystal logic gates in COMSOL Multiphysics (λ = 1.55 μm). Based on Rani et al., 2015.</p>
-    <div class="project-gallery">
-      <figure>
-        <a href="images/comsol_field_distribution.png" target="_blank" rel="noopener">
-          <img src="images/comsol_field_distribution.png" alt="Field distribution" class="thumb">
-        </a>
-        <figcaption>Field distribution</figcaption>
-      </figure>
-      <figure>
-        <a href="images/comsol_phc_structure.png" target="_blank" rel="noopener">
-          <img src="images/comsol_phc_structure.png" alt="PhC structure" class="thumb">
-        </a>
-        <figcaption>PhC structure: air-hole lattice in silicon</figcaption>
-      </figure>
+<!-- ══════════ PROJECT LAYERS ══════════ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Projects by Layer</h2>
+    <p class="section-subtitle">Sixteen projects across four levels of the electronics stack.</p>
+
+    <!-- Layer 1: Physical & Simulation -->
+    <div style="margin-top:2rem;">
+      <div style="display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;">
+        <span class="layer-badge layer-physical">Layer 1</span>
+        <h3 style="font-size:1.3rem; margin:0;"><a href="layer-physical.html">Physical &amp; Simulation</a></h3>
+      </div>
+      <p style="color:var(--muted); font-size:.95rem; margin-bottom:1rem;">
+        Device-level physics, electromagnetic simulation, quantum mechanics, photonic design — the foundation.
+      </p>
+      <div class="project-grid">
+        <div class="project-card">
+            <img src="images/D2NN_layers_height_all.png" alt="D2NN" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-physical">Physical</span>
+              <h3><a href="projects/d2nn.html" class="stretched-link">D2NN Physical Feasibility Evaluator</a></h3>
+              <p>ASM propagation engine with five quantitative checks: band-limit, energy conservation, photon budget, SNR, and Monte Carlo fabrication tolerance.</p>
+              <div class="project-card-footer">
+                <span class="tag">Python</span><span class="tag">ASM</span><span class="tag">Wave Optics</span>
+                <a href="https://github.com/muhammadzareii/d2nn-feasibility" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/fig3_transmission_spectrum.png" alt="BIC Sensor" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-physical">Physical</span>
+              <h3><a href="projects/bic-sensor.html" class="stretched-link">BIC Photonic Cell Sensor</a></h3>
+              <p>Bound-state-in-the-continuum Si nanocube resonator (Q &gt; 1000) for label-free cancer vs. non-cancer cell detection. COMSOL FDTD + Kramers–Kronig conversion + SVM classification.</p>
+              <div class="project-card-footer">
+                <span class="tag">COMSOL</span><span class="tag">BIC</span><span class="tag">Python</span>
+                <a href="https://github.com/MuhammadZareII/bic-cell-classifier" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/Microcavity_Field_Distribution.png" alt="Plasmonics" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-physical">Physical</span>
+              <h3><a href="projects/plasmonics.html" class="stretched-link">FDTD Active Plasmonics</a></h3>
+              <p>Semiclassical Maxwell-Bloch FDTD for gain-modulated MSM waveguides and microcavities. Gold modelled with Lorentz-Drude; ~60% resonance amplitude increase demonstrated.</p>
+              <div class="project-card-footer">
+                <span class="tag">FDTD</span><span class="tag">Plasmonics</span><span class="tag">MATLAB</span>
+                <a href="https://github.com/muhammadzareii/fdtd-active-plasmonics" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/slavcheva_vcsel.png" alt="Slavcheva" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-physical">Physical</span>
+              <h3><a href="projects/slavcheva.html" class="stretched-link">Slavcheva Maxwell-Bloch FDTD</a></h3>
+              <p>Faithful reproduction of Slavcheva et al. semiclassical FDTD for VCSEL lasing at 850 nm and 1.29 μm. 1D Yee grid, Mur ABC, gain saturation.</p>
+              <div class="project-card-footer">
+                <span class="tag">FDTD</span><span class="tag">VCSEL</span><span class="tag">MATLAB</span>
+                <a href="https://github.com/muhammadzareii/slavcheva_faithful_repo" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/phc_field.png" alt="PhC Gates" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-physical">Physical</span>
+              <h3><a href="projects/phc-gates.html" class="stretched-link">Photonic Crystal All-Optical Logic Gates</a></h3>
+              <p>COMSOL Multiphysics 2D PhC simulation of all-optical NOT, AND, OR gates at λ = 1.55 μm based on Rani et al. 2015. Interference-based switching without nonlinearity.</p>
+              <div class="project-card-footer">
+                <span class="tag">COMSOL</span><span class="tag">PhC</span><span class="tag">Photonics</span>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/qw_coupled.png" alt="Coupled QW" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-physical">Physical</span>
+              <h3><a href="projects/coupled-qw.html" class="stretched-link">Coupled Quantum Well Valence Band</a></h3>
+              <p>Luttinger-Kohn Hamiltonian solver for GaAs/Al₀.₅Ga₀.₅As double quantum well (25 Å / 15 Å barrier). HH/LH Gaussian wavepacket dynamics in MATLAB.</p>
+              <div class="project-card-footer">
+                <span class="tag">Quantum Mechanics</span><span class="tag">MATLAB</span><span class="tag">Semiconductor</span>
+                <a href="https://github.com/muhammadzareii/coupled-qw-valence-band" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Layer 2: Circuit & Hardware -->
+    <div style="margin-top:3rem;">
+      <div style="display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;">
+        <span class="layer-badge layer-circuit">Layer 2</span>
+        <h3 style="font-size:1.3rem; margin:0;"><a href="layer-circuit.html">Circuit &amp; Hardware</a></h3>
+      </div>
+      <p style="color:var(--muted); font-size:.95rem; margin-bottom:1rem;">
+        Analog and mixed-signal design, PCB, RF/inductive systems — turning physics into hardware.
+      </p>
+      <div class="project-grid">
+        <div class="project-card">
+            <img src="images/fablab_viz1.png" alt="FabLab" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-circuit">Circuit</span>
+              <h3><a href="projects/fablab.html" class="stretched-link">Magnetic Wireless Multi-User Communication</a></h3>
+              <p>~1 MHz magnetically-coupled near-field link, push-pull LC driver, ASK/OOK modulation, beaconed TDMA MAC for up to 8 nodes over 1–3 m. University of Oulu FabLab.</p>
+              <div class="project-card-footer">
+                <span class="tag">RF/Magnetic</span><span class="tag">TDMA</span><span class="tag">MATLAB</span>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/system_overview.png" alt="Impedance" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-circuit">Circuit</span>
+              <h3><a href="projects/impedance-meter.html" class="stretched-link">AVR Impedance Meter</a></h3>
+              <p>ATmega16-based impedance meter using AC bridge at 10 kHz. Peak detector and zero-crossing detector measure magnitude and phase; polar-to-rectangular conversion in firmware.</p>
+              <div class="project-card-footer">
+                <span class="tag">AVR</span><span class="tag">Analog</span><span class="tag">Instrumentation</span>
+                <a href="https://github.com/muhammadzareii/avr-impedance-meter" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/smps_bode.png" alt="SMPS" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-circuit">Circuit</span>
+              <h3><a href="projects/smps.html" class="stretched-link">Switched-Mode Power Supply Design</a></h3>
+              <p>Full SMPS design cycle: topology selection, magnetics, control loop compensation (Bode analysis), PCB layout, and bench validation. Final-year undergraduate project.</p>
+              <div class="project-card-footer">
+                <span class="tag">Power Electronics</span><span class="tag">Altium</span><span class="tag">SPICE</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Layer 3: Embedded & Firmware -->
+    <div style="margin-top:3rem;">
+      <div style="display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;">
+        <span class="layer-badge layer-embedded">Layer 3</span>
+        <h3 style="font-size:1.3rem; margin:0;"><a href="layer-embedded.html">Embedded &amp; Firmware</a></h3>
+      </div>
+      <p style="color:var(--muted); font-size:.95rem; margin-bottom:1rem;">
+        RTOS design, microcontroller firmware, communication protocols, edge computing.
+      </p>
+      <div class="project-grid">
+        <div class="project-card">
+            <img src="images/stm32_hardware.png" alt="STM32" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-embedded">Embedded</span>
+              <h3><a href="projects/stm32-datalogger.html" class="stretched-link">STM32H743 FreeRTOS Datalogger</a></h3>
+              <p>Contract-grade 6-task RTOS datalogger. 100 Hz IMU, 5 Hz GPS, RS232 telemetry, raw SD sector writes with triple-redundant pointers. Paid client project.</p>
+              <div class="project-card-footer">
+                <span class="tag">STM32</span><span class="tag">FreeRTOS</span><span class="tag">C</span>
+                <a href="https://github.com/muhammadzareii/stm32-rtos-datalogger" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/webapp_ui.png" alt="Webapp" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-embedded">Embedded</span>
+              <h3><a href="projects/semiconductor-webapp.html" class="stretched-link">Semiconductor Process Modeling WebApp</a></h3>
+              <p>HTML/JS frontend + Python backend modeling proton-exchange and thermal-oxidation processes. Accepts Excel inputs or live sensor readings; outputs process curves in real time.</p>
+              <div class="project-card-footer">
+                <span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">Semiconductor</span>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/identity_face.jpg" alt="Wireless Identity" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-embedded">Embedded</span>
+              <h3><a href="projects/wireless-identity.html" class="stretched-link">Wireless Identity Recognition System</a></h3>
+              <p>Face recognition + 9-class MediaPipe gesture recognition, dual-threaded Python client, TCP to ESP32 server. Real-time identity and gesture dispatch over Wi-Fi.</p>
+              <div class="project-card-footer">
+                <span class="tag">ESP32</span><span class="tag">Python</span><span class="tag">CV</span>
+                <a href="https://github.com/muhammadzareii/iot_fun-main" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Layer 4: Applied Intelligence & Robotics -->
+    <div style="margin-top:3rem;">
+      <div style="display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;">
+        <span class="layer-badge layer-intel">Layer 4</span>
+        <h3 style="font-size:1.3rem; margin:0;"><a href="layer-intelligence.html">Applied Intelligence &amp; Robotics</a></h3>
+      </div>
+      <p style="color:var(--muted); font-size:.95rem; margin-bottom:1rem;">
+        Perception, machine learning, autonomous systems — intelligence built on all lower layers.
+      </p>
+      <div class="project-grid">
+        <div class="project-card">
+            <img src="images/fig3_results_comparison.png" alt="BCI" class="project-card-img" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-intel">Intelligence</span>
+              <h3><a href="projects/bci.html" class="stretched-link">Motor Imagery BCI Classification</a></h3>
+              <p>64-ch EEG at 250 Hz. Three classifiers: 1D CNN (83.8%), EEGNet (83.4%), CSP+SVM (81.2%). BCI Competition 2005 Dataset I with 5-fold stratified cross-validation.</p>
+              <div class="project-card-footer">
+                <span class="tag">EEG</span><span class="tag">PyTorch</span><span class="tag">CNN</span>
+                <a href="https://github.com/muhammadzareii/motor-imagery-bci-classification" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <img src="images/respeck_viz1.png" alt="Respeck" class="project-card-img" style="object-fit:contain; background:#f0f4f8;" />
+            <div class="project-card-body">
+              <span class="layer-badge layer-intel">Intelligence</span>
+              <h3><a href="projects/respeck.html" class="stretched-link">Respeck Activity Recognition</a></h3>
+              <p>12 Hz chest-worn accelerometer. Two-stage hierarchical classifier (Stage-1 coarse: 4 groups; Stage-2 fine: 12+ activities). Handcrafted time/frequency features, Random Forest &middot; XGBoost &middot; SVM ensemble for clinical activity monitoring.</p>
+              <div class="project-card-footer">
+                <span class="tag">Wearable</span><span class="tag">CNN</span><span class="tag">Python</span>
+                <a href="https://github.com/muhammadzareii/respeck-activity-recognition" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <div class="project-card-img-placeholder">🚗</div>
+            <div class="project-card-body">
+              <span class="layer-badge layer-intel">Intelligence</span>
+              <h3><a href="projects/autonomous-car.html" class="stretched-link">Autonomous Car Vision System</a></h3>
+              <p>Raspberry Pi 4 + PiCamera2. Three sign-detection backends (template matching → custom CNN → YOLOv5), lane following via binary threshold + centroid, UDP JPEG stream.</p>
+              <div class="project-card-footer">
+                <span class="tag">RaspPi</span><span class="tag">YOLOv5</span><span class="tag">Python</span>
+                <a href="https://github.com/muhammadzareii/autonomous-car-vision" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+        <div class="project-card">
+            <div class="project-card-img-placeholder">🤖</div>
+            <div class="project-card-body">
+              <span class="layer-badge layer-intel">Intelligence</span>
+              <h3><a href="projects/diff-drive-robot.html" class="stretched-link">Autonomous Differential-Drive Robot</a></h3>
+              <p>Built from scratch at age 15. Dead-reckoning odometry, 8-sensor ring, 10×10 occupancy grid, Dijkstra planning, boustrophedon coverage. Arduino Mega 2560.</p>
+              <div class="project-card-footer">
+                <span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">Robotics</span>
+                <a href="https://github.com/muhammadzareii/diff-drive-robot" target="_blank" class="btn btn-brand btn-sm" style="margin-left:auto;" onclick="event.stopPropagation()">GitHub</a>
+              </div>
+            </div>
+          </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Data Logger -->
-  <div class="card project-card">
-    <h3>Data Logger Board with Custom UI <span class="meta">| 2025</span></h3>
-    <p>Designed a modular embedded data-logger with SD storage, multi-sensor interfaces, and a custom UI for real-time telemetry.</p>
-    <div class="project-gallery">
-      <figure>
-        <a href="images/hardware.png" target="_blank" rel="noopener">
-          <img src="images/hardware.png" alt="Project hardware" class="thumb">
-        </a>
-        <figcaption>Project Hardware</figcaption>
-      </figure>
-      <figure>
-        <a href="images/datalogger_ui_dashboard.png" target="_blank" rel="noopener">
-          <img src="images/datalogger_ui_dashboard.png" alt="UI dashboard" class="thumb">
-        </a>
-        <figcaption>Dashboard — real-time telemetry panels</figcaption>
-      </figure>
+<!-- ══════════ EXPERIENCE ══════════ -->
+<section style="background:var(--accent2);">
+  <div class="container">
+    <h2 class="section-title">Professional Experience</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">2024 – 2025</div>
+        <div class="timeline-title">Independent Electronics Contractor</div>
+        <div class="timeline-org">Self-employed — Remote &amp; On-site <span style="color:var(--muted);">(Embedded systems · Hardware design · Higher compensation than prior employment)</span></div>
+        <p style="font-size:.95rem;">
+          Operated independently on a project-by-project basis after leaving full-time employment, commanding
+          higher rates than the preceding salaried role. Delivered the STM32H FreeRTOS datalogger system
+          (5 field-iterated versions) under a paid contract, taking sole ownership of firmware architecture,
+          hardware bring-up, and field debugging. Took on additional embedded and hardware design engagements
+          where technical depth and autonomy were the primary requirements.
+        </p>
+        <div class="tags">
+          <span class="tag">STM32H743</span><span class="tag">FreeRTOS</span><span class="tag">C</span>
+          <span class="tag">Contract / Freelance</span><span class="tag">Embedded Systems</span>
+          <span class="tag">Hardware Design</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-date">2022 – 2024</div>
+        <div class="timeline-title">Electronics R&amp;D Engineer</div>
+        <div class="timeline-org">Sepidgaman Parseh — Tehran &amp; Shiraz, Iran <span style="color:var(--muted);">(Biomedical devices · Project contracts)</span></div>
+        <p style="font-size:.95rem;">
+          Worked in an <strong>ISO Class 7 cleanroom</strong> environment on microbolometer FPA and ROIC inspection
+          systems for thermal imaging. Designed and debugged analog front-ends and mixed-signal PCBs for
+          biomedical instrumentation using Altium Designer. Developed firmware for STM32, AVR, and PIC
+          microcontrollers under production constraints. Wrote Python and MATLAB automation tools for
+          measurement data acquisition and post-processing. Worked closely with Cadence OrCAD/PSpice for
+          circuit simulation. Engagement was primarily through project-based contracts across both the Tehran
+          and Shiraz offices.
+        </p>
+        <div class="tags">
+          <span class="tag">STM32</span><span class="tag">AVR</span><span class="tag">Altium</span>
+          <span class="tag">Mixed-Signal</span><span class="tag">ISO Class 7 Cleanroom</span>
+          <span class="tag">Cadence OrCAD</span><span class="tag">Python</span><span class="tag">MATLAB</span>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Model Builder WebApp -->
-  <div class="card project-card">
-    <h3>Model Builder WebApp <span class="meta">| 2025</span></h3>
-    <p>Developed a web application for semiconductor process modeling with an AI-assisted frontend (HTML, JavaScript) and a Python backend. The system processes input from Excel files or from embedded sensor stations acting as live data sources, modeling and controlling key parameters such as temperature and solvent concentration. It supports semiconductor fabrication processes—including proton exchange, oxidation, and related steps—helping optimize outcomes in device manufacturing.</p>
-    <div class="project-gallery">
-      <figure>
-        <a href="images/webapp_ui.png" target="_blank" rel="noopener">
-          <img src="images/webapp_ui.png" alt="WebApp UI" class="thumb">
-        </a>
-        <figcaption>WebApp user interface for process modeling</figcaption>
-      </figure>
-      <figure>
-        <a href="images/webapp_results.png" target="_blank" rel="noopener">
-          <img src="images/webapp_results.png" alt="Modeling results" class="thumb">
-        </a>
-        <figcaption>Model outputs for process optimization</figcaption>
-      </figure>
+<!-- ══════════ CHISTA ROBOTICS ══════════ -->
+<section id="chista">
+  <div class="container">
+    <h2 class="section-title">Robotics Team</h2>
+    <p class="section-subtitle">A different kind of engineering — not for a client, not for a grade.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; margin-top:2rem;">
+      <div>
+        <h3 style="color:var(--brand); margin-bottom:.4rem;">Chista Robotics Team</h3>
+        <div style="font-size:.9rem; color:var(--muted); margin-bottom:1rem;">Hardware &amp; Embedded Programmer &nbsp;·&nbsp; 2014 – present &nbsp;·&nbsp; Shiraz, Iran</div>
+        <p style="font-size:.95rem;">
+          Chista is a serious competitive robotics team based in Shiraz. I joined in 2014 and have been
+          the hardware and embedded programmer since — responsible for microcontroller firmware, sensor
+          integration, motor drivers, and real-time control systems on competition robots. The team competes
+          at a high level in regional and international leagues, but none of us are paid. It is shared
+          passion: the kind of work where you stay up until 3 a.m. before a competition not because you
+          have to, but because you cannot leave a problem unsolved.
+        </p>
+        <p style="font-size:.95rem;">
+          Two projects in this portfolio grew directly out of Chista work: the
+          <a href="projects/diff-drive-robot.html">Autonomous Differential-Drive Robot</a> — built from
+          scratch when I was around 15 — and the
+          <a href="projects/autonomous-car.html">Autonomous Car Vision System</a>, which applied the same
+          embedded-plus-perception approach to a track-following vehicle. The competition history below
+          spans a decade of that work.
+        </p>
+        <p style="font-size:.88rem; color:var(--muted); margin-top:1rem; font-style:italic;">
+          Certificates of participation and awards (where applicable) are available on request.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size:.95rem; color:var(--brand); text-transform:uppercase; letter-spacing:.06em; margin-bottom:1rem;">Competition History</h4>
+        <table style="width:100%; border-collapse:collapse; font-size:.9rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--brand); text-align:left;">
+              <th style="padding:.4rem .6rem; color:var(--brand);">Competition</th>
+              <th style="padding:.4rem .6rem; color:var(--brand);">Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:.45rem .6rem;">Autonomous Vehicles Tehran</td>
+              <td style="padding:.45rem .6rem; color:var(--muted);">2025</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0; background:#f8fafc;">
+              <td style="padding:.45rem .6rem;">Asia Pacific Robot Contest</td>
+              <td style="padding:.45rem .6rem; color:var(--muted);">2018</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:.45rem .6rem;">Iran Open Robocup</td>
+              <td style="padding:.45rem .6rem; color:var(--muted);">2016, 2017</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0; background:#f8fafc;">
+              <td style="padding:.45rem .6rem;">AUT Cup (Amirkabir University)</td>
+              <td style="padding:.45rem .6rem; color:var(--muted);">2017</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+              <td style="padding:.45rem .6rem;">FIRA Cup</td>
+              <td style="padding:.45rem .6rem; color:var(--muted);">multiple</td>
+            </tr>
+            <tr style="background:#f8fafc;">
+              <td style="padding:.45rem .6rem;">Shiraz Open</td>
+              <td style="padding:.45rem .6rem; color:var(--muted);">2015</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:.82rem; color:var(--muted); margin-top:.8rem;">
+          Additional regional competitions not listed. Documentation available on request.
+        </p>
+      </div>
     </div>
   </div>
+</section>
 
-</div>
+<!-- ══════════ TOOLS & SKILLS ══════════ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Tools &amp; Skills</h2>
+    <div class="skills-section">
+      <div class="group">
+        <div class="group-label">Simulation &amp; EDA</div>
+        <div class="chips">
+          <span class="chip">COMSOL Multiphysics</span>
+          <span class="chip">Lumerical (Python API)</span>
+          <span class="chip">Cadence OrCAD / PSpice</span>
+          <span class="chip">Cadence Virtuoso (GPDK)</span>
+          <span class="chip">Altium Designer</span>
+          <span class="chip">MATLAB</span>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-label">Embedded &amp; RTOS</div>
+        <div class="chips">
+          <span class="chip">STM32CubeIDE</span>
+          <span class="chip">FreeRTOS</span>
+          <span class="chip">AVR-GCC</span>
+          <span class="chip">Arduino C++</span>
+          <span class="chip">I²C / SPI / UART / RS232</span>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-label">Software &amp; ML</div>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip">PyTorch</span>
+          <span class="chip">scikit-learn</span>
+          <span class="chip">NumPy / SciPy</span>
+          <span class="chip">C / C++</span>
+          <span class="chip">JavaScript</span>
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-label">Measurement &amp; Debug</div>
+        <div class="chips">
+          <span class="chip">Oscilloscope</span>
+          <span class="chip">Spectrum Analyser</span>
+          <span class="chip">Wireshark</span>
+          <span class="chip">VNA</span>
+          <span class="chip">FTIR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<footer>
-  <p>© 2025 Muhammad Zareii — <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a></p>
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+    <p style="margin-top:.4rem; font-size:.82rem; opacity:.6;">Electronics, top to bottom.</p>
+  </div>
 </footer>
 
+<script src="js/lightbox.js"></script>
 </body>
 </html>

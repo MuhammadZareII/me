@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Applied Intelligence &amp; Robotics — Muhammad Zareii</title>
+  <link rel="stylesheet" href="css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="layer-physical.html">Physical &amp; Sim</a>
+      <a href="layer-circuit.html">Circuit &amp; HW</a>
+      <a href="layer-embedded.html">Embedded &amp; FW</a>
+      <a href="layer-intelligence.html" class="active">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero hero-intel">
+  <div class="container">
+    <span class="layer-badge layer-intel">Layer 4 of 4</span>
+    <h1>Applied Intelligence &amp; Robotics</h1>
+    <p>Perception, machine learning, signal decoding, autonomous navigation — the top layer of the stack, built on all layers below it.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="info-box">
+    <strong>Layer philosophy:</strong> Intelligence without hardware is an abstraction. What makes these
+    projects interesting is that they are grounded: the BCI classifier runs on signals from real EEG
+    electrodes with real noise; the activity recognition runs on a real wearable sensor; the autonomous
+    car navigates a real track in real time; the robot was built with real motors and real drift that had
+    to be measured and corrected. Machine learning is a tool here, not the point — the point is making
+    things that function in the physical world.
+  </div>
+
+  <h2 class="section-title">Projects in this Layer</h2>
+
+  <div class="project-grid">
+
+    <div class="project-card">
+        <img src="images/fig3_results_comparison.png" alt="BCI" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-intel">Intelligence</span>
+          <h3><a href="projects/bci.html" class="stretched-link">Motor Imagery BCI Classification</a></h3>
+          <p>64-channel EEG at 250 Hz for left/right hand motor imagery decoding. Three classifiers benchmarked: 1D CNN with channel attention (83.8%), EEGNet (83.4%), CSP+SVM (81.2%). 5-fold stratified CV on BCI Competition 2005 Dataset I.</p>
+          <div class="tags">
+            <span class="tag">EEG</span><span class="tag">PyTorch</span><span class="tag">CNN</span><span class="tag">CSP</span><span class="tag">BCI</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/motor-imagery-bci-classification" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/respeck_viz1.png" alt="Respeck" class="project-card-img" style="object-fit:contain; background:#f0f4f8;" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-intel">Intelligence</span>
+          <h3><a href="projects/respeck.html" class="stretched-link">Respeck Activity Recognition</a></h3>
+          <p>Chest-worn wearable sensor (12 Hz 3-axis accelerometer). Two-stage hierarchical classifier: Stage-1 coarse (LOCOMOTION/MISC/RUNNING/STATIC), Stage-2 fine within each group (12+ classes). Handcrafted time/frequency features, RF &middot; XGBoost &middot; SVM ensemble. Clinical activity monitoring.</p>
+          <div class="tags">
+            <span class="tag">Wearable</span><span class="tag">CNN</span><span class="tag">Python</span><span class="tag">Clinical</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/respeck-activity-recognition" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <div class="project-card-img-placeholder" style="height:175px; background:#e3edf7; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🚗</div>
+        <div class="project-card-body">
+          <span class="layer-badge layer-intel">Intelligence</span>
+          <h3><a href="projects/autonomous-car.html" class="stretched-link">Autonomous Car Vision System</a></h3>
+          <p>Raspberry Pi 4 + PiCamera2. Three sign-detection backends: template matching (30+ FPS), custom CNN (~15 FPS), YOLOv5-nano (~8 FPS). Lane following via binary threshold + centroid steering. UDP JPEG monitoring stream. ASCII serial motor protocol.</p>
+          <div class="tags">
+            <span class="tag">Raspberry Pi 4</span><span class="tag">YOLOv5</span><span class="tag">OpenCV</span><span class="tag">Python</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/autonomous-car-vision" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <div class="project-card-img-placeholder" style="height:175px; background:#e3edf7; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">🤖</div>
+        <div class="project-card-body">
+          <span class="layer-badge layer-intel">Intelligence</span>
+          <h3><a href="projects/diff-drive-robot.html" class="stretched-link">Autonomous Differential-Drive Robot</a></h3>
+          <p>Built at age ~15 from scratch. Stepper-motor differential drive with empirically calibrated dead-reckoning odometry (CM_PER_PULSE = 0.150325, Rl = 4.79 cm, Rr = 4.78 cm). 8 sensors, 10×10 occupancy grid, Dijkstra planning, boustrophedon coverage, MPU-9250 IMU, nRF24L01 telemetry.</p>
+          <div class="tags">
+            <span class="tag">Arduino Mega</span><span class="tag">C++</span><span class="tag">Robotics</span><span class="tag">Dijkstra</span><span class="tag">Odometry</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/diff-drive-robot" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="js/lightbox.js"></script>
+</body>
+</html>

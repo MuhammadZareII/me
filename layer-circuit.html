@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Circuit &amp; Hardware — Muhammad Zareii</title>
+  <link rel="stylesheet" href="css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="layer-physical.html">Physical &amp; Sim</a>
+      <a href="layer-circuit.html" class="active">Circuit &amp; HW</a>
+      <a href="layer-embedded.html">Embedded &amp; FW</a>
+      <a href="layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero hero-circuit">
+  <div class="container">
+    <span class="layer-badge layer-circuit">Layer 2 of 4</span>
+    <h1>Circuit &amp; Hardware</h1>
+    <p>Analog and mixed-signal circuit design, RF and inductive systems, power electronics, PCB design — translating physics into functioning hardware.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="info-box">
+    <strong>Layer philosophy:</strong> Understanding the physics (Layer 1) is necessary but not sufficient.
+    A circuit is a controlled physics experiment: every resistor value, every capacitor placement, every
+    trace width is a design decision with quantifiable consequences. The projects in this layer span
+    instrumentation (impedance measurement), power conversion (SMPS design), and communication
+    (magnetically coupled near-field network) — all requiring the same discipline of component-level
+    understanding combined with system-level thinking.
+  </div>
+
+  <h2 class="section-title">Projects in this Layer</h2>
+
+  <div class="project-grid">
+
+    <div class="project-card">
+        <img src="images/fablab_viz1.png" alt="FabLab" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-circuit">Circuit</span>
+          <h3><a href="projects/fablab.html" class="stretched-link">Magnetic Wireless Multi-User Communication</a></h3>
+          <p>Near-field inductive communication at ~1 MHz. Push-pull LC driver, ASK/OOK modulation, beaconed TDMA MAC for 8 nodes over 1–3 m. Designed entirely for magnetic near-field regime (λ ≫ range). University of Oulu FabLab, January 2026.</p>
+          <div class="tags">
+            <span class="tag">RF/Magnetic</span><span class="tag">LC Driver</span><span class="tag">TDMA</span><span class="tag">ASK</span><span class="tag">MATLAB</span>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/system_overview.png" alt="Impedance Meter" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-circuit">Circuit</span>
+          <h3><a href="projects/impedance-meter.html" class="stretched-link">AVR Impedance Meter</a></h3>
+          <p>ATmega16 impedance meter from first principles. 10 kHz AC bridge, OPA2172D differential amplifier, peak detector + zero-crossing detector for magnitude and phase. Polar-to-rectangular conversion in firmware; LCD output.</p>
+          <div class="tags">
+            <span class="tag">AVR / ATmega16</span><span class="tag">Analog</span><span class="tag">Instrumentation</span><span class="tag">C</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/avr-impedance-meter" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/smps_bode.png" alt="SMPS" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-circuit">Circuit</span>
+          <h3><a href="projects/smps.html" class="stretched-link">Switched-Mode Power Supply Design</a></h3>
+          <p>Complete SMPS design cycle: topology selection, magnetics design, SPICE simulation, Type-II compensator for 52° phase margin, Altium PCB, bench characterisation. Undergraduate final-year project combining power electronics theory with practical hardware.</p>
+          <div class="tags">
+            <span class="tag">Power Electronics</span><span class="tag">Altium</span><span class="tag">PSpice</span><span class="tag">Control Loop</span>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="js/lightbox.js"></script>
+</body>
+</html>

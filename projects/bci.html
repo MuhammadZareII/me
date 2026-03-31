@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Motor Imagery BCI Classification — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html" class="active">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-intelligence.html">Applied Intelligence</a><span>›</span>
+    <span class="current">Motor Imagery BCI Classification</span>
+  </div>
+</div>
+
+<div class="page-hero hero-intel">
+  <div class="container">
+    <span class="layer-badge layer-intel">Layer 4 — Applied Intelligence</span>
+    <h1>Motor Imagery BCI Classification</h1>
+    <p>64-channel EEG decoding for brain-computer interfaces. Three classifiers compared: 1D CNN (83.8%), EEGNet (83.4%), CSP+SVM (81.2%). BCI Competition 2005 Dataset I.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">64 ch</span><span class="stat-label">EEG Channels</span></div>
+    <div class="stat"><span class="stat-value">250 Hz</span><span class="stat-label">Sampling Rate</span></div>
+    <div class="stat"><span class="stat-value">83.8%</span><span class="stat-label">Best Accuracy (1D CNN)</span></div>
+    <div class="stat"><span class="stat-value">5-fold CV</span><span class="stat-label">Validation Strategy</span></div>
+    <div class="stat"><span class="stat-value">PyTorch</span><span class="stat-label">Framework</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · Python / PyTorch</p>
+      <a href="https://github.com/muhammadzareii/motor-imagery-bci-classification" target="_blank">github.com/muhammadzareii/motor-imagery-bci-classification</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    Motor imagery (MI) BCI is a paradigm where a person imagines performing a movement — without actually
+    moving — and the resulting neural activity in the motor cortex is decoded from EEG signals to produce
+    a control command. MI BCIs are used in rehabilitation robotics, assistive technology for paralysed
+    patients, and neuroscience research. The central challenge is that EEG is low-SNR, non-stationary,
+    and highly individual-specific: patterns that decode well for one subject require re-calibration for another.
+  </p>
+  <p>
+    This project benchmarks three classification approaches on BCI Competition 2005 Dataset I (a standard,
+    well-characterised benchmark): a classical signal processing pipeline (CSP+SVM), a compact end-to-end
+    deep learning architecture (EEGNet), and a custom 1D CNN. All three use 5-fold stratified cross-validation
+    for fair comparison and to detect overfitting.
+  </p>
+
+  <h2 class="section-title">Dataset</h2>
+  <table>
+    <tr><th>Parameter</th><th>Value</th></tr>
+    <tr><td>Dataset</td><td>BCI Competition 2005 Dataset I</td></tr>
+    <tr><td>EEG channels</td><td>64 (10/20 system)</td></tr>
+    <tr><td>Sampling rate</td><td>250 Hz</td></tr>
+    <tr><td>Task</td><td>Binary motor imagery: left hand vs. right hand</td></tr>
+    <tr><td>Epoch duration</td><td>3 s per trial (750 samples per channel)</td></tr>
+    <tr><td>Preprocessing</td><td>Bandpass 8–30 Hz (μ + β bands), common average reference</td></tr>
+    <tr><td>Cross-validation</td><td>5-fold stratified (balanced class ratio per fold)</td></tr>
+  </table>
+
+  <h2 class="section-title">Preprocessing Pipeline</h2>
+
+  <div class="diagram-wrap">
+    <svg width="620" height="90" viewBox="0 0 620 90" font-family="'Times New Roman', Times, serif" font-size="11">
+      <rect x="0" y="0" width="620" height="90" fill="#f0f4f8" rx="6"/>
+      <defs><marker id="ab" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#003366"/></marker></defs>
+
+      <rect x="5"   y="20" width="90" height="48" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="50"  y="38" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Raw EEG</text>
+      <text x="50"  y="51" text-anchor="middle" fill="#556" font-size="9">64 ch, 250 Hz</text>
+      <text x="50"  y="62" text-anchor="middle" fill="#556" font-size="9">BCI2005 DI</text>
+
+      <rect x="108" y="20" width="90" height="48" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="153" y="38" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Bandpass</text>
+      <text x="153" y="51" text-anchor="middle" fill="#556" font-size="9">8–30 Hz</text>
+      <text x="153" y="62" text-anchor="middle" fill="#556" font-size="9">4th-order Butter.</text>
+
+      <rect x="211" y="20" width="90" height="48" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="256" y="38" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">CAR</text>
+      <text x="256" y="51" text-anchor="middle" fill="#556" font-size="9">Common Average</text>
+      <text x="256" y="62" text-anchor="middle" fill="#556" font-size="9">Reference</text>
+
+      <rect x="314" y="20" width="90" height="48" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="359" y="38" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Epoching</text>
+      <text x="359" y="51" text-anchor="middle" fill="#556" font-size="9">3 s windows</text>
+      <text x="359" y="62" text-anchor="middle" fill="#556" font-size="9">750 samples/ch</text>
+
+      <rect x="417" y="20" width="90" height="48" rx="4" fill="#003366" stroke="#003366"/>
+      <text x="462" y="38" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Feature</text>
+      <text x="462" y="51" text-anchor="middle" fill="#aaddff" font-size="9">Extraction /</text>
+      <text x="462" y="62" text-anchor="middle" fill="#aaddff" font-size="9">Raw to CNN</text>
+
+      <rect x="520" y="20" width="95" height="48" rx="4" fill="#4a1f7a" stroke="#4a1f7a"/>
+      <text x="567" y="38" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Classifier</text>
+      <text x="567" y="51" text-anchor="middle" fill="#e2d9f3" font-size="9">CNN / EEGNet</text>
+      <text x="567" y="62" text-anchor="middle" fill="#e2d9f3" font-size="9">/ CSP+SVM</text>
+
+      <line x1="95"  y1="44" x2="106"  y2="44" stroke="#003366" stroke-width="1.5" marker-end="url(#ab)"/>
+      <line x1="198" y1="44" x2="209"  y2="44" stroke="#003366" stroke-width="1.5" marker-end="url(#ab)"/>
+      <line x1="301" y1="44" x2="312"  y2="44" stroke="#003366" stroke-width="1.5" marker-end="url(#ab)"/>
+      <line x1="404" y1="44" x2="415"  y2="44" stroke="#003366" stroke-width="1.5" marker-end="url(#ab)"/>
+      <line x1="507" y1="44" x2="518"  y2="44" stroke="#003366" stroke-width="1.5" marker-end="url(#ab)"/>
+    </svg>
+    <div class="caption"><strong>Fig. 1.</strong> EEG preprocessing pipeline: bandpass → common average reference → epoching → feature extraction → classification.</div>
+  </div>
+
+  <h2 class="section-title">Classifier 1: Common Spatial Patterns + SVM</h2>
+  <p>
+    Common Spatial Patterns (CSP) is a classical spatial filter algorithm that maximises the variance ratio
+    between two classes in EEG. Given the covariance matrices Σ₁ (class 1) and Σ₂ (class 2), CSP finds
+    the filter matrix W such that:
+  </p>
+  <div class="eq">W^T Σ₁ W = Λ &nbsp;&nbsp; and &nbsp;&nbsp; W^T (Σ₁ + Σ₂) W = I</div>
+  <p>
+    The first and last columns of W correspond to the directions of maximum variance for class 1 and class 2
+    respectively. Log-variance of the filtered signals (log(var(W^T·x))) forms the feature vector fed to
+    an SVM with RBF kernel. CSP+SVM achieved <strong>81.2%</strong> accuracy.
+  </p>
+
+  <h2 class="section-title">Classifier 2: EEGNet</h2>
+  <p>
+    EEGNet (Lawhern et al. 2018) is a compact CNN designed specifically for EEG classification.
+    Its architecture:
+  </p>
+  <ul>
+    <li><strong>Block 1:</strong> Temporal convolution (1×64, captures spectral content) → Depthwise spatial convolution (C×1 per channel pair, spatial filtering) → BatchNorm → ELU → AvgPool → Dropout</li>
+    <li><strong>Block 2:</strong> Separable convolution (1×16, learns temporal dynamics of spatial features) → BatchNorm → ELU → AvgPool → Dropout</li>
+    <li><strong>Classifier:</strong> Flatten → Dense → Softmax</li>
+  </ul>
+  <p>
+    EEGNet has ~2,500 parameters (very compact), which is important for EEG where limited training data
+    makes large models prone to overfitting. Achieved <strong>83.4%</strong> accuracy.
+  </p>
+
+  <h2 class="section-title">Classifier 3: Custom 1D CNN</h2>
+  <p>
+    The custom 1D CNN treats each channel's time series independently through depthwise convolutions, then
+    fuses across channels. Architecture:
+  </p>
+  <ul>
+    <li>Input: (64 channels × 750 time points)</li>
+    <li>4× temporal Conv1D blocks (increasing kernel sizes: 32, 16, 8, 4 samples)</li>
+    <li>Batch normalisation + ReLU + MaxPool after each block</li>
+    <li>Channel attention module (squeeze-excitation) for spatial feature weighting</li>
+    <li>Global average pooling → FC(128) → Dropout(0.5) → FC(2) → Softmax</li>
+  </ul>
+  <p>
+    Achieved <strong>83.8%</strong> accuracy — the best of the three, marginalyl ahead of EEGNet.
+    The channel attention mechanism proved important: ablation without it reduced accuracy by 2.1%.
+  </p>
+
+  <h2 class="section-title">Results</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/fig1_data_overview.png" alt="EEG data overview" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> Raw EEG data overview: 64-channel recording showing characteristic μ-band (8–12 Hz) and β-band (13–30 Hz) oscillations in motor cortex channels.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/fig2_spectrograms.png" alt="EEG spectrograms" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> Time-frequency spectrograms for representative channels (C3, Cz, C4). Event-related desynchronisation (ERD) visible as power decrease during motor imagery.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/fig3_results_comparison.png" alt="Results comparison" />
+      <div class="fig-caption"><strong>Fig. 4.</strong> Accuracy comparison across the three classifiers. Error bars show std across the 5 cross-validation folds. 1D CNN: 83.8%, EEGNet: 83.4%, CSP+SVM: 81.2%.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/fig4_confusion_matrices.png" alt="Confusion matrices" />
+      <div class="fig-caption"><strong>Fig. 5.</strong> Confusion matrices for all three classifiers. All show stronger performance on right-hand imagery — consistent with the literature on this dataset.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/fig5_training_curves.png" alt="Training curves" />
+      <div class="fig-caption"><strong>Fig. 6.</strong> Training and validation accuracy curves for the 1D CNN. Convergence within 80 epochs; no visible overfitting with dropout regularisation.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/fig6_csp_patterns.png" alt="CSP spatial patterns" />
+      <div class="fig-caption"><strong>Fig. 7.</strong> CSP spatial filter patterns: topographic maps of the first and last filter columns. Clear lateralisation to left/right motor cortex (C3/C4 areas).</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Classifier</th><th>Mean Accuracy</th><th>Std (5-fold)</th><th>Parameters</th></tr>
+    <tr><td>1D CNN (custom)</td><td>83.8%</td><td>±2.1%</td><td>~45,000</td></tr>
+    <tr><td>EEGNet</td><td>83.4%</td><td>±1.9%</td><td>~2,500</td></tr>
+    <tr><td>CSP + SVM (RBF)</td><td>81.2%</td><td>±2.8%</td><td>N/A (classical)</td></tr>
+  </table>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

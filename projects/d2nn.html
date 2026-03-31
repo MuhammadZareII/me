@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>D2NN Feasibility Evaluator — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html" class="active">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-physical.html">Physical &amp; Simulation</a><span>›</span>
+    <span class="current">D2NN Feasibility Evaluator</span>
+  </div>
+</div>
+
+<div class="page-hero hero-physical">
+  <div class="container">
+    <span class="layer-badge layer-physical">Layer 1 — Physical &amp; Simulation</span>
+    <h1>D2NN Physical Feasibility Evaluator</h1>
+    <p>Physics-based validation for Diffractive Deep Neural Networks: five sequential checks — ASM band-limit, energy conservation, photon budget, SNR, and Monte Carlo fabrication tolerance — determine whether a trained optical network can be physically realised before committing to fabrication.</p>
+    <div class="domain-tags" style="margin-top:0.8rem;">
+      <span class="domain-tag domain-photonics">Photonics</span>
+      <span class="domain-tag domain-ai">Neural Networks</span>
+      <span class="domain-tag domain-signal">Wave Optics</span>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">ASM</span><span class="stat-label">Propagation Method</span></div>
+    <div class="stat"><span class="stat-value">5 checks</span><span class="stat-label">Physical Validation</span></div>
+    <div class="stat"><span class="stat-value">λ = 632 nm</span><span class="stat-label">Design Wavelength</span></div>
+    <div class="stat"><span class="stat-value">NumPy / SciPy</span><span class="stat-label">No DL Framework</span></div>
+    <div class="stat"><span class="stat-value">Monte Carlo</span><span class="stat-label">Tolerance Analysis</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · Python (NumPy / SciPy)</p>
+      <a href="https://github.com/muhammadzareii/d2nn-feasibility" target="_blank">github.com/muhammadzareii/d2nn-feasibility</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Background: Diffractive Deep Neural Networks</h2>
+  <p>
+    A Diffractive Deep Neural Network (D2NN, Lin et al. 2018 [1]) implements an artificial neural network entirely in the optical domain. Rather than using electronic processors, a stack of thin diffractive phase masks replaces learned weight matrices: light from an input object propagates through successive layers by free-space diffraction, and the final intensity pattern at a detector plane encodes the network's output — for example, digit classification by spatially segregated detector regions.
+  </p>
+  <p>
+    Training optimises the per-pixel phase values of each layer using backpropagation through a differentiable diffraction model. Inference is then entirely passive: the trained phase masks are fabricated (3D printing, two-photon polymerisation, or photolithographic patterning) and the computation happens at the speed of light with no electronic power consumption beyond illumination. This makes D2NNs attractive for low-latency, low-power optical computing and real-time sensing.
+  </p>
+
+  <h2 class="section-title">System Geometry</h2>
+  <p>
+    The reference system used throughout this project is a five-layer D2NN for MNIST digit classification. The source illuminates an object mask (the input digit) from below; the light diverges through a cone of ±1° half-angle. Five diffractive layers (L1–L5), each a 200×200 pixel grid with pixel pitch <em>dx</em> = 0.533λ, are spaced at equal axial intervals along the z-axis. A flat detector array is placed 3 cm beyond the final layer. The total stack depth is approximately 18 cm.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/d2nn_topview.png" alt="Top-view (x-z) diagram of D2NN system: source at bottom, object mask, L1-L5 diffractive layers at equal spacing, detector at top" />
+    <figcaption><span class="fig-num">Fig. 1.</span> <span class="fig-caption">Top-view (x–z plane) system layout. Source (±1° beam divergence) illuminates the object mask; the diffractive beam expands through five layers (L1–L5, N = 200, dx = 0.533λ₀) before reaching the detector. Horizontal axis is the transverse dimension (metres); vertical axis is the propagation axis z. The 1 cm scale bar reflects the physical size of each layer aperture.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Learned Phase Masks</h2>
+  <p>
+    Each diffractive layer applies a multiplicative complex transmittance to the incident field:
+  </p>
+  <div class="equation-block">
+    <em>t</em>(x,y) = exp(<em>j</em> · φ(x,y)) &nbsp;&nbsp;&nbsp;&nbsp; φ(x,y) ∈ [0, 2π]
+  </div>
+  <p>
+    This is a pure-phase element — amplitude is unity everywhere, so the mask absorbs no light; it only redirects it. The physical realisation is a surface-relief profile with height
+  </p>
+  <div class="equation-block">
+    <em>h</em>(x,y) = φ(x,y) · λ / (2π(<em>n</em> − 1))
+  </div>
+  <p>
+    where <em>n</em> is the refractive index of the mask substrate. For a polymer with <em>n</em> = 1.5 at λ = 632 nm, a full 2π phase shift corresponds to a 1.26 μm surface relief height. Figure 2 shows the learned height maps for all five layers simultaneously; Fig. 3 shows Layer 1 in detail at the physical height scale.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/D2NN_layers_height_all.png" alt="Five learned diffractive layer height maps shown side by side, each showing pseudo-random phase texture coloured from deep purple (0) to yellow (0.9 λ/227)" />
+    <figcaption><span class="fig-num">Fig. 2.</span> <span class="fig-caption">Learned phase mask height difference profiles Δh(x,y) for all five diffractive layers (in units of λ/227, normalised to the maximum height step per pixel). Layer 1 exhibits a structured annular feature around the beam centre, while layers 2–5 develop progressively complex spatial frequency content as the network encodes the classification mapping. The colour scale is shared across layers.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/d2nn_mask_l1.png" alt="Layer 1 height map in micrometres: pseudo-random texture with values 0-2 μm, 256x256 pixels" />
+    <figcaption><span class="fig-num">Fig. 3.</span> <span class="fig-caption">Layer 1 height map at the fabrication scale (μm). Maximum height ~2 μm; the pixel pitch at λ = 632 nm and dx = 0.533λ is approximately 337 nm. The fabrication challenge is reproducing this spatial texture at sub-micrometre resolution — motivating the Monte Carlo tolerance analysis in Check 5.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Angular Spectrum Method Propagation</h2>
+  <p>
+    Free-space diffraction between layers is modelled using the Angular Spectrum Method (ASM), which is exact within scalar wave optics and makes no paraxial approximation. For a monochromatic field <em>U</em>(x,y) at wavelength λ propagating by axial distance z:
+  </p>
+  <div class="equation-block">
+    <em>U</em><sub>out</sub>(x,y) = IFFT[ FFT[<em>U</em><sub>in</sub>(x,y)] · <em>H</em>(f<sub>x</sub>, f<sub>y</sub>) ]
+  </div>
+  <div class="equation-block">
+    <em>H</em>(f<sub>x</sub>,f<sub>y</sub>) = exp(<em>j</em> · 2πz · √(1/λ² − f<sub>x</sub>² − f<sub>y</sub>²)) &nbsp; for f<sub>x</sub>² + f<sub>y</sub>² &lt; 1/λ², &nbsp; else 0
+  </div>
+  <p>
+    The transfer function <em>H</em> is a pure phase factor for propagating plane waves (f<sub>x</sub>² + f<sub>y</sub>² &lt; 1/λ²) and exactly zero for evanescent components beyond the optical band-limit. The simulation grid is zero-padded by 8× before each FFT to suppress circular convolution artefacts; only the central N×N region is retained after propagation.
+  </p>
+  <p>
+    Figure 4 shows the spectral-power-density-integrated intensity distribution in the x–z plane for a flat (uniform) input illumination mode, overlaid with the system geometry. The successive intensity lobes between layers visualise how the beam is shaped by each diffractive mask as it propagates toward the detector.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/d2nn_xz_overlay.png" alt="x-z power dispersion (PSD-integrated) map overlaid with system geometry: source at bottom, 5 diffractive layers, detector at top; intensity concentrated along optical axis with diverging lobes at each layer" />
+    <figcaption><span class="fig-num">Fig. 4.</span> <span class="fig-caption">x–z spectral-power-integrated intensity map with system geometry overlay. Colour scale is PSD-integrated intensity in arbitrary units. The beam converges and diverges between successive layers as each diffractive mask reshapes the wavefront. Horizontal confinement of the high-intensity region near the optical axis confirms the layers are concentrating energy toward the classifier output regions at the detector.</span></figcaption>
+  </figure>
+
+  <p>
+    The animated figure below (Fig. 5) shows the complex field propagating through all five layers: magnitude (amplitude) on the left and phase on the right. The phase wraps periodically in [0, 2π] as the wavefront accumulates the phase pattern imprinted by each successive mask; the magnitude shows the intensity distribution evolving toward the final classification pattern at the detector plane.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/d2nn_field_mag_phase.gif" alt="Animated field propagation: magnitude (left) and phase (right) evolving through five diffractive layers" />
+    <figcaption><span class="fig-num">Fig. 5.</span> <span class="fig-caption">Animated propagation of the optical field through the five diffractive layers. Left panel: field magnitude |U(x,y)| normalised to peak. Right panel: field phase arg(<em>U</em>) in [0, 2π]. The frames are continuously moving in z, and equivalently in t. The phase acquires increasing spatial complexity as the network's classification information is encoded into the wavefront curvature.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Inference: MNIST Classification</h2>
+  <p>
+    Figure 6 shows a representative inference result on a test digit (class 1). The input amplitude (leftmost panel) is the binarised MNIST digit image used to modulate the input beam. After propagating through all five layers, the output intensity pattern at the detector (second panel) shows energy preferentially concentrated in one of the ten spatially segregated classifier regions. The detector energy map (third panel) normalises the integrated intensity per classifier region, and the bar chart (rightmost panel) confirms that detector region 1 collects the dominant fraction of incident energy — yielding a correct classification.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/d2nn_test_example.png" alt="Four-panel inference result: input amplitude (digit 1), output intensity, detector energy map, and energy-per-detector bar chart confirming correct classification" />
+    <figcaption><span class="fig-num">Fig. 6.</span> <span class="fig-caption">Inference result for MNIST digit '1' (ground truth GT=1, prediction Pred=1). From left: input amplitude mask, output intensity at the detector plane, normalised per-region energy map, and per-region energy bar chart. Detector region 1 collects nearly all the energy, confirming a correct single-step optical classification without any electronic computation.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">The Five Physical Feasibility Checks</h2>
+  <p>
+    A trained D2NN that performs well in simulation is not automatically physically realisable. The following five checks — each grounded in a specific aspect of wave optics or detector physics — are run sequentially as the final gate before committing to fabrication. Results are written to a machine-readable <code>feasibility_report.json</code> with per-check pass/fail flags and numerical values.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Check 1 — ASM Band-limit (Sampling Adequacy)</h3>
+  <p>
+    The ASM transfer function is valid only when the field's angular spectrum fits within the Nyquist zone of the simulation grid. When a beam diffracts through sharp phase features, energy spreads toward higher spatial frequencies. If this energy reaches the grid edge it aliases — wrapping around under the periodic FFT boundary condition and corrupting the field. The check computes the <em>edge energy ratio</em>: the fraction of total field energy in the outermost 10% of pixels along each edge of the simulation window:
+  </p>
+  <div class="equation-block">
+    edge_energy_ratio = Σ|<em>U</em>|² (border strip) / Σ|<em>U</em>|² (total)
+  </div>
+  <p>
+    <strong>Pass criterion: edge_energy_ratio &lt; 0.20.</strong> A ratio above 20% indicates the field is "hitting the wall" — the simulation result cannot be trusted regardless of how well the design converged during training.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Check 2 — Energy Conservation</h3>
+  <p>
+    In a correctly implemented, well-sampled ASM propagation, total field energy is conserved to numerical precision. The evaluator computes the relative energy error before and after each propagation step:
+  </p>
+  <div class="equation-block">
+    rel_err = |Σ|<em>U</em><sub>out</sub>|² − Σ|<em>U</em><sub>in</sub>|²| / Σ|<em>U</em><sub>in</sub>|²
+  </div>
+  <p>
+    <strong>Pass criterion: rel_err &lt; 2%.</strong> Failure indicates insufficient zero-padding, grid truncation, or an error in the propagation kernel. Figure 7 shows the relative energy error as a function of wavelength for a broadband source — the error is small and spectrally monotonic, confirming the ASM implementation is sound across the operating bandwidth.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/d2nn_energy_check.png" alt="Plot of numerical energy consistency (relative error) vs wavelength 500-560 nm, decreasing from ~0.429 to ~0.419" />
+    <figcaption><span class="fig-num">Fig. 7.</span> <span class="fig-caption">Numerical energy conservation (relative error) vs. wavelength across the source spectrum. The error decreases monotonically with wavelength due to improved sampling as the ratio dx/λ improves. All values lie below 0.44 — well within the 2% threshold — confirming adequate grid sampling across the operating bandwidth.</span></figcaption>
+  </figure>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Check 3 — Photon Budget and Capture Fraction</h3>
+  <p>
+    For a physical D2NN, the input illumination is a real source with finite spectral power. Diffraction at the layer apertures and the finite detector active area mean that only a fraction of the incident photons reach the active classifier region. The evaluator traces optical power from the source through each propagation step, accounting for aperture diffraction, to compute the fraction of input energy captured by the detector array:
+  </p>
+  <div class="equation-block">
+    capture_fraction(λ) = Σ|<em>U</em>|² (detector window) / Σ|<em>U</em>|² (padded input)
+  </div>
+  <p>
+    This fraction is then multiplied by the source spectral power, integration time <em>T</em>, and detector quantum efficiency (QE) to estimate the total number of detected photoelectrons per classification event. <strong>Pass criterion: N<sub>photoelectrons</sub> &gt; 1000 per decision.</strong> Below this threshold, Poisson shot noise limits classification accuracy irreversibly — no amount of detector noise suppression can compensate for insufficient photon count. Figure 8 shows capture fraction increasing with wavelength, consistent with improved diffraction efficiency as dx/λ grows toward the optimal range.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Check 4 — SNR at the Detector</h3>
+  <p>
+    Even with an adequate photon count, the detector adds noise. The SNR check uses a combined noise model that includes shot noise (Poisson statistics), detector read noise σ<sub>read</sub>, and dark current <em>I</em><sub>dark</sub>:
+  </p>
+  <div class="equation-block">
+    SNR = <em>N</em><sub>signal</sub> / √(<em>N</em><sub>signal</sub> + <em>N</em><sub>dark</sub> + σ<sub>read</sub>²)
+  </div>
+  <p>
+    The result is a per-pixel SNR map across the detector plane (Fig. 9). <strong>Pass criterion: SNR &gt; 10 dB</strong> (or linear SNR &gt; 3.16) at the active classifier pixels. The spatially varying SNR reflects the non-uniform intensity distribution at the detector — pixels in the bright focus of the classifier output region have high SNR, while off-axis regions are noise-limited.
+  </p>
+
+  <div style="display:flex; gap:1.5rem; margin:1.8rem 0; align-items:flex-start;">
+    <figure class="ieee-fig" style="flex:1; margin:0;">
+      <img src="../images/d2nn_capture_fraction.png" alt="Capture fraction vs wavelength 500–560 nm, showing diffraction efficiency improvement" />
+      <figcaption><span class="fig-num">Fig. 8.</span> <span class="fig-caption">Captured energy fraction (detector window / padded field) vs. wavelength. The fraction rises from ∼4.6% at 500 nm to ∼6.6% at 560 nm, reflecting improved diffraction efficiency as the pixel pitch becomes a larger fraction of the wavelength. Used with source power and QE to compute the absolute photon budget.</span></figcaption>
+    </figure>
+    <figure class="ieee-fig" style="flex:1; margin:0;">
+      <img src="../images/d2nn_snr_map.png" alt="Per-pixel SNR map at detector plane showing structured high-SNR interference pattern" />
+      <figcaption><span class="fig-num">Fig. 9.</span> <span class="fig-caption">Per-pixel SNR map at the detector plane. Brighter regions indicate SNR above 5000; dark regions below 500. The structured high-SNR pattern (not a simple Gaussian) confirms the diffractive network is genuinely encoding classification information into the field distribution.</span></figcaption>
+    </figure>
+  </div>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Check 5 — Monte Carlo Fabrication Tolerance</h3>
+  <p>
+    Fabrication introduces random and systematic errors. The Monte Carlo tolerance analysis applies seven independent perturbation types — lateral layer shift (x,y), rotation, axial z-error, surface height noise (pixel-level phase errors), a correlated phase screen (simulating long-range surface roughness), photo-response non-uniformity (PRNU) at the detector, and inter-pixel optical crosstalk — drawn from distributions parameterised by the target fabrication process. Over N = 200 trials per configuration, the evaluator records the fraction of trials that still produce correct classifications and computes a pass rate.
+  </p>
+  <p>
+    <strong>Pass criterion: pass_rate ≥ configurable threshold (default 90%).</strong> The output is a tolerance curve: accuracy vs. perturbation magnitude for each perturbation type separately, allowing identification of the most fabrication-sensitive degrees of freedom. For a two-photon polymerisation process (typical height tolerance ±100 nm at 632 nm, corresponding to σ<sub>fab</sub> ≈ 0.5 rad RMS), the reference MNIST D2NN achieves a pass rate of ~94%, passing this check.
+  </p>
+
+  <h2 class="section-title">Output: SystemPackage</h2>
+  <p>
+    Every evaluation run writes a timestamped <code>SystemPackage/</code> directory containing the full design state and all check results. The primary machine-readable artifact is <code>feasibility_report.json</code>, which holds per-check numerical results (edge energy ratio, relative energy error, photon count, per-pixel SNR percentiles, Monte Carlo pass rate) alongside individual pass/fail booleans (<code>sampling_ok</code>, <code>energy_ok</code>, <code>power_ok</code>, <code>snr_ok</code>, <code>tolerances_ok</code>) and a composite <code>overall_pass</code> flag. Supporting artefacts include field arrays in <code>.npy</code> format, all figures, and a reproducibility log recording Python and library versions.
+  </p>
+
+  <pre class="code-block">SystemPackage/SYS_&lt;timestamp&gt;_&lt;hash&gt;/
+├── feasibility_report.json    ← pass/fail + all numerical results
+├── system_spec.json           ← grid, geometry, z-planes
+├── illumination_spec.json     ← source spectrum, power, coherence
+├── mask_spec.json             ← material, fab constraints, height maps
+├── detector_spec.json         ← pixel pitch, QE, noise parameters
+└── artifacts/
+    ├── arrays/                ← .npy field arrays (phase masks, intensities)
+    ├── figures/               ← edge check, SNR map, MC worst cases…
+    ├── tables/                ← sampling diagnostics, SPD bins (JSON/CSV)
+    └── logs/env.json          ← Python/library versions (reproducibility)</pre>
+
+  <div class="info-box">
+    <strong>Research context:</strong> This project connects directly to my interest in optical analog computing and the BIC photonic sensor work. The feasibility framework is designed to be extended: planned additions include coherence length requirements for partially coherent sources, aperture diffraction at mask boundaries, and thermal drift modelling for temperature-sensitive polymer substrates. The reference architecture (Lin et al. 2018) operates at THz frequencies in the original paper; this implementation scales it to visible wavelengths for benchtop optical prototyping.
+  </div>
+
+  <h2 class="section-title">Reference</h2>
+  <p>
+    [1] X. Lin, Y. Rivenson, N. T. Yardimci, M. Veli, Y. Luo, M. Jarrahi, and A. Ozcan, "All-optical machine learning using diffractive deep neural networks," <em>Science</em>, vol. 361, no. 6406, pp. 1004–1008, 2018. DOI: <a href="https://doi.org/10.1126/science.aat8084" target="_blank">10.1126/science.aat8084</a>.
+  </p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

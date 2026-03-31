@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autonomous Differential-Drive Robot — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html" class="active">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-intelligence.html">Applied Intelligence</a><span>›</span>
+    <span class="current">Autonomous Differential-Drive Robot</span>
+  </div>
+</div>
+
+<div class="page-hero hero-intel">
+  <div class="container">
+    <span class="layer-badge layer-intel">Layer 4 — Applied Intelligence</span>
+    <h1>Autonomous Differential-Drive Robot</h1>
+    <p>Built from scratch at age 15. Dead-reckoning odometry, 8-sensor ring, 10×10 occupancy grid, Dijkstra path planning, boustrophedon coverage. Now published as clean C++.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">Arduino Mega</span><span class="stat-label">ATmega2560</span></div>
+    <div class="stat"><span class="stat-value">Built at 15</span><span class="stat-label">Original Build Year ~2016</span></div>
+    <div class="stat"><span class="stat-value">8 sensors</span><span class="stat-label">5× HC-SR04 + 3× Sharp IR</span></div>
+    <div class="stat"><span class="stat-value">10×10 grid</span><span class="stat-label">Occupancy Map</span></div>
+    <div class="stat"><span class="stat-value">Dijkstra</span><span class="stat-label">Path Planner</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · C++ / Arduino</p>
+      <a href="https://github.com/muhammadzareii/diff-drive-robot" target="_blank">github.com/muhammadzareii/diff-drive-robot</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">The Story</h2>
+  <p>
+    This was one of the first serious engineering projects — a fully autonomous mobile robot designed,
+    built, and programmed from scratch at age 15. There was no robotics kit, no tutorial, no library
+    handling the hard parts. Every number in the firmware — the centimetres per stepper pulse, the wheel
+    radius asymmetry, the turn correction factor, the IR distance calibration curve — came from physical
+    measurement: commanding motion, measuring the result with a tape measure or protractor, and adjusting.
+  </p>
+  <p>
+    The original source code still exists: a single monolithic <code>.ino</code> file with Farsi
+    comments, global variables, and <code>goto</code> statements — exactly as written at the time.
+    Rough code, but the thinking inside it was solid. The kinematic model is correct. The sensor fusion
+    is principled. The path planning is real Dijkstra.
+  </p>
+  <p>
+    This repository is a clean reimplementation of the same algorithms in modular, documented C++ —
+    preserving every empirical constant, every calibration equation, every algorithm — because the
+    original thinking deserves to be readable.
+  </p>
+
+  <h2 class="section-title">Robot Schematic</h2>
+
+  <!-- SVG Robot schematic - top-down view, rebuilt to eliminate overlaps -->
+  <div class="diagram-wrap">
+    <svg width="620" height="430" viewBox="0 0 620 430" font-family="'Times New Roman', serif" font-size="11">
+      <rect x="0" y="0" width="620" height="430" fill="#f0f4f8" rx="6"/>
+      <text x="310" y="18" text-anchor="middle" fill="#003366" font-size="13" font-weight="bold">Differential-Drive Robot — Top View (Schematic)</text>
+
+      <defs>
+        <marker id="fw" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <polygon points="0,0 8,4 0,8" fill="#1a5c30"/>
+        </marker>
+        <marker id="dim" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="#003366"/>
+        </marker>
+      </defs>
+
+      <!-- ── FORWARD label & arrow ── -->
+      <text x="310" y="38" text-anchor="middle" fill="#1a5c30" font-size="11" font-weight="bold">▲ FORWARD</text>
+
+      <!-- ── CHASSIS ── -->
+      <rect x="185" y="55" width="250" height="210" rx="10" fill="#d4edda" stroke="#003366" stroke-width="2"/>
+
+      <!-- ── LEFT WHEEL ── -->
+      <rect x="148" y="105" width="37" height="90" rx="6" fill="#003366"/>
+      <text x="166" y="152" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" transform="rotate(-90,166,152)">LEFT</text>
+      <!-- Left wheel radius label — placed well clear of wheel -->
+      <text x="95" y="143" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Rl = 4.79 cm</text>
+      <line x1="148" y1="150" x2="114" y2="150" stroke="#003366" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- ── RIGHT WHEEL ── -->
+      <rect x="435" y="105" width="37" height="90" rx="6" fill="#003366"/>
+      <text x="453" y="152" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" transform="rotate(90,453,152)">RIGHT</text>
+      <!-- Right wheel radius label -->
+      <text x="520" y="143" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Rr = 4.78 cm</text>
+      <line x1="472" y1="150" x2="505" y2="150" stroke="#003366" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- ── ARDUINO MEGA (centre of chassis) ── -->
+      <rect x="228" y="100" width="164" height="75" rx="4" fill="#003366"/>
+      <text x="310" y="122" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Arduino Mega 2560</text>
+      <text x="310" y="137" text-anchor="middle" fill="#aaddff" font-size="9">ATmega2560 @ 16 MHz</text>
+      <text x="310" y="151" text-anchor="middle" fill="#aaddff" font-size="9">C++ / Arduino firmware</text>
+      <text x="310" y="165" text-anchor="middle" fill="#aaddff" font-size="9">I²C · SPI · UART</text>
+
+      <!-- ── MPU-9250 IMU ── -->
+      <rect x="248" y="192" width="128" height="32" rx="3" fill="#7a4b00"/>
+      <text x="312" y="206" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">MPU-9250 IMU</text>
+      <text x="312" y="218" text-anchor="middle" fill="#ffecc9" font-size="8">9DOF · I²C · Yaw heading</text>
+
+      <!-- ── nRF24L01 radio ── -->
+      <rect x="190" y="192" width="52" height="32" rx="3" fill="#1a5c30"/>
+      <text x="216" y="205" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">nRF24L01</text>
+      <text x="216" y="218" text-anchor="middle" fill="#c9f0d5" font-size="7">2.4 GHz SPI</text>
+
+      <!-- ── HC-SR04 ULTRASONIC sensors (×5) — shown as cyan rectangles ── -->
+      <!-- Forward center: on front edge -->
+      <rect x="292" y="43" width="36" height="14" rx="3" fill="#006699" stroke="#003366" stroke-width="1.5"/>
+      <text x="310" y="53" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">SR04-F</text>
+      <line x1="310" y1="57" x2="310" y2="55" stroke="#003366" stroke-width="1"/>
+
+      <!-- Front-Left: on chassis left-front corner, angled out -->
+      <rect x="185" y="43" width="46" height="14" rx="3" fill="#006699" stroke="#003366" stroke-width="1.5"/>
+      <text x="208" y="53" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">SR04-FL</text>
+
+      <!-- Front-Right: on chassis right-front corner -->
+      <rect x="389" y="43" width="46" height="14" rx="3" fill="#006699" stroke="#003366" stroke-width="1.5"/>
+      <text x="412" y="53" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">SR04-FR</text>
+
+      <!-- Left side: on left edge of chassis -->
+      <rect x="155" y="225" width="30" height="36" rx="3" fill="#006699" stroke="#003366" stroke-width="1.5"/>
+      <text x="170" y="241" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" transform="rotate(-90,170,241)">SR04-L</text>
+
+      <!-- Right side: on right edge -->
+      <rect x="435" y="225" width="30" height="36" rx="3" fill="#006699" stroke="#003366" stroke-width="1.5"/>
+      <text x="450" y="241" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" transform="rotate(90,450,241)">SR04-R</text>
+
+      <!-- ── SHARP IR sensors (×3) — shown as orange diamonds, inside front of chassis ── -->
+      <!-- IR-Left -->
+      <polygon points="220,70 228,63 236,70 228,77" fill="#e07010" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="228" y="90" text-anchor="middle" fill="#7a4b00" font-size="8">IR-L</text>
+      <!-- IR-Center -->
+      <polygon points="302,70 310,63 318,70 310,77" fill="#e07010" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="310" y="90" text-anchor="middle" fill="#7a4b00" font-size="8">IR-C</text>
+      <!-- IR-Right -->
+      <polygon points="384,70 392,63 400,70 392,77" fill="#e07010" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="392" y="90" text-anchor="middle" fill="#7a4b00" font-size="8">IR-R</text>
+
+      <!-- ── AXLE WIDTH dimension ── -->
+      <line x1="185" y1="290" x2="435" y2="290" stroke="#003366" stroke-width="1.5" marker-start="url(#dim)" marker-end="url(#dim)"/>
+      <text x="310" y="307" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">d = 23.0 cm  (axle width)</text>
+
+      <!-- ── CALIBRATION CONSTANTS box (bottom left) ── -->
+      <rect x="10" y="320" width="175" height="100" rx="4" fill="#fff" stroke="#003366" stroke-width="1.5"/>
+      <text x="97" y="337" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Calibration Constants</text>
+      <text x="18" y="353" fill="#556" font-size="9">CM_PER_PULSE = 0.150325</text>
+      <text x="18" y="367" fill="#556" font-size="9">Rl = 4.79 cm  |  Rr = 4.78 cm</text>
+      <text x="18" y="381" fill="#556" font-size="9">d (axle) = 23.0 cm</text>
+      <text x="18" y="395" fill="#556" font-size="9">CW = 82/90  |  CCW = 83.75/90</text>
+      <text x="18" y="409" fill="#556" font-size="9">Δr asymmetry: 0.01 cm (measured)</text>
+
+      <!-- ── IR CALIBRATION box (bottom right) ── -->
+      <rect x="435" y="320" width="175" height="100" rx="4" fill="#fff" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="522" y="337" text-anchor="middle" fill="#7a4b00" font-size="10" font-weight="bold">Sharp IR (GP2Y0A21YK)</text>
+      <text x="443" y="353" fill="#556" font-size="9">dist = 93677 × ADC^(−1.505)</text>
+      <text x="443" y="367" fill="#556" font-size="9">Valid: 5–45 cm</text>
+      <text x="443" y="381" fill="#556" font-size="9">Fitted from bench measurements</text>
+      <text x="443" y="395" fill="#556" font-size="9">10-bit ADC  ·  5V reference</text>
+      <text x="443" y="409" fill="#556" font-size="9">Non-monotonic below 5 cm</text>
+
+      <!-- ── LEGEND (bottom centre) ── -->
+      <rect x="215" y="322" width="24" height="12" rx="2" fill="#006699"/>
+      <text x="244" y="333" fill="#003366" font-size="9">HC-SR04 Ultrasonic (×5)  2 cm–4 m</text>
+      <polygon points="215,349 223,342 231,349 223,356" fill="#e07010" stroke="#7a4b00" stroke-width="1"/>
+      <text x="244" y="352" fill="#7a4b00" font-size="9">Sharp IR (×3)  5–45 cm</text>
+    </svg>
+    <div class="caption"><strong>Fig. 1.</strong> Top-down schematic of the differential-drive robot. Calibration constants were measured empirically — not guessed. The 0.01 cm asymmetry between R<sub>l</sub> and R<sub>r</sub> was discovered by observing systematic drift under straight-line commands and iterated until eliminated.</div>
+  </div>
+
+  <h2 class="section-title">Dead-Reckoning Odometry</h2>
+  <p>
+    The kinematic model for a differential-drive robot tracks position (x, y) and heading θ from wheel
+    pulse counts. Stepper motors are used instead of encoders — each commanded pulse moves the wheel by
+    a precisely measured distance.
+  </p>
+  <div class="eq">
+    s = pulses × CM_PER_PULSE = pulses × 0.150325 cm/pulse<br/><br/>
+    Δθ = (s_right − s_left) / d &nbsp;&nbsp; [for differential turns]<br/><br/>
+    x ← x + s·cos(θ) &nbsp;&nbsp;&nbsp; y ← y + s·sin(θ) &nbsp;&nbsp;&nbsp; θ ← θ + Δθ
+  </div>
+  <p>
+    The wheel radius asymmetry (Rl = 4.79 cm, Rr = 4.78 cm) causes a 0.21% systematic drift per metre
+    of straight travel — invisible over short distances, visible after 3+ metres. This is corrected in
+    firmware by applying asymmetric pulse counts for commanded forward motion.
+  </p>
+
+  <h2 class="section-title">Turn Calibration</h2>
+  <p>
+    Turning by exactly 90° requires knowing how many stepper pulses correspond to that angle. Measured:
+  </p>
+  <div class="eq">
+    CW correction: 82/90 &nbsp;&nbsp; (command 82 pulses per wheel to achieve 90° CW)<br/>
+    CCW correction: 83.75/90 &nbsp;&nbsp; (83.75 pulses per wheel for 90° CCW)
+  </div>
+  <p>
+    The asymmetry (CW ≠ CCW) is due to mechanical asymmetry in the drive train — the motor + gearbox
+    has slightly different friction in the two directions. Discovered by commanding 360° rotations and
+    measuring actual rotation with a protractor, then iterating the correction factor.
+  </p>
+
+  <h2 class="section-title">Sharp IR Calibration</h2>
+  <p>
+    The Sharp GP2Y family produces a voltage inversely related to distance via a power law:
+  </p>
+  <div class="eq">distance_cm = 93677 × ADC^(−1.505)</div>
+  <p>
+    Fitted using least-squares regression in log space from measurements at 5, 10, 15, 20, 30, 40, 45 cm.
+    Valid for 5–45 cm with the GP2Y0A21YK sensor at 5V, 10-bit ADC. Below 5 cm the output is non-monotonic
+    and unusable; above 45 cm the noise exceeds 5 cm uncertainty.
+  </p>
+
+  <h2 class="section-title">Path Planning — Dijkstra on 10×10 Grid</h2>
+  <p>
+    The arena (2m × 2m) is discretised into a 10×10 grid of 20×20 cm cells. Cells start as "unknown"
+    and are marked "free" as the robot visits them; cells where an obstacle was detected are marked "blocked".
+    Dijkstra's shortest-path algorithm runs on the 100-node graph (4-connected adjacency, uniform edge weight)
+    to find the shortest free path to any target cell.
+  </p>
+  <p>
+    The algorithm is implemented in O(N²) with a linear scan priority queue — fast enough for N=100 on
+    ATmega2560 (runs in &lt;1 ms). Memory: ~200 bytes for distance table + ~100 bytes for parent pointers.
+    Both fit easily in the 8 KB SRAM of the ATmega2560.
+  </p>
+
+  <h2 class="section-title">Coverage — Boustrophedon Pattern</h2>
+  <p>
+    Area coverage uses the boustrophedon ("as the ox ploughs") pattern: alternating left-to-right and
+    right-to-left passes across the grid columns. When a new obstacle is discovered mid-sweep, the map
+    is updated and the remaining coverage path is regenerated around it.
+  </p>
+
+  <!-- Boustrophedon SVG — viewBox extended to prevent legend cutoff -->
+  <div class="diagram-wrap">
+    <svg width="420" height="310" viewBox="0 0 420 310" font-family="'Times New Roman', serif" font-size="10">
+      <rect x="0" y="0" width="420" height="310" fill="#f0f4f8" rx="6"/>
+      <text x="210" y="18" text-anchor="middle" fill="#003366" font-size="12" font-weight="bold">Boustrophedon Coverage (10×10 grid)</text>
+      <defs>
+        <marker id="bp-up" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <polygon points="0,0 7,3.5 0,7" fill="#1a5c30"/>
+        </marker>
+        <marker id="bp-dn" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <polygon points="0,0 7,3.5 0,7" fill="#003366"/>
+        </marker>
+      </defs>
+
+      <!-- Grid lines -->
+      <g stroke="#ccc" stroke-width="0.5">
+        <line x1="35" y1="30" x2="35" y2="250"/>
+        <line x1="65" y1="30" x2="65" y2="250"/>
+        <line x1="95" y1="30" x2="95" y2="250"/>
+        <line x1="125" y1="30" x2="125" y2="250"/>
+        <line x1="155" y1="30" x2="155" y2="250"/>
+        <line x1="185" y1="30" x2="185" y2="250"/>
+        <line x1="215" y1="30" x2="215" y2="250"/>
+        <line x1="245" y1="30" x2="245" y2="250"/>
+        <line x1="275" y1="30" x2="275" y2="250"/>
+        <line x1="305" y1="30" x2="305" y2="250"/>
+        <line x1="335" y1="30" x2="335" y2="250"/>
+        <line x1="35" y1="30"  x2="335" y2="30"/>
+        <line x1="35" y1="52"  x2="335" y2="52"/>
+        <line x1="35" y1="74"  x2="335" y2="74"/>
+        <line x1="35" y1="96"  x2="335" y2="96"/>
+        <line x1="35" y1="118" x2="335" y2="118"/>
+        <line x1="35" y1="140" x2="335" y2="140"/>
+        <line x1="35" y1="162" x2="335" y2="162"/>
+        <line x1="35" y1="184" x2="335" y2="184"/>
+        <line x1="35" y1="206" x2="335" y2="206"/>
+        <line x1="35" y1="228" x2="335" y2="228"/>
+        <line x1="35" y1="250" x2="335" y2="250"/>
+      </g>
+
+      <!-- Col 0: bottom→top (green/up) -->
+      <line x1="50" y1="247" x2="50" y2="33" stroke="#1a5c30" stroke-width="2" marker-end="url(#bp-up)"/>
+      <!-- Col 0→1 at top -->
+      <line x1="50" y1="33" x2="80" y2="33" stroke="#1a5c30" stroke-width="2" marker-end="url(#bp-up)"/>
+      <!-- Col 1: top→bottom (blue/down) -->
+      <line x1="80" y1="33" x2="80" y2="247" stroke="#003366" stroke-width="2" marker-end="url(#bp-dn)"/>
+      <!-- Col 1→2 at bottom -->
+      <line x1="80" y1="247" x2="110" y2="247" stroke="#003366" stroke-width="2" marker-end="url(#bp-dn)"/>
+      <!-- Col 2: bottom→top (green) -->
+      <line x1="110" y1="247" x2="110" y2="33" stroke="#1a5c30" stroke-width="2" marker-end="url(#bp-up)"/>
+      <!-- Col 2→3 at top -->
+      <line x1="110" y1="33" x2="140" y2="33" stroke="#1a5c30" stroke-width="2" marker-end="url(#bp-up)"/>
+      <!-- Col 3: top→bottom (blue) -->
+      <line x1="140" y1="33" x2="140" y2="247" stroke="#003366" stroke-width="2" marker-end="url(#bp-dn)"/>
+
+      <!-- Continuation dots -->
+      <text x="178" y="145" fill="#556" font-size="14" font-weight="bold">· · ·</text>
+
+      <!-- Obstacle cell (col 7, row 3) -->
+      <rect x="215" y="74" width="30" height="22" fill="#ffeac9" stroke="#cc4400" stroke-width="1.5"/>
+      <text x="230" y="88" text-anchor="middle" fill="#cc4400" font-size="11" font-weight="bold">✕</text>
+      <text x="280" y="88" fill="#cc4400" font-size="8">obstacle</text>
+      <text x="280" y="99" fill="#cc4400" font-size="8">→ re-plan</text>
+
+      <!-- Robot start position marker -->
+      <circle cx="50" cy="247" r="11" fill="#003366"/>
+      <text x="50" y="251" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">R</text>
+      <text x="50" y="268" text-anchor="middle" fill="#003366" font-size="8">Start</text>
+
+      <!-- Column labels -->
+      <text x="50"  y="27" text-anchor="middle" fill="#556" font-size="8">0</text>
+      <text x="80"  y="27" text-anchor="middle" fill="#556" font-size="8">1</text>
+      <text x="110" y="27" text-anchor="middle" fill="#556" font-size="8">2</text>
+      <text x="140" y="27" text-anchor="middle" fill="#556" font-size="8">3</text>
+      <text x="335" y="27" text-anchor="middle" fill="#556" font-size="8">9</text>
+
+      <!-- Legend -->
+      <line x1="340" y1="100" x2="370" y2="100" stroke="#1a5c30" stroke-width="2" marker-end="url(#bp-up)"/>
+      <text x="375" y="104" fill="#1a5c30" font-size="9">Upward sweep</text>
+      <line x1="340" y1="120" x2="370" y2="120" stroke="#003366" stroke-width="2" marker-end="url(#bp-dn)"/>
+      <text x="375" y="124" fill="#003366" font-size="9">Downward sweep</text>
+      <rect x="340" y="137" width="14" height="10" fill="#ffeac9" stroke="#cc4400" stroke-width="1"/>
+      <text x="360" y="147" fill="#cc4400" font-size="9">Obstacle → re-plan</text>
+
+      <!-- Border -->
+      <rect x="35" y="30" width="300" height="220" fill="none" stroke="#003366" stroke-width="1.5"/>
+    </svg>
+    <div class="caption"><strong>Fig. 2.</strong> Boustrophedon coverage: alternating column sweeps, top-to-bottom and bottom-to-top. When an obstacle is encountered (✕), the occupancy map is updated and the remaining path is re-planned around it.</div>
+  </div>
+
+  <h2 class="section-title">IMU — Heading Correction</h2>
+  <p>
+    The MPU-9250 (9-DOF: accel + gyro + magnetometer via AK8963) is connected over I²C at 400 kHz.
+    The Z-axis gyroscope provides angular velocity; Euler integration at 20 Hz gives heading.
+    The IMU is used for two purposes:
+  </p>
+  <ul>
+    <li><strong>Sanity check after turns:</strong> If the odometry model claims a 90° turn but the gyro reports only 45°, slippage occurred. The gyro reading overrides the odometric heading.</li>
+    <li><strong>Slip detection:</strong> If commanded forward motion produces nonzero gyroscope yaw rate, a wheel is slipping. The robot stops and retries.</li>
+  </ul>
+
+  <h2 class="section-title">nRF24L01 Wireless</h2>
+  <p>
+    The 2.4 GHz nRF24L01 transceiver (SPI) provides a wireless link for two purposes: real-time
+    position telemetry to a remote monitor (the robot broadcasts its current (x, y, θ) every 500 ms),
+    and emergency stop command reception. If the remote sends the stop byte <code>0xFF</code>, the
+    robot immediately halts all motion regardless of current navigation state.
+  </p>
+
+  <h2 class="section-title">Why This Matters at 15</h2>
+  <p>
+    No robotics library was used. No SLAM library, no navigation stack, no pre-written kinematics. Every
+    part — the kinematic model, the IR calibration, the Dijkstra implementation, the sensor ring layout,
+    the turn asymmetry correction — was derived from reading datasheets and papers and verified
+    experimentally. The result was a robot that actually worked: navigated to (x, y) coordinates,
+    covered its arena, avoided obstacles, and communicated wirelessly.
+  </p>
+  <p>
+    The empirical calibration discipline embedded here — measure it, don't guess it — has carried forward
+    into every subsequent hardware project.
+  </p>
+
+  <!-- Chista context -->
+  <div class="info-box" style="margin-top:2.5rem; border-left-color:#4a1f7a;">
+    <strong>Chista Robotics Team context:</strong> This robot was the first serious hardware project built as
+    part of <a href="../index.html#chista">Chista Robotics Team</a>, a competitive robotics team based in
+    Shiraz, Iran, where I have been the hardware and embedded programmer since 2014. Chista has competed at
+    <strong>Asia Pacific Robot Contest (2018)</strong>, <strong>Iran Open Robocup (2016, 2017)</strong>,
+    <strong>AUT Cup (2017)</strong>, <strong>FIRA Cup</strong>, <strong>Shiraz Open (2015)</strong>, and
+    <strong>Autonomous Vehicles Tehran (2025)</strong>, among others. The team competes seriously but is
+    entirely volunteer-driven — shared engineering passion, no compensation.
+    Certificates of participation and awards for relevant competitions are available on request.
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AVR Impedance Meter — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html" class="active">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-circuit.html">Circuit &amp; Hardware</a><span>›</span>
+    <span class="current">AVR Impedance Meter</span>
+  </div>
+</div>
+
+<div class="page-hero hero-circuit">
+  <div class="container">
+    <span class="layer-badge layer-circuit">Layer 2 — Circuit &amp; Hardware</span>
+    <h1>AVR Impedance Meter</h1>
+    <p>ATmega16-based impedance meter using an AC bridge at 10 kHz. Peak detector and zero-crossing detector measure magnitude and phase; polar-to-rectangular firmware conversion.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">ATmega16</span><span class="stat-label">Microcontroller</span></div>
+    <div class="stat"><span class="stat-value">10 kHz</span><span class="stat-label">Test Signal Frequency</span></div>
+    <div class="stat"><span class="stat-value">OPA2172D</span><span class="stat-label">Op-Amps</span></div>
+    <div class="stat"><span class="stat-value">LM393</span><span class="stat-label">Comparators</span></div>
+    <div class="stat"><span class="stat-value">|Z|, θ → R+jX</span><span class="stat-label">Output</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · C / AVR</p>
+      <a href="https://github.com/muhammadzareii/avr-impedance-meter" target="_blank">github.com/muhammadzareii/avr-impedance-meter</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    An impedance meter measures the complex electrical impedance Z = |Z|·e^(jθ) = R + jX of an unknown
+    component at a specific test frequency. Most bench LCR meters use dedicated ICs; this project implements
+    the same measurement from first principles on an ATmega16 using a bridge circuit, precision analog front-end,
+    and digital signal processing in firmware.
+  </p>
+  <p>
+    The fundamental approach is the AC bridge: the unknown impedance Z_x is placed in one arm of a balanced
+    Wheatstone-type bridge driven at 10 kHz. At balance, the voltage across the bridge diagonal is zero.
+    In this design, rather than manually balancing the bridge, the bridge is unbalanced intentionally and the
+    imbalance voltage is measured — its amplitude gives |Z_x| and its phase relative to the drive signal gives θ.
+  </p>
+
+  <h2 class="section-title">Circuit Architecture</h2>
+
+  <!-- SVG signal chain — clean 3-row layout -->
+  <div class="diagram-wrap">
+    <svg width="660" height="295" viewBox="0 0 660 295" font-family="'Times New Roman', Times, serif" font-size="11">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto">
+          <polygon points="0,0 8,3.5 0,7" fill="#003366"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="660" height="295" fill="#f0f4f8" rx="6"/>
+      <text x="330" y="19" text-anchor="middle" fill="#003366" font-size="12" font-weight="bold">AVR Impedance Meter — Signal Chain</text>
+
+      <!-- ROW 1: Generation + Bridge + Amp (horizontal) -->
+      <!-- Box 1: MCU PWM -->
+      <rect x="12" y="34" width="106" height="46" rx="4" fill="#003366"/>
+      <text x="65" y="53" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">ATmega16</text>
+      <text x="65" y="68" text-anchor="middle" fill="#aaddff" font-size="9">PWM → 10 kHz sq.</text>
+      <!-- Arrow 1→2 -->
+      <line x1="118" y1="57" x2="138" y2="57" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Box 2: LPF -->
+      <rect x="140" y="34" width="106" height="46" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="193" y="53" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">LPF + Buffer</text>
+      <text x="193" y="68" text-anchor="middle" fill="#556" font-size="9">sq. → ~sine</text>
+      <!-- Arrow 2→3 -->
+      <line x1="246" y1="57" x2="266" y2="57" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="256" y="50" text-anchor="middle" fill="#888" font-size="8">V_drive</text>
+      <!-- Box 3: AC Bridge -->
+      <rect x="268" y="34" width="106" height="46" rx="4" fill="#fff3cd" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="321" y="53" text-anchor="middle" fill="#7a4b00" font-size="10" font-weight="bold">AC Bridge</text>
+      <text x="321" y="68" text-anchor="middle" fill="#7a4b00" font-size="9">R_ref ‖ Z_x arms</text>
+      <!-- Arrow 3→4 -->
+      <line x1="374" y1="57" x2="394" y2="57" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="384" y="50" text-anchor="middle" fill="#888" font-size="8">V_bridge</text>
+      <!-- Box 4: Diff Amp -->
+      <rect x="396" y="34" width="106" height="46" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="449" y="53" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">OPA2172D</text>
+      <text x="449" y="68" text-anchor="middle" fill="#556" font-size="9">Differential Amp</text>
+
+      <!-- Vertical drop + horizontal split bus -->
+      <line x1="449" y1="80" x2="449" y2="115" stroke="#003366" stroke-width="1.5"/>
+      <line x1="223" y1="115" x2="449" y2="115" stroke="#003366" stroke-width="1.5"/>
+      <!-- Drop to Peak Det -->
+      <line x1="223" y1="115" x2="223" y2="135" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Drop to ZCD -->
+      <line x1="449" y1="115" x2="449" y2="135" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Junction dots -->
+      <circle cx="449" cy="115" r="3.5" fill="#003366"/>
+      <circle cx="223" cy="115" r="3.5" fill="#003366"/>
+
+      <!-- ROW 2: Magnitude (left) and Phase (right) -->
+      <!-- Box 5: Peak Detector -->
+      <rect x="155" y="137" width="136" height="46" rx="4" fill="#d4edda" stroke="#1a5c30" stroke-width="1.5"/>
+      <text x="223" y="156" text-anchor="middle" fill="#1a5c30" font-size="10" font-weight="bold">Peak Detector</text>
+      <text x="223" y="171" text-anchor="middle" fill="#556" font-size="9">ADC ch. → |Z|</text>
+      <!-- Box 6: LM393 ZCD -->
+      <rect x="381" y="137" width="136" height="46" rx="4" fill="#d4edda" stroke="#1a5c30" stroke-width="1.5"/>
+      <text x="449" y="156" text-anchor="middle" fill="#1a5c30" font-size="10" font-weight="bold">LM393 ZCD</text>
+      <text x="449" y="171" text-anchor="middle" fill="#556" font-size="9">Timer capture → θ</text>
+
+      <!-- Converging arrows → Row 3 -->
+      <line x1="223" y1="183" x2="280" y2="232" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="449" y1="183" x2="392" y2="232" stroke="#003366" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="218" y="218" text-anchor="middle" fill="#888" font-size="8">|Z|</text>
+      <text x="458" y="218" text-anchor="middle" fill="#888" font-size="8">θ</text>
+
+      <!-- ROW 3: Processing + LCD -->
+      <!-- Box 7: MCU processing -->
+      <rect x="222" y="234" width="216" height="50" rx="4" fill="#003366"/>
+      <text x="330" y="254" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">ATmega16 — Firmware</text>
+      <text x="330" y="270" text-anchor="middle" fill="#aaddff" font-size="9">|Z|, θ  →  R + jX  →  16×2 LCD</text>
+
+      <!-- Stage labels (right margin) -->
+      <text x="518" y="57" text-anchor="start" fill="#999" font-size="9" font-style="italic">Generation</text>
+      <text x="518" y="160" text-anchor="start" fill="#999" font-size="9" font-style="italic">Measurement</text>
+      <text x="518" y="260" text-anchor="start" fill="#999" font-size="9" font-style="italic">Processing</text>
+    </svg>
+    <div class="caption"><strong>Fig. 1.</strong> Signal chain (three stages): <em>Generation</em> — ATmega16 PWM square wave → RC low-pass filter → approximate sine drive; <em>Measurement</em> — AC bridge imbalance amplified by OPA2172D, then split to peak detector (ADC, gives |Z|) and LM393 zero-crossing detector (timer capture, gives θ); <em>Processing</em> — ATmega16 converts polar |Z|∠θ to rectangular R + jX and displays on LCD.</div>
+  </div>
+
+  <h2 class="section-title">Signal Chain Detail</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Test Signal Generation</h3>
+  <p>
+    The ATmega16 generates a 10 kHz square wave using its built-in PWM timer. A first-order RC low-pass filter
+    converts this to an approximate sine wave with sufficient amplitude for the bridge. The 10 kHz frequency
+    is chosen as a compromise: high enough to measure reactive components (capacitors, inductors) over a useful
+    range, low enough for reliable zero-crossing detection with a standard comparator.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Magnitude Measurement — Peak Detector</h3>
+  <p>
+    The bridge imbalance voltage (proportional to Z_x) is amplified by the OPA2172D differential amplifier.
+    A diode-capacitor peak detector then captures the amplitude envelope. The OPA2172D is chosen for its
+    rail-to-rail output and low offset voltage (&lt;25 μV), which is important when the bridge approaches balance
+    (small imbalance signal). The peak detector output is read by the ATmega16 ADC (10-bit, 5V reference).
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Phase Measurement — Zero-Crossing Detector</h3>
+  <p>
+    The phase between the bridge imbalance voltage and the reference signal is measured by time-of-flight
+    between their zero crossings. Each zero crossing triggers an edge on an MCU digital input via the LM393
+    comparator. The ATmega16 input capture timer records the time difference Δt; the phase angle is then:
+  </p>
+  <div class="eq">θ = 2π × Δt × f_test = 2π × Δt × 10,000</div>
+  <p>
+    The 16-bit input capture timer at F_CPU = 8 MHz gives a time resolution of 125 ns, corresponding to a
+    phase resolution of 0.45° at 10 kHz — adequate for most passive component measurements.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Polar-to-Rectangular Conversion</h3>
+  <p>
+    The firmware converts the measured polar form (|Z|, θ) to rectangular form (R, X) using fixed-point
+    trigonometry (look-up table for sin/cos to avoid floating-point overhead on the AVR):
+  </p>
+  <div class="eq">R = |Z| × cos(θ) &nbsp;&nbsp;&nbsp; X = |Z| × sin(θ)</div>
+  <p>
+    Both polar and rectangular forms are displayed on a 16×2 LCD connected via 4-bit parallel interface.
+  </p>
+
+  <h2 class="section-title">Results and Figures</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/system_overview.png" alt="System overview" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> Complete system block diagram showing all signal chain stages from PWM generation to LCD display output.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/ac_bridge_circuit.png" alt="AC bridge circuit" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> AC bridge schematic: reference arm (R_ref) and unknown arm (Z_x). The OPA2172D amplifies the differential bridge imbalance voltage.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/peak_detector.png" alt="Peak detector" />
+      <div class="fig-caption"><strong>Fig. 4.</strong> Peak detector circuit with hold capacitor and op-amp buffer. The held voltage is proportional to the bridge imbalance amplitude, giving |Z_x|.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/zero_cross_detector.png" alt="Zero crossing detector" />
+      <div class="fig-caption"><strong>Fig. 5.</strong> LM393 zero-crossing detector. Output edges trigger the ATmega16 input capture unit for phase measurement.</div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

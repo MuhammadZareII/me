@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magnetic Wireless Multi-User Communication — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html" class="active">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-circuit.html">Circuit &amp; Hardware</a><span>›</span>
+    <span class="current">Magnetic Wireless Multi-User Communication</span>
+  </div>
+</div>
+
+<div class="page-hero hero-circuit" style="background: linear-gradient(135deg, #003366 60%, #7a4b00);">
+  <div class="container">
+    <span class="layer-badge layer-circuit">Layer 2 — Circuit &amp; Hardware</span>
+    <h1>Magnetic Wireless Multi-User Communication System</h1>
+    <p>Low-frequency near-field magnetic coupling for a multi-node indoor communication network. FabLab project, University of Oulu, January 2026.</p>
+    <div class="domain-tags" style="margin-top:0.8rem;">
+      <span class="domain-tag domain-comms">Communications</span>
+      <span class="domain-tag domain-signal">Signal Processing</span>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">~1 MHz</span><span class="stat-label">Carrier Frequency</span></div>
+    <div class="stat"><span class="stat-value">1–3 m</span><span class="stat-label">Communication Range</span></div>
+    <div class="stat"><span class="stat-value">8 nodes</span><span class="stat-label">Max Network Size</span></div>
+    <div class="stat"><span class="stat-value">ASK/OOK</span><span class="stat-label">Modulation</span></div>
+    <div class="stat"><span class="stat-value">TDMA</span><span class="stat-label">MAC Protocol</span></div>
+  </div>
+
+  <div class="note-box">
+    Completed as part of the FabLab practical course at the University of Oulu (January 2026). Design files, MATLAB simulations, and the full system description report are maintained locally.
+  </div>
+
+  <h2 class="section-title">System Overview</h2>
+  <p>
+    The goal of this project was to design a small multiuser communication network using magnetic near-field coupling rather than radiating antennas. A central node coordinates communication with up to eight end nodes, targeting reliable transfer of text and simple images over 1–3 metres using entirely discrete components on a custom PCB — no off-the-shelf radio modules.
+  </p>
+  <p>
+    Figure 1 shows the end-to-end signal chain. Digital functions — packet formation, buffering, DMA, and TDMA scheduling — interface to the physical layer through a digitally controlled oscillator (DCO) carrier, an envelope/ASK gate, a switching current driver, and a tuned LC coil. On the receive side, the magnetically coupled signal passes through an envelope detector, low-pass filter, and baseband amplifier before being digitised by an external SPI ADC. A sense coil provides an independent measurement point for calibration.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz1.png" alt="System block diagram: MCU, Buffer, DMA, DAC, ADC, VCG, LC Tank, Envelope Detector, LPF, Power Amplifier, Sense Coil, Magnetic Coupling" />
+    <figcaption><span class="fig-num">Fig. 1.</span> <span class="fig-caption">End-to-end system block diagram. The MCU drives a square-wave DCO whose output is gated by the ASK envelope control (VCG) and fed to a switching current driver. The LC tank coil radiates magnetically; the received signal is envelope-detected, low-pass filtered, and digitised. DAC controls VCG gain; a separate sense coil feeds the ADC for calibration. (DCO = Digitally Controlled Oscillator; VCG = Voltage Controlled Gain / Envelope Gate; EnV-D = Envelope Detector; P-AMP = Class-D Current Amplifier.)</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Why Magnetic Coupling — and Why 1 MHz</h2>
+
+  <p>
+    At a carrier frequency of 1 MHz the free-space wavelength is approximately 300 m. The near-field boundary — defined by <em>r ≪ λ/2π</em> — lies around 50 m, well beyond the 1–3 m target range. This means the system operates entirely inside the magnetic near field, where the dominant coupling mechanism is mutual inductive coupling between resonant coils, not radiation.
+  </p>
+  <p>
+    A conventional antenna at 1 MHz would be electrically tiny (physical size ≪ λ), resulting in extremely low radiation resistance and negligible efficiency. Classical far-field link budgets do not apply here: received signal strength depends on coil geometry, orientation, separation distance, and resonant tuning rather than antenna gain and transmitted power. This is not a shortcoming but an intentional design choice — near-field confinement limits the useful communication range, reducing inter-cell interference and making eavesdropping from outside the room physically difficult.
+  </p>
+  <p>
+    The 1 MHz frequency was also chosen for practical engineering reasons: at this frequency discrete lumped components (coils wound by hand, standard capacitors) behave predictably, PCB layout and routing are straightforward, and standard laboratory oscilloscopes and spectrum analysers can be used directly for debugging without specialised RF instrumentation.
+  </p>
+
+  <!-- Star topology network diagram -->
+  <div class="diagram-wrap">
+    <svg width="620" height="340" viewBox="0 0 620 340" font-family="'Times New Roman', Times, serif" font-size="12">
+      <rect x="0" y="0" width="620" height="340" fill="#f0f4f8" rx="6"/>
+      <text x="310" y="20" text-anchor="middle" fill="#003366" font-size="13" font-weight="bold">Network Topology — Star, Master-Coordinated</text>
+      <circle cx="310" cy="165" r="40" fill="#003366" stroke="#003366" stroke-width="2"/>
+      <text x="310" y="161" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">MASTER</text>
+      <text x="310" y="177" text-anchor="middle" fill="#aaddff" font-size="10">Beacon + TDMA</text>
+      <circle cx="310" cy="165" r="90" fill="none" stroke="#003366" stroke-width="1" stroke-dasharray="6,4" opacity="0.3"/>
+      <circle cx="310" cy="165" r="140" fill="none" stroke="#003366" stroke-width="1" stroke-dasharray="4,6" opacity="0.2"/>
+      <!-- 7 slave nodes -->
+      <circle cx="310" cy="58" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="310" y="54" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 1</text>
+      <text x="310" y="68" text-anchor="middle" fill="#556" font-size="9">UL slot 1</text>
+      <line x1="310" y1="84" x2="310" y2="125" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <circle cx="455" cy="93" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="455" y="89" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 2</text>
+      <text x="455" y="103" text-anchor="middle" fill="#556" font-size="9">UL slot 2</text>
+      <line x1="432" y1="108" x2="347" y2="141" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <circle cx="510" cy="195" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="510" y="191" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 3</text>
+      <text x="510" y="205" text-anchor="middle" fill="#556" font-size="9">UL slot 3</text>
+      <line x1="484" y1="192" x2="350" y2="173" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <circle cx="445" cy="290" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="445" y="286" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 4</text>
+      <text x="445" y="300" text-anchor="middle" fill="#556" font-size="9">UL slot 4</text>
+      <line x1="422" y1="274" x2="342" y2="204" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <circle cx="165" cy="290" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="165" y="286" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 5</text>
+      <text x="165" y="300" text-anchor="middle" fill="#556" font-size="9">UL slot 5</text>
+      <line x1="188" y1="274" x2="278" y2="204" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <circle cx="100" cy="195" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="100" y="191" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 6</text>
+      <text x="100" y="205" text-anchor="middle" fill="#556" font-size="9">UL slot 6</text>
+      <line x1="126" y1="192" x2="270" y2="173" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <circle cx="155" cy="93" r="26" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="155" y="89" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Node 7</text>
+      <text x="155" y="103" text-anchor="middle" fill="#556" font-size="9">UL slot 7</text>
+      <line x1="178" y1="108" x2="273" y2="141" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+      <line x1="30" y1="325" x2="60" y2="325" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="65" y="329" fill="#556" font-size="10">Magnetic near-field coupling</text>
+      <circle cx="35" cy="313" r="5" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="45" y="317" fill="#556" font-size="10">End node (up to 7 per master)</text>
+    </svg>
+    <div class="caption"><strong>Fig. 2.</strong> Star topology: master at centre broadcasts a synchronisation beacon; each end node replies in its assigned uplink slot. All coupling is magnetic near-field at ~1 MHz.</div>
+  </div>
+
+  <h2 class="section-title">PHY Layer — Resonant LC Channel</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Resonant Coil as Channel, Filter, and Energy Store</h3>
+  <p>
+    Each node is built around a tuned LC resonator whose resonant frequency is set to the network carrier frequency <em>f</em><sub>net</sub>. The resonator serves three simultaneous roles: it is the coupling element (coil current generates the magnetic field), a narrow band-pass filter (attenuating out-of-band interference and harmonics from the square-wave driver), and an energy store that shapes transmitted envelope transitions.
+  </p>
+  <p>
+    The LC tank resonant frequency is <em>f</em><sub>0</sub> = 1/(2π√<em>LC</em>). The effective bandwidth of the resonator is BW ≈ <em>f</em><sub>0</sub>/<em>Q</em>, where <em>Q</em> is the quality factor. A higher <em>Q</em> gives a narrower pass-band, better harmonic rejection, and higher received signal amplitude — but at the cost of slower envelope response and lower achievable symbol rate.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz2.png" alt="Plot of resonator bandwidth BW vs quality factor Q, hyperbolic decrease from ~70 kHz at Q=10 to ~6 kHz at Q=120" />
+    <figcaption><span class="fig-num">Fig. 3.</span> <span class="fig-caption">Resonator bandwidth BW ≈ <em>f</em><sub>0</sub>/<em>Q</em> as a function of quality factor <em>Q</em> for <em>f</em><sub>0</sub> = 700 kHz. Increasing <em>Q</em> narrows the pass-band, improving spectral selectivity and harmonic suppression, but reduces the bandwidth available for data modulation.</span></figcaption>
+  </figure>
+
+  <p>
+    This bandwidth–selectivity trade-off directly constrains the achievable symbol rate. A conservative design guideline requires the bit rate to remain well below the resonator bandwidth to avoid inter-symbol interference from envelope distortion. Figure 3 shows the resulting conservative bit rate estimate <em>R</em><sub>b</sub> ≲ BW/3 as a function of <em>Q</em>. Together, Figs. 2 and 3 motivate the choice of moderate <em>Q</em> values in this system — balancing spectral cleanliness, transient response, and practical data throughput.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz3.png" alt="Plot of conservative achievable bit rate Rb vs quality factor Q, decreasing from ~23 kbps at Q=10 to ~2 kbps at Q=120" />
+    <figcaption><span class="fig-num">Fig. 4.</span> <span class="fig-caption">Conservative achievable bit rate <em>R</em><sub>b</sub> ≲ BW/3 as a function of quality factor <em>Q</em>, assuming <em>f</em><sub>0</sub> = 700 kHz. Higher <em>Q</em> improves spectral confinement but reduces the data rate the resonator can support without excessive ISI.</span></figcaption>
+  </figure>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Envelope Rise and Fall — The Q–Bit-Rate Trade-off in the Time Domain</h3>
+  <p>
+    When the carrier is gated on or off for OOK modulation, the resonant LC tank does not respond instantaneously. The stored energy builds up or decays with a time constant approximately
+  </p>
+  <div class="equation-block">
+    <span class="eq-math"><em>τ</em> ≈ <em>Q</em> / (π <em>f</em><sub>0</sub>)</span>
+  </div>
+  <p>
+    A higher <em>Q</em> therefore means longer rise and fall times of the carrier envelope. If the symbol period becomes comparable to <em>τ</em>, amplitude levels never reach their steady-state values and detection margin collapses. This is the time-domain counterpart of the bandwidth argument above. Figures 4 and 5 illustrate the envelope fall and rise responses for several <em>Q</em> values at <em>f</em><sub>0</sub> = 700 kHz: at <em>Q</em> = 120 the settling time exceeds 300 μs, whereas at <em>Q</em> = 10 it is under 30 μs.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz4.png" alt="Normalised envelope fall vs time for Q = 10, 20, 30, 50, 80, 120 at f0 = 700 kHz. Higher Q decays slower." />
+    <figcaption><span class="fig-num">Fig. 5.</span> <span class="fig-caption">Normalised envelope fall (carrier switch-off) for quality factors <em>Q</em> = 10…120 at <em>f</em><sub>0</sub> = 700 kHz, with time constant <em>τ</em> = <em>Q</em>/(π<em>f</em><sub>0</sub>). Higher <em>Q</em> results in slower decay, directly limiting the maximum symbol rate for reliable OOK detection.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz5.png" alt="Normalised envelope rise vs time for Q = 10, 20, 30, 50, 80, 120 at f0 = 700 kHz. Higher Q builds up slower." />
+    <figcaption><span class="fig-num">Fig. 6.</span> <span class="fig-caption">Normalised envelope rise (carrier switch-on) for the same <em>Q</em> range. The build-up is symmetric with the fall; both must complete within the symbol period for reliable bit detection. Moderate <em>Q</em> values balance harmonic suppression against acceptable transient response.</span></figcaption>
+  </figure>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Push-Pull Switching Current Driver</h3>
+  <p>
+    The transmitter power stage uses a push-pull topology with two N-channel MOSFETs driven by a dual-channel gate driver. The gate driver translates the logic-level DCO output into complementary high-current switching signals, alternately driving the resonant LC tank in opposite directions. This symmetric excitation efficiently utilises the supply voltage, minimises even-order distortion, and maximises coil current for a given supply. End nodes operate from 5 V, targeting peak coil currents around 0.5 A; the central node uses 12 V and drives 1–2 A peak to improve link margin and synchronisation reliability.
+  </p>
+  <p>
+    The carrier is generated by a digitally controlled oscillator (DCO) implemented with an MCU timer peripheral toggling at the desired frequency. Frequency tuning is accomplished by adjusting the timer reload value: <em>f</em><sub>DCO</sub> = <em>f</em><sub>clk</sub> / 2<em>N</em>. Although the raw DCO output is a square wave containing odd harmonics (<em>f</em><sub>0</sub>, 3<em>f</em><sub>0</sub>, 5<em>f</em><sub>0</sub>, …), the resonant LC tank strongly attenuates these, so the coil current is approximately sinusoidal at <em>f</em><sub>net</sub>.
+  </p>
+  <p>
+    ASK/OOK modulation is applied by gating the DCO output through a voltage-controlled gain stage (VCG) whose amplitude is set by an external SPI DAC. This allows a small number of discrete, repeatable amplitude levels rather than continuous analog control, simplifying calibration and improving reproducibility across nodes.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Envelope Detector and ADC Front-End</h3>
+  <p>
+    At the receiver, the magnetically filtered signal at the LC tank output is rectified by a Schottky diode envelope detector (Schottky chosen for its low forward voltage drop and better sensitivity at small amplitudes). A low-pass filter removes residual carrier-frequency ripple, yielding a smooth baseband envelope. A baseband amplifier then scales this signal to match the ADC full-scale range. Importantly, amplification is placed after the LPF rather than before it, preventing RF ripple amplification and avoiding ADC saturation. An external SPI ADC provides better resolution, lower noise, and more deterministic timing than an MCU's internal converter — important for adaptive calibration and received signal strength indication (RSSI) measurement.
+  </p>
+
+  <h2 class="section-title">MAC Layer — Beaconed TDMA</h2>
+  <p>
+    Because all nodes share a single magnetic channel (there is no spatial separation at these distances), multiple access requires time-division. The MAC layer uses a beaconed TDMA scheme: a master node broadcasts a periodic beacon frame that synchronises all slaves. Each slave is pre-assigned both an uplink slot (slave transmits to master) and a downlink mini-slot (master transmits to slave); transmission outside the assigned window is forbidden by protocol. Guard intervals between slots absorb clock drift and beacon detection jitter.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz6.png" alt="TDMA frame: Beacon (5 ms), guard, UL 1-4 (4 ms each with guards), DL 1-4 (2 ms each with guards), total ~35 ms" />
+    <figcaption><span class="fig-num">Fig. 7.</span> <span class="fig-caption">TDMA superframe structure (4-node example, MATLAB simulation). Each frame opens with a 5 ms beacon from the master, followed by four uplink slots (UL 1–4, light blue, 4 ms each) and four downlink mini-slots (DL 1–4, grey, 2 ms each), separated by 0.8 ms guard intervals. The frame repeats every ~35 ms.</span></figcaption>
+  </figure>
+
+  <p>
+    Synchronisation is achieved through the beacon: all slaves reset their slot counter upon detecting the beacon preamble. A slave that misses two consecutive beacons enters a listen-only mode and attempts re-synchronisation, preventing rogue transmissions from corrupting other nodes' slots. The join/leave procedure allows nodes to dynamically enter or exit the network without disrupting ongoing communication.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Beacon Packet Structure</h3>
+  <p>
+    The beacon frame carries all the information a slave needs to (re-)synchronise and operate correctly within its assigned window. As shown in Fig. 7, the packet fields are: a <strong>Preamble</strong> for timing recovery and carrier detection; a <strong>Sync Word</strong> for frame boundary alignment; a <strong>Frame Counter</strong> for sequence numbering; a <strong>Slot Map</strong> encoding which slots are assigned; an <strong>ACK Bitmap</strong> confirming receipt of uplink packets from the previous frame; <strong>Network Parameters</strong> carrying frequency offset and gain corrections; and a <strong>Per-Node Feedback</strong> field with link quality and retransmission instructions.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fablab_viz7.png" alt="Beacon packet structure showing seven fields proportional to their bit length: Preamble, Sync Word, Frame Counter, Slot Map, ACK Bitmap, Network Params, Per-Node Feedback" />
+    <figcaption><span class="fig-num">Fig. 8.</span> <span class="fig-caption">Beacon packet structure, with field widths proportional to relative bit-field length. The Preamble is the longest field, providing sufficient lead-in for envelope detection and timing recovery. Per-Node Feedback carries per-link quality metrics and retransmission requests.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Calibration and Self-Tuning</h2>
+  <p>
+    Component tolerances, parasitic capacitances, temperature variation, and environmental loading all cause resonant frequency drift between nodes. If transmitter and receiver resonances are misaligned, coupling efficiency drops sharply. The system addresses this through a three-stage calibration sequence. On startup, the central node performs an idle-channel scan, sweeping the DCO across a small frequency range to identify the quietest operating point. It then broadcasts a long pilot tone; each end node adjusts its tuning capacitance to maximise received envelope amplitude. Finally, during steady-state TDMA operation, the ACK bitmap and RSSI feedback in each beacon provide continuous fine-correction cues, keeping all nodes locked near network resonance without requiring a dedicated calibration master clock.
+  </p>
+
+  <h2 class="section-title">MATLAB Simulation</h2>
+  <p>
+    A supporting MATLAB simulation suite was developed alongside the hardware design. <code>Simtool.m</code> models the resonant LC channel, computing envelope rise/fall time constants, bandwidth, and achievable bit rate as functions of quality factor (Figs. 2–5 above). <code>figtool_0.m</code> generates the TDMA frame timing diagram (Fig. 6), with configurable beacon duration, uplink and downlink slot widths, number of nodes, and guard intervals. <code>figtool_1.m</code> produces the beacon packet structure diagram (Fig. 7). These tools were used to validate timing budget calculations and explore the Q-factor design space before hardware implementation.
+  </p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

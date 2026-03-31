@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Physical &amp; Simulation — Muhammad Zareii</title>
+  <link rel="stylesheet" href="css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="layer-physical.html" class="active">Physical &amp; Sim</a>
+      <a href="layer-circuit.html">Circuit &amp; HW</a>
+      <a href="layer-embedded.html">Embedded &amp; FW</a>
+      <a href="layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero hero-physical">
+  <div class="container">
+    <span class="layer-badge layer-physical">Layer 1 of 4</span>
+    <h1>Physical &amp; Simulation</h1>
+    <p>Device-level physics, electromagnetic field simulation, quantum mechanics, photonic resonator design — the foundation of the stack. These projects are closest to the physics.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="info-box">
+    <strong>Layer philosophy:</strong> Physics constrains everything else. Before a photonic device can be
+    fabricated, before a plasmonic waveguide can carry a signal, before a quantum well can emit light —
+    the electromagnetic behaviour must be understood quantitatively. These projects are all simulations
+    and numerical models: FDTD solvers, k·p Hamiltonians, wave-optics propagation engines.
+    They produce no hardware, but they produce understanding.
+  </div>
+
+  <h2 class="section-title">Projects in this Layer</h2>
+
+  <div class="project-grid">
+
+    <div class="project-card">
+        <img src="images/D2NN_layers_height_all.png" alt="D2NN" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-physical">Physical</span>
+          <h3><a href="projects/d2nn.html" class="stretched-link">D2NN Physical Feasibility Evaluator</a></h3>
+          <p>Angular Spectrum Method propagation engine with five quantitative physical checks — band-limit, energy conservation, photon budget, SNR, Monte Carlo fabrication tolerance. Bridges the gap between trained simulation and fabricable device.</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">ASM</span><span class="tag">Wave Optics</span><span class="tag">Monte Carlo</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/d2nn-feasibility" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/fig3_transmission_spectrum.png" alt="BIC Sensor" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-physical">Physical</span>
+          <h3><a href="projects/bic-sensor.html" class="stretched-link">BIC Photonic Cell Sensor</a></h3>
+          <p>Bound-state-in-the-continuum Si nanocube resonator (Q &gt; 1000) for label-free cancer vs. non-cancer cell detection. Full pipeline: FTIR → Kramers–Kronig → COMSOL FDTD → PCA+SVM classifier. Exploits the unique linewidth of qBIC modes for refractive-index sensing.</p>
+          <div class="tags">
+            <span class="tag">COMSOL</span><span class="tag">BIC/qBIC</span><span class="tag">Python</span><span class="tag">SVM</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/MuhammadZareII/bic-cell-classifier" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/Microcavity_Field_Distribution.png" alt="Plasmonics" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-physical">Physical</span>
+          <h3><a href="projects/plasmonics.html" class="stretched-link">FDTD Active Plasmonics</a></h3>
+          <p>Semiclassical Maxwell-Bloch FDTD solver for gain-modulated plasmonic structures. Lorentz-Drude gold model + optical Bloch equations. Simulates MSM waveguides and microcavities; ~60% resonance amplitude increase with nanoparticle-enhanced gain.</p>
+          <div class="tags">
+            <span class="tag">FDTD</span><span class="tag">Maxwell-Bloch</span><span class="tag">Plasmonics</span><span class="tag">MATLAB</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/fdtd-active-plasmonics" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/slavcheva_vcsel.png" alt="Slavcheva FDTD" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-physical">Physical</span>
+          <h3><a href="projects/slavcheva.html" class="stretched-link">Slavcheva Maxwell-Bloch FDTD</a></h3>
+          <p>Faithful, auditable reproduction of the Slavcheva et al. semiclassical FDTD framework. 1D Yee grid, Mur ABC, predictor-corrector Bloch integrator. Reproduces VCSEL gain saturation and lasing at 850 nm and 1.29 μm.</p>
+          <div class="tags">
+            <span class="tag">FDTD</span><span class="tag">VCSEL</span><span class="tag">Gain Saturation</span><span class="tag">MATLAB</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/slavcheva_faithful_repo" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/phc_field.png" alt="PhC Gates" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-physical">Physical</span>
+          <h3><a href="projects/phc-gates.html" class="stretched-link">Photonic Crystal All-Optical Logic Gates</a></h3>
+          <p>COMSOL 2D PhC FDTD simulation of NOT, AND, OR gates at λ = 1.55 μm. Linear interference mechanism — no nonlinear material required. Based on Rani et al. 2015 geometry. Validates published transmission spectra and field distributions.</p>
+          <div class="tags">
+            <span class="tag">COMSOL</span><span class="tag">PhC</span><span class="tag">All-Optical</span><span class="tag">1.55 μm</span>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/qw_coupled.png" alt="Coupled QW" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-physical">Physical</span>
+          <h3><a href="projects/coupled-qw.html" class="stretched-link">Coupled QW Valence Band</a></h3>
+          <p>Luttinger-Kohn 4×4 Hamiltonian solver for GaAs/Al₀.₅Ga₀.₅As double quantum well (25 Å wells, 15 Å barrier, ΔE_v = 0.25 eV). HH/LH subband dispersion and Gaussian wavepacket dynamics. Demonstrates HH–LH anti-crossing and inter-well tunnelling.</p>
+          <div class="tags">
+            <span class="tag">k·p Theory</span><span class="tag">QW</span><span class="tag">Semiconductor</span><span class="tag">MATLAB</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/coupled-qw-valence-band" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="js/lightbox.js"></script>
+</body>
+</html>

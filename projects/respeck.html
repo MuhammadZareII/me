@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Respeck Activity Recognition — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html" class="active">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-intelligence.html">Applied Intelligence</a><span>›</span>
+    <span class="current">Respeck Activity Recognition</span>
+  </div>
+</div>
+
+<div class="page-hero hero-intel">
+  <div class="container">
+    <span class="layer-badge layer-intel">Layer 4 — Applied Intelligence</span>
+    <h1>Respeck Activity Recognition</h1>
+    <p>Wearable accelerometer pipeline for activity classification and long-term behavioural analysis. Feature engineering, two-stage hierarchical classifier, and CNN inference on Respeck chest sensor data at 12 Hz.</p>
+    <div class="domain-tags" style="margin-top:0.8rem;">
+      <span class="domain-tag domain-ai">Machine Learning</span>
+      <span class="domain-tag domain-bio">Wearable / Clinical</span>
+      <span class="domain-tag domain-signal">Signal Processing</span>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">12 Hz</span><span class="stat-label">Sensor Sample Rate</span></div>
+    <div class="stat"><span class="stat-value">50 samples</span><span class="stat-label">Window Size (4.17 s)</span></div>
+    <div class="stat"><span class="stat-value">12+ classes</span><span class="stat-label">Fine Activity Labels</span></div>
+    <div class="stat"><span class="stat-value">2-Stage</span><span class="stat-label">Hierarchical Classifier</span></div>
+    <div class="stat"><span class="stat-value">RF · XGB · SVM</span><span class="stat-label">Models Compared</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · Python</p>
+      <a href="https://github.com/muhammadzareii/respeck-activity-recognition" target="_blank">github.com/muhammadzareii/respeck-activity-recognition</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    The Respeck is a small chest-worn sensor patch containing a 3-axis MEMS accelerometer sampling at 12 Hz, originally designed for clinical respiratory monitoring. Its 12 Hz rate gives a Nyquist limit of 6 Hz — more than sufficient for human locomotion: walking step frequency peaks at 1.5–2.5 Hz, running at 2.5–4.0 Hz. This project uses the Respeck accelerometer signal for physical activity recognition and long-term behavioural analysis.
+  </p>
+  <p>
+    The work has two complementary parts. The first is a clean inference pipeline that applies a pre-trained CNN model to long multi-hour recordings, chunking them into 50-sample windows (4.17 s), classifying each window, and producing hourly and daily activity summaries. The second is a deeper classifier study — a comprehensive comparison of single-stage and two-stage hierarchical classifiers using handcrafted time- and frequency-domain features — exploring how well different model families can separate a larger set of fine-grained activity classes including several lying postures, shuffling, sitting/standing transitions, and stair variants.
+  </p>
+
+  <h2 class="section-title">Raw Signal Characteristics</h2>
+  <p>
+    Each activity imprints a distinct pattern in the three-axis acceleration signal, which is the foundation for classification. Standing (Fig. 1) is the simplest case: all three axes are nearly constant, reflecting static gravitational loading with negligible dynamic component. Walking (Fig. 2) introduces a rhythmic oscillation at roughly 1.5–2 Hz, visible across all axes with a characteristic anti-phase relationship between the vertical and anterior axes due to the heel-strike cycle.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p2.png" alt="Standing trimmed: accelX, accelY, accelZ all nearly flat over 30 s" />
+    <figcaption><span class="fig-num">Fig. 1.</span> <span class="fig-caption">Standing. All three axes are quasi-static: the sensor rests in a fixed orientation against gravity, producing near-zero dynamic component. This low-variance signature is the reference baseline for other static activities.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p3.png" alt="Walking trimmed: accelX, accelY, accelZ showing rhythmic ~1.5 Hz oscillation" />
+    <figcaption><span class="fig-num">Fig. 2.</span> <span class="fig-caption">Walking. Rhythmic oscillation at ~1.5–2 Hz is visible across all three axes (accelX: blue, accelY: orange, accelZ: green). The anti-phase relationship between axes reflects chest motion during the heel-strike gait cycle.</span></figcaption>
+  </figure>
+
+  <p>
+    Running (Fig. 3) produces a dramatically different signature from walking: the amplitude is two to three times larger and the dominant frequency shifts upward to 2.5–4 Hz. The three axes are more tightly correlated in phase, reflecting the more vertical and symmetric impact of the running stride on the chest. Stair ascending (Fig. 4) resembles walking in rhythm but is asymmetric — the accelZ (vertical) component has an intermittent elevation transient corresponding to the step-up impulse, and the overall envelope is less regular than level walking.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p4.png" alt="Running: high-amplitude dense oscillation 2.5-4 Hz across all axes" />
+    <figcaption><span class="fig-num">Fig. 3.</span> <span class="fig-caption">Running. Amplitude 2–3× larger than walking, with dominant frequency near 3 Hz. All three axes oscillate nearly in phase, reflecting the symmetric vertical impact of the running stride. Peak accelerations reach ±2 g.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p1.png" alt="Ascending stairs: irregular oscillation with intermittent elevation transients" />
+    <figcaption><span class="fig-num">Fig. 4.</span> <span class="fig-caption">Ascending stairs. Rhythm similar to walking (~1.5 Hz) but with irregular amplitude envelope caused by step-up impulses. The staircase contact pattern introduces asymmetry absent in level walking, making this class harder to separate from walking.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Feature Engineering</h2>
+  <p>
+    Rather than feeding raw windows directly to a neural network, the classifier study extracts a rich set of handcrafted features per window to make the class boundaries interpretable. Each 50-sample window produces two feature groups:
+  </p>
+  <p>
+    <strong>Time-domain features</strong> capture the statistical properties of each axis and of the signal magnitude |a| = √(ax² + ay² + az²): mean, standard deviation, RMS, peak-to-peak, min, max, skewness, and step-rate estimates derived from peak counting on the magnitude signal. The jerk vector j = da/dt is also computed, providing features sensitive to impulse events (heel-strikes, step-ups) that are less visible in the acceleration itself.
+  </p>
+  <p>
+    <strong>Frequency-domain features</strong> include the dominant frequency and band-power estimates at several physiologically motivated bins (0.3–1, 1–2.5, 2.5–5 Hz) computed from the FFT of the magnitude signal. Spectral entropy is also included to capture the regularity of the motion spectrum — running has a clean, peaky spectrum while miscellaneous movements are spectrally diffuse.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/respeck_p5.png" alt="PCA scatter of time+frequency features coloured by activity label and shaped by cluster" />
+    <figcaption><span class="fig-num">Fig. 5.</span> <span class="fig-caption">PCA projection of the combined time+frequency feature set (first two principal components), coloured by ground-truth activity label and shaped by unsupervised cluster assignment. Running (red) and static activities (lying variants, sitting, standing) form compact, well-separated clusters. Locomotion activities (walking, stairs, shuffling) overlap more in the PCA projection, motivating the two-stage hierarchical design.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Single-Stage Classifier Comparison</h2>
+  <p>
+    Three single-stage classifiers were trained on the full feature set and compared via normalised confusion matrices on a held-out test set: Random Forest, XGBoost, and SVM with an RBF kernel. All three were evaluated on the full set of fine activity labels without any hierarchical grouping.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p6.png" alt="Random Forest confusion matrix for full activity labels" />
+    <figcaption><span class="fig-num">Fig. 6.</span> <span class="fig-caption">Random Forest (time+freq features). High accuracy for running, lying variants, and static activities. Confusion concentrated between normal walking and stair/shuffling classes, and between lying postures.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p7.png" alt="XGBoost confusion matrix for full activity labels" />
+    <figcaption><span class="fig-num">Fig. 7.</span> <span class="fig-caption">XGBoost (time+freq features). Slightly better separation than Random Forest on the locomotion sub-group, but similar overall pattern: running and static activities are near-perfectly classified while within-locomotion and within-static confusions remain.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/respeck_p8.png" alt="SVM-RBF confusion matrix for full activity labels" />
+    <figcaption><span class="fig-num">Fig. 8.</span> <span class="fig-caption">SVM with RBF kernel (time+freq features). Performance broadly comparable to XGBoost on most classes. The SVM shows slightly higher confusion on the lying-posture sub-group compared to the tree-based models, likely due to the marginal geometry of the separating hyperplane for those classes.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Two-Stage Hierarchical Classifier</h2>
+  <p>
+    Motivated by the PCA structure (Fig. 5), which shows clear macro-level separation before fine-level distinctions, a two-stage hierarchical approach was developed. Stage 1 trains a coarse classifier that groups all activities into four broad super-classes: <strong>STATIC</strong> (sitting, standing, all lying postures), <strong>LOCOMOTION</strong> (walking, stair variants, shuffling), <strong>RUNNING</strong>, and <strong>MISC</strong> (miscellaneous movements). Stage 2 trains a separate fine-grained classifier within each coarse group, so that the inter-group margins learned at Stage 1 are not competing with the harder within-group distinctions at Stage 2.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p9.png" alt="Stage-1 coarse confusion matrix: LOCOMOTION, MISC, RUNNING, STATIC with XGBoost" />
+    <figcaption><span class="fig-num">Fig. 9.</span> <span class="fig-caption">Stage-1 coarse confusion matrix (XGBoost, best coarse model). RUNNING and STATIC are classified with near-perfect accuracy (1.00). LOCOMOTION achieves 0.99 correct; MISC has a small 4% spillover into LOCOMOTION, which is the most similar macro-group dynamically.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p10.png" alt="Stage-1 coarse feature importances: j_mag_std dominant, then a_mag_rms, j_mag_rms" />
+    <figcaption><span class="fig-num">Fig. 10.</span> <span class="fig-caption">Stage-1 (coarse) classifier feature importances. Jerk magnitude standard deviation (<em>j_mag_std</em>) is the single most important feature by a large margin, reflecting the step-impulse intensity difference between static and locomotion activities. Acceleration magnitude RMS (<em>a_mag_rms</em>) is the second most important, capturing overall motion intensity.</span></figcaption>
+  </figure>
+
+  <p>
+    The fine-label Stage-2 classifiers operate only within their coarse group, so they are trained on a much cleaner sub-problem. Fig. 11 shows the Stage-2 fine-label confusion matrix using hard routing (every sample takes whichever Stage-1 coarse label is most probable). Fig. 12 shows the soft-decision variant, where Stage-1 posterior probabilities are used to weight the contributions of each Stage-2 model, producing smoother confusion at coarse boundaries.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p11.png" alt="Two-stage fine-label confusion matrix, hard decision routing" />
+    <figcaption><span class="fig-num">Fig. 11.</span> <span class="fig-caption">Two-stage fine-label confusion matrix (hard Stage-1 routing). Overall diagonal dominance is strong; residual confusion is mainly concentrated between lying postures (lyingLeft, lyingRight, lyingBack, lyingStomach) and between walking variants (normal walking, shuffling, stairs).</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p12.png" alt="Two-stage fine-label confusion matrix, soft decision routing" />
+    <figcaption><span class="fig-num">Fig. 12.</span> <span class="fig-caption">Two-stage fine-label confusion matrix (soft Stage-1 routing, Stage-1 posteriors used to weight Stage-2 outputs). The soft variant reduces hard misclassifications near coarse boundaries (e.g. MISC vs LOCOMOTION) and improves the overall diagonal, particularly for the <em>miscMovement</em> class.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Stage-2 Feature Importances</h2>
+  <p>
+    The per-group Stage-2 models learn different feature rankings depending on the discrimination problem within each coarse class. For the STATIC group (sitting, standing, multiple lying postures), the dominant feature is the low-frequency band-power of the y-axis FFT (<em>ay_fft_bp_1_2p5</em>), reflecting the subtle postural differences in chest inclination angle between sitting, standing, and lying orientations (Fig. 13). For the LOCOMOTION group (walking, stairs, shuffling), dominant frequency features (<em>a_mag_fft_dom_freq</em>, <em>ay_fft_dom_freq</em>) and jerk statistics are most discriminative (Fig. 14) — locomotion sub-classes differ primarily in step cadence and impact asymmetry rather than in overall amplitude.
+  </p>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p13.png" alt="Stage-2 STATIC model feature importances: ay_fft_bp_1_2p5 dominant" />
+    <figcaption><span class="fig-num">Fig. 13.</span> <span class="fig-caption">Stage-2 STATIC sub-classifier feature importances. The dominant feature is low-frequency y-axis band-power, capturing the gravity projection differences between sitting, standing, and lying orientations. Jerk-based features are also informative for distinguishing transitions (sitting-to-standing) from fully static states.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig ieee-fig-half">
+    <img src="../images/respeck_p14.png" alt="Stage-2 LOCOMOTION model feature importances: a_mag_fft_dom_freq dominant" />
+    <figcaption><span class="fig-num">Fig. 14.</span> <span class="fig-caption">Stage-2 LOCOMOTION sub-classifier feature importances. Dominant frequency of acceleration magnitude is the top feature, distinguishing the staircase step rate from level-walking cadence and shuffling. Jerk variance and magnitude statistics follow, reflecting impact intensity differences.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Ensemble and Final Performance</h2>
+  <p>
+    The final classifier combines the best Stage-2 model in each coarse group with a Multi-Layer Perceptron (MLP) trained on the full feature set, using soft-weighted ensemble combination. The ensemble confusion matrix (Fig. 15) shows the best overall performance of all systems evaluated. Running and most lying postures are classified with near-zero error; the remaining confusions — primarily within the locomotion group between walking and stair variants — reflect genuine signal similarity at the 12 Hz sampling rate that would likely require higher-frequency or gyroscope features to fully resolve.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/respeck_p15.png" alt="Two-stage ensemble (Stage-2 + MLP, SOFT, WEIGHTED) final confusion matrix" />
+    <figcaption><span class="fig-num">Fig. 15.</span> <span class="fig-caption">Final ensemble confusion matrix (best Stage-2 per coarse group + MLP, soft-weighted combination). Running, static lying postures, and sitting/standing achieve near-diagonal performance. Residual confusion is concentrated in walking vs. stair variants, which share similar step cadence at 12 Hz.</span></figcaption>
+  </figure>
+
+  <h2 class="section-title">Long-Recording Inference and Behavioural Analysis</h2>
+  <p>
+    The inference pipeline applies the CNN classifier to multi-hour continuous recordings, producing per-window activity labels that are overlaid on the raw accelerometer signal for qualitative validation. Figures 16–18 show three representative 5-minute segments from three different subjects. The background shading shows the Stage-1 coarse classification (STATIC = grey, MISC = yellow, LOCOMOTION = blue-green) and the fine label (coloured strips at the bottom). The agreement between the raw signal character — flat for static, oscillatory for locomotion — and the predicted labels confirms that the classifier tracks activity transitions correctly even on subjects and recordings not seen during training.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/respeck_p16.png" alt="Subject 2508285: 5-minute segment with accelX/Y/Z and coarse+fine activity predictions overlaid" />
+    <figcaption><span class="fig-num">Fig. 16.</span> <span class="fig-caption">Inference on a 5-minute segment from subject 2508285. Coarse class shading (background) and fine class strips (bottom) are overlaid on accelX (blue), accelY (orange), accelZ (green). The signal transitions from high-activity locomotion to a quiet static period, correctly tracked by both coarse and fine classifiers.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/respeck_p17.png" alt="Subject u013: 5-minute segment with coarse+fine activity predictions overlaid" />
+    <figcaption><span class="fig-num">Fig. 17.</span> <span class="fig-caption">Subject u013, 5-minute segment. This recording contains a LOCOMOTION-dominant episode with brief interspersed MISC and STATIC transitions. The fine-label classifier correctly identifies the dynamic changes in the signal envelope, including the transition from low-amplitude miscMovement to higher-amplitude locomotion around t = 150 s.</span></figcaption>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/respeck_p18.png" alt="Subject 2511531: 5-minute segment with coarse+fine activity predictions overlaid" />
+    <figcaption><span class="fig-num">Fig. 18.</span> <span class="fig-caption">Subject 2511531, 5-minute segment. A longer STATIC period (grey background, lying or sitting) is followed by LOCOMOTION activity visible as a dense oscillatory burst. The shift from near-zero dynamic acceleration to a 1–2 g amplitude oscillation is unambiguously classified, validating the pipeline on a third independent subject.</span></figcaption>
+  </figure>
+
+  <div class="info-box">
+    <strong>Clinical relevance:</strong> The Respeck sensor is already deployed in post-operative and COPD patient monitoring for continuous respiratory rate tracking. Extending it to activity classification — particularly the ability to distinguish lying postures, walking, and stair-climbing — enables automated bed-rest vs. mobilisation monitoring and adds context to respiratory rate measurements (a patient running vs. lying down has very different normal respiratory rates). The 12 Hz / discrete-component constraint makes this pipeline deployable on low-power edge devices without GPU acceleration.
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

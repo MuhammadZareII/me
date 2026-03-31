@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STM32H743 FreeRTOS Datalogger — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html" class="active">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-embedded.html">Embedded &amp; Firmware</a><span>›</span>
+    <span class="current">STM32H743 FreeRTOS Datalogger</span>
+  </div>
+</div>
+
+<div class="page-hero hero-embedded">
+  <div class="container">
+    <span class="layer-badge layer-embedded">Layer 3 — Embedded &amp; Firmware</span>
+    <h1>STM32H743 FreeRTOS Datalogger</h1>
+    <p>Contract-grade multi-sensor datalogger. Six priority-scheduled RTOS tasks, raw SD sector writes with triple-redundant pointers, RS232 telemetry. Originally developed for a client and presented here in a simplified, non-confidential form.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">STM32H743</span><span class="stat-label">Microcontroller (480 MHz)</span></div>
+    <div class="stat"><span class="stat-value">6 Tasks</span><span class="stat-label">FreeRTOS Threads</span></div>
+    <div class="stat"><span class="stat-value">100 Hz</span><span class="stat-label">IMU Sampling Rate</span></div>
+    <div class="stat"><span class="stat-value">70 bytes</span><span class="stat-label">Binary Packet Size</span></div>
+    <div class="stat"><span class="stat-value">3× pointers</span><span class="stat-label">SD Redundancy</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · C / FreeRTOS / STM32CubeIDE</p>
+      <a href="https://github.com/muhammadzareii/stm32-rtos-datalogger" target="_blank">github.com/muhammadzareii/stm32-rtos-datalogger</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Project Context</h2>
+  <p>
+    This was a paid contract project — a client needed a reliable, long-duration field datalogger for a
+    multi-sensor payload. "Reliable" here meant: no data loss on power-off mid-write, no missed samples
+    under the worst-case sensor interrupt storm, no silent failures, and recoverable logs after an unclean
+    shutdown. The first version was a polling loop with filesystem (FatFS) writes. By version 5, it had
+    become a proper RTOS design with raw sector I/O and triple-redundant write pointers.
+  </p>
+  <p>
+    The evolution from V1 (polling, FatFS) to V5 (RTOS, raw sectors) was driven by discovered failure modes:
+    FatFS write latency caused sample drops at 100 Hz; the watchdog triggered during a long SD write cycle;
+    a corrupt FAT table lost all data. Each failure produced a design revision.
+  </p>
+
+  <h2 class="section-title">RTOS Task Design</h2>
+
+  <!-- SVG Task Chart -->
+  <div class="diagram-wrap">
+    <svg width="660" height="305" viewBox="0 0 660 305" font-family="'Times New Roman', Times, serif" font-size="11">
+      <rect x="0" y="0" width="660" height="305" fill="#f0f4f8" rx="6"/>
+      <text x="330" y="20" text-anchor="middle" fill="#003366" font-size="13" font-weight="bold">FreeRTOS Task Scheduling (Priority-based, vTaskDelayUntil)</text>
+
+      <!-- Y-axis label -->
+      <text x="12" y="50" fill="#003366" font-size="10" font-weight="bold">P6</text>
+      <text x="12" y="90" fill="#003366" font-size="10" font-weight="bold">P5</text>
+      <text x="12" y="130" fill="#003366" font-size="10" font-weight="bold">P4</text>
+      <text x="12" y="170" fill="#003366" font-size="10" font-weight="bold">P3</text>
+      <text x="12" y="210" fill="#003366" font-size="10" font-weight="bold">P2</text>
+      <text x="12" y="250" fill="#003366" font-size="10" font-weight="bold">P1</text>
+
+      <!-- Task bars - represent one second of operation -->
+      <!-- task_accel P6: 100 Hz = 100 times/s. Show dense bars -->
+      <text x="90" y="50" fill="#003366" font-size="10" font-weight="bold" font-family="'Courier New', monospace">task_accel</text>
+      <text x="280" y="50" fill="#556" font-size="9">100 Hz — IMU reads via PCA9548A mux</text>
+      <!-- Dense blue bars -->
+      <g fill="#003366" opacity="0.85">
+        <rect x="90" y="55" width="3" height="14" rx="1"/>
+        <rect x="96" y="55" width="3" height="14" rx="1"/>
+        <rect x="102" y="55" width="3" height="14" rx="1"/>
+        <rect x="108" y="55" width="3" height="14" rx="1"/>
+        <rect x="114" y="55" width="3" height="14" rx="1"/>
+        <rect x="120" y="55" width="3" height="14" rx="1"/>
+        <rect x="126" y="55" width="3" height="14" rx="1"/>
+        <rect x="132" y="55" width="3" height="14" rx="1"/>
+        <rect x="138" y="55" width="3" height="14" rx="1"/>
+        <rect x="144" y="55" width="3" height="14" rx="1"/>
+        <rect x="150" y="55" width="3" height="14" rx="1"/>
+        <rect x="156" y="55" width="3" height="14" rx="1"/>
+        <rect x="162" y="55" width="3" height="14" rx="1"/>
+        <rect x="168" y="55" width="3" height="14" rx="1"/>
+        <rect x="174" y="55" width="3" height="14" rx="1"/>
+        <rect x="180" y="55" width="3" height="14" rx="1"/>
+        <rect x="186" y="55" width="3" height="14" rx="1"/>
+        <rect x="192" y="55" width="3" height="14" rx="1"/>
+        <rect x="198" y="55" width="3" height="14" rx="1"/>
+        <rect x="204" y="55" width="3" height="14" rx="1"/>
+        <text x="215" y="65" fill="#556" font-size="9">… 100× per second</text>
+      </g>
+
+      <!-- task_gps P5: 5 Hz -->
+      <text x="90" y="90" fill="#004488" font-size="10" font-weight="bold" font-family="'Courier New', monospace">task_gps</text>
+      <text x="280" y="90" fill="#556" font-size="9">5 Hz — UART GPS NMEA parse</text>
+      <g fill="#004488" opacity="0.85">
+        <rect x="90"  y="95" width="12" height="14" rx="2"/>
+        <rect x="126" y="95" width="12" height="14" rx="2"/>
+        <rect x="162" y="95" width="12" height="14" rx="2"/>
+        <rect x="198" y="95" width="12" height="14" rx="2"/>
+        <rect x="234" y="95" width="12" height="14" rx="2"/>
+      </g>
+
+      <!-- task_temp P4: 10 Hz -->
+      <text x="90" y="130" fill="#1a5c30" font-size="10" font-weight="bold" font-family="'Courier New', monospace">task_temp</text>
+      <text x="280" y="130" fill="#556" font-size="9">10 Hz — I²C temp sensor via mux</text>
+      <g fill="#1a5c30" opacity="0.8">
+        <rect x="90"  y="135" width="8" height="14" rx="2"/>
+        <rect x="108" y="135" width="8" height="14" rx="2"/>
+        <rect x="126" y="135" width="8" height="14" rx="2"/>
+        <rect x="144" y="135" width="8" height="14" rx="2"/>
+        <rect x="162" y="135" width="8" height="14" rx="2"/>
+        <rect x="180" y="135" width="8" height="14" rx="2"/>
+        <rect x="198" y="135" width="8" height="14" rx="2"/>
+        <rect x="216" y="135" width="8" height="14" rx="2"/>
+        <rect x="234" y="135" width="8" height="14" rx="2"/>
+        <rect x="252" y="135" width="8" height="14" rx="2"/>
+      </g>
+
+      <!-- task_logger P3: 10 Hz -->
+      <text x="90" y="170" fill="#7a4b00" font-size="10" font-weight="bold" font-family="'Courier New', monospace">task_logger</text>
+      <text x="280" y="170" fill="#556" font-size="9">10 Hz — SD raw sector write (70-byte packet)</text>
+      <g fill="#7a4b00" opacity="0.8">
+        <rect x="90"  y="175" width="14" height="14" rx="2"/>
+        <rect x="112" y="175" width="14" height="14" rx="2"/>
+        <rect x="134" y="175" width="14" height="14" rx="2"/>
+        <rect x="156" y="175" width="14" height="14" rx="2"/>
+        <rect x="178" y="175" width="14" height="14" rx="2"/>
+        <rect x="200" y="175" width="14" height="14" rx="2"/>
+        <rect x="222" y="175" width="14" height="14" rx="2"/>
+        <rect x="244" y="175" width="14" height="14" rx="2"/>
+        <rect x="266" y="175" width="14" height="14" rx="2"/>
+        <rect x="288" y="175" width="14" height="14" rx="2"/>
+      </g>
+
+      <!-- task_watchdog P2: 2 Hz -->
+      <text x="90" y="210" fill="#5c1a1a" font-size="10" font-weight="bold" font-family="'Courier New', monospace">task_watchdog</text>
+      <text x="280" y="210" fill="#556" font-size="9">2 Hz — pet IWDG, check task liveness</text>
+      <g fill="#5c1a1a" opacity="0.8">
+        <rect x="90"  y="215" width="10" height="14" rx="2"/>
+        <rect x="200" y="215" width="10" height="14" rx="2"/>
+      </g>
+
+      <!-- task_scan P1: 0.5 Hz -->
+      <text x="90" y="250" fill="#556" font-size="10" font-weight="bold" font-family="'Courier New', monospace">task_scan</text>
+      <text x="280" y="250" fill="#556" font-size="9">0.5 Hz — RS232 telemetry + health report</text>
+      <g fill="#556" opacity="0.8">
+        <rect x="90"  y="255" width="18" height="14" rx="2"/>
+      </g>
+
+      <!-- x-axis: 1 second span -->
+      <line x1="90" y1="272" x2="600" y2="272" stroke="#003366" stroke-width="1"/>
+      <text x="90"  y="282" fill="#556" font-size="9" text-anchor="middle">0 ms</text>
+      <text x="345" y="282" fill="#556" font-size="9" text-anchor="middle">500 ms</text>
+      <text x="600" y="282" fill="#556" font-size="9" text-anchor="middle">1000 ms</text>
+      <text x="345" y="263" fill="#003366" font-size="9" font-style="italic" text-anchor="middle">← one superframe (1 second) →</text>
+    </svg>
+    <div class="caption"><strong>Fig. 1.</strong> FreeRTOS task schedule: all six tasks use <code>vTaskDelayUntil</code> for jitter-free periodic execution. Higher priority pre-empts lower; <code>task_accel</code> at P6 is never delayed by I/O tasks below it.</div>
+  </div>
+
+  <table>
+    <tr><th>Task</th><th>Priority</th><th>Rate</th><th>Function</th></tr>
+    <tr><td><code>task_accel</code></td><td>P6 (highest)</td><td>100 Hz</td><td>IMU read via PCA9548A I²C mux; push to ring buffer</td></tr>
+    <tr><td><code>task_gps</code></td><td>P5</td><td>5 Hz</td><td>UART GPS NMEA sentence parse; extract lat/lon/time</td></tr>
+    <tr><td><code>task_temp</code></td><td>P4</td><td>10 Hz</td><td>I²C temperature sensor reads; push to shared struct</td></tr>
+    <tr><td><code>task_logger</code></td><td>P3</td><td>10 Hz</td><td>Assemble 70-byte binary packet; raw SD sector write</td></tr>
+    <tr><td><code>task_watchdog</code></td><td>P2</td><td>2 Hz</td><td>Pet IWDG; check task liveness via heartbeat flags</td></tr>
+    <tr><td><code>task_scan</code></td><td>P1 (lowest)</td><td>0.5 Hz</td><td>RS232 telemetry; health and buffer status report</td></tr>
+  </table>
+
+  <h2 class="section-title">Key Design Decisions</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Jitter-free periodic scheduling</h3>
+  <p>
+    <code>vTaskDelay(N)</code> delays N ticks from the call site — any task runtime accumulates into the
+    period, causing drift. <code>vTaskDelayUntil</code> delays until an absolute tick count, absorbing
+    execution time. For a 100 Hz sensor logged over hours, the difference is measurable in timestamp
+    accuracy and matters for client data quality.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">I²C address conflicts</h3>
+  <p>
+    Multiple sensors of the same family share the same 7-bit I²C address by default. An 8-channel I²C
+    multiplexer (PCA9548A) resolves this cleanly: a single control-register write selects the active
+    downstream channel. Switching overhead is negligible at 100 Hz.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Non-deterministic filesystem latency</h3>
+  <p>
+    FatFS write latency spikes at cluster boundaries (FAT table updates can stall for tens of milliseconds),
+    which causes sample drops at 100 Hz. The solution is to bypass the filesystem and write binary-packed
+    records directly to SD sectors via DMA — deterministic, fast, and reliable regardless of card geometry.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Power-cut recovery</h3>
+  <p>
+    The write address pointer must survive an unclean shutdown. A redundant pointer scheme — maintaining
+    multiple consistent copies in reserved regions and using majority-vote recovery at startup — ensures
+    the log is always recoverable without requiring a filesystem.
+  </p>
+
+  <h2 class="section-title">Hardware Photos</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/stm32_hardware.png" alt="STM32 datalogger hardware" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> Assembled datalogger hardware: STM32H743 Nucleo board, PCA9548A I²C mux breakout, IMU and GPS modules, SD card holder, RS232 transceiver.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/stm32_dashboard.png" alt="STM32 telemetry dashboard" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> Python monitoring dashboard connected via RS232 telemetry link. Shows real-time task health, buffer fill level, write rate, and sample timestamps.</div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

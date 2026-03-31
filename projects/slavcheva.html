@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slavcheva Maxwell-Bloch FDTD — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html" class="active">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-physical.html">Physical &amp; Simulation</a><span>›</span>
+    <span class="current">Slavcheva Maxwell-Bloch FDTD</span>
+  </div>
+</div>
+
+<div class="page-hero hero-physical">
+  <div class="container">
+    <span class="layer-badge layer-physical">Layer 1 — Physical &amp; Simulation</span>
+    <h1>Slavcheva Maxwell-Bloch FDTD</h1>
+    <p>Faithful reproduction of the Slavcheva et al. semiclassical FDTD framework for modelling gain saturation and VCSEL lasing dynamics from first principles.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">1D Yee</span><span class="stat-label">FDTD Grid</span></div>
+    <div class="stat"><span class="stat-value">850 nm / 1.29 μm</span><span class="stat-label">VCSEL Wavelengths</span></div>
+    <div class="stat"><span class="stat-value">Mur ABC</span><span class="stat-label">Absorbing Boundary</span></div>
+    <div class="stat"><span class="stat-value">Bloch Equations</span><span class="stat-label">Gain Model</span></div>
+    <div class="stat"><span class="stat-value">MATLAB</span><span class="stat-label">Implementation</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · MATLAB</p>
+      <a href="https://github.com/muhammadzareii/slavcheva_faithful_repo" target="_blank">github.com/muhammadzareii/slavcheva_faithful_repo</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    This repository is a careful, auditable implementation of the semiclassical FDTD framework described in
+    Slavcheva et al. (G. Slavcheva, J. M. Arnold, I. Wallace, R. W. Ziolkowski, "FDTD simulation of the
+    nonlinear gain dynamics in active optical waveguides and semiconductor microcavity lasers").
+    The paper presents a complete semiclassical model — Maxwell's equations coupled to optical Bloch equations —
+    for studying gain saturation, pulse propagation, and lasing threshold in one-dimensional semiconductor
+    structures.
+  </p>
+  <p>
+    The purpose of the repository is not a pedagogical exercise. It is a piece of research software: readable,
+    auditable, easy to extend, and designed to be placed on GitHub without embarrassment. Every configurable
+    parameter (predictor-corrector iterations, source placement, boundary type, FFT windowing, output
+    decimation) is exposed explicitly rather than hard-coded — because a rigid implementation can appear
+    paper-faithful on the surface while being impossible to validate.
+  </p>
+  <p>
+    The primary test cases are: slab gain validation (verifying population inversion against analytic formulas),
+    waveguide saturation dynamics (pulse compression and gain depletion), and VCSEL cavity lasing at 850 nm
+    and 1.29 μm.
+  </p>
+
+  <h2 class="section-title">Physical Formulation</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Maxwell's Equations (1D TE Mode)</h3>
+  <p>
+    In 1D the relevant field components are E_y and H_z. The update equations on a Yee grid:
+  </p>
+  <div class="eq">
+    H_z^(n+½)[i+½] = H_z^(n−½)[i+½] − (Δt/μ₀Δx)·(E_y^n[i+1] − E_y^n[i])<br/>
+    D_y^(n+1)[i] = D_y^n[i] − (Δt/Δx)·(H_z^(n+½)[i+½] − H_z^(n+½)[i−½])<br/>
+    E_y^(n+1)[i] = (D_y^(n+1)[i] − P_y^(n+1)[i]) / ε₀ε_r
+  </div>
+  <p>
+    The electric displacement D is separated from the polarisation P of the gain medium. P is evolved by
+    the Bloch equations.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Optical Bloch Equations</h3>
+  <p>
+    For a two-level system with transition frequency ω₀, dipole moment μ, population relaxation time T₁,
+    and dephasing time T₂:
+  </p>
+  <div class="eq">
+    d²P/dt² + (2/T₂)·dP/dt + ω₀²·P = (2ω₀μ²/ℏ)·N·E<br/>
+    dN/dt = −(N − N_pump)/T₁ + (1/ℏω₀)·E·dP/dt
+  </div>
+  <p>
+    N is the population inversion (N &gt; 0: gain). N_pump represents the externally maintained carrier
+    density from electrical pumping. The coupling between Maxwell and Bloch is tight: E drives P through the
+    first equation; P modifies D which enters E through the constitutive relation; and E·dP/dt is the
+    stimulated emission / absorption power depositing energy into or extracting it from the field.
+  </p>
+
+  <h2 class="section-title">Numerical Decisions</h2>
+  <table>
+    <tr><th>Design Choice</th><th>Implementation</th><th>Rationale</th></tr>
+    <tr><td>Boundary condition</td><td>Mur first-order ABC</td><td>Transparent, stable, easy to audit vs. PML</td></tr>
+    <tr><td>Bloch integration</td><td>Predictor-corrector (2 iterations)</td><td>Second-order accuracy, stable for stiff gain equations</td></tr>
+    <tr><td>Source injection</td><td>Soft source at configurable position</td><td>Separates incident and reflected fields cleanly</td></tr>
+    <tr><td>Spectral extraction</td><td>On-the-fly DFT with Hann window</td><td>Spectral leakage suppression in cavity resonance analysis</td></tr>
+    <tr><td>Noise seeding</td><td>Gaussian noise with stored RNG seed</td><td>Fully reproducible cavity start-up</td></tr>
+  </table>
+
+  <div class="note-box">
+    <strong>On reproducibility:</strong> Every cavity run stores the RNG seed, noise amplitude σ_E, noise
+    region boundaries, and FFT window parameters. This means figures can be regenerated exactly from logs,
+    which is important when comparing lasing spectra across parameter sweeps.
+  </div>
+
+  <h2 class="section-title">Results</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/slavcheva_waveguide.png" alt="Waveguide gain saturation" />
+      <div class="fig-caption"><strong>Fig. 1.</strong> Waveguide propagation: pulse propagation in an active slab. Gain saturation visible as leading-edge amplification with trailing-edge depletion.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/slavcheva_vcsel.png" alt="VCSEL lasing spectrum" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> VCSEL cavity: lasing spectrum at 850 nm. Single dominant longitudinal mode emerges above threshold; side modes suppressed by gain saturation.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/slavcheva_poprelax.png" alt="Population relaxation dynamics" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> Population inversion dynamics during and after a resonant pulse. T₁ relaxation visible in recovery toward N_pump after stimulated depletion.</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Repository Structure</h2>
+  <pre>slavcheva_faithful_repo/
+├── core/
+│   ├── fdtd_1d.m              # Main FDTD loop (Maxwell + Mur ABC)
+│   ├── bloch.m                # Predictor-corrector Bloch integrator
+│   ├── drude_aux.m            # ADE for dispersive media (if used)
+│   └── source.m               # Soft-source injection
+├── configs/
+│   ├── vcsel_850nm.m          # VCSEL case: 850 nm
+│   └── vcsel_1290nm.m         # VCSEL case: 1.29 μm
+├── docs/
+│   ├── equations_and_numerics.md   # Full derivation of update equations
+│   ├── figure_map.md               # Which figure corresponds to which run
+│   └── reproduction_protocol.md    # Step-by-step guide to reproduce paper figures
+├── notes/
+│   ├── internal_extended_notes.md  # Design rationale and conservative choices
+│   └── known_gaps_and_validation_plan.md
+└── STATUS.md                  # Current reproduction status per figure</pre>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

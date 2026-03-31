@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wireless Identity Recognition System — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html" class="active">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-embedded.html">Embedded &amp; Firmware</a><span>›</span>
+    <span class="current">Wireless Identity Recognition System</span>
+  </div>
+</div>
+
+<div class="page-hero hero-embedded">
+  <div class="container">
+    <span class="layer-badge layer-embedded">Layer 3 — Embedded &amp; Firmware</span>
+    <h1>Wireless Identity Recognition System</h1>
+    <p>Real-time face recognition and 9-class gesture classification. Dual-threaded Python client streams predictions to an ESP32 server over TCP/Wi-Fi.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">ESP32</span><span class="stat-label">Embedded Server</span></div>
+    <div class="stat"><span class="stat-value">9 gestures</span><span class="stat-label">MediaPipe Classes</span></div>
+    <div class="stat"><span class="stat-value">TCP</span><span class="stat-label">Transport Protocol</span></div>
+    <div class="stat"><span class="stat-value">2 threads</span><span class="stat-label">Python Client</span></div>
+    <div class="stat"><span class="stat-value">Wi-Fi</span><span class="stat-label">Communication Link</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · Python / C (ESP32)</p>
+      <a href="https://github.com/muhammadzareii/iot_fun-main" target="_blank">github.com/muhammadzareii/iot_fun-main</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    The Wireless Identity Recognition System is an edge-IoT project that combines computer vision running
+    on a host machine with an ESP32 microcontroller acting as the network server and actuator dispatcher.
+    The Python client runs two concurrent inference threads — one for face recognition, one for hand gesture
+    classification — and streams results over a TCP socket to the ESP32, which can trigger outputs (relays,
+    displays, actuators) based on the identity and gesture commands received.
+  </p>
+  <p>
+    The system demonstrates the practical integration layer between a high-compute host (laptop/SBC) and a
+    low-power embedded node: the host does the perception, the embedded node does the action. This is a
+    common pattern in smart building, access control, and human-machine interface systems.
+  </p>
+
+  <h2 class="section-title">System Architecture</h2>
+
+  <div class="diagram-wrap">
+    <svg width="620" height="280" viewBox="0 0 620 280" font-family="'Times New Roman', Times, serif" font-size="11">
+      <rect x="0" y="0" width="620" height="280" fill="#f0f4f8" rx="6"/>
+      <text x="310" y="18" text-anchor="middle" fill="#003366" font-size="12" font-weight="bold">System Architecture</text>
+
+      <!-- Host PC box -->
+      <rect x="20" y="28" width="310" height="220" rx="6" fill="#e3edf7" stroke="#003366" stroke-width="2"/>
+      <text x="175" y="48" text-anchor="middle" fill="#003366" font-size="12" font-weight="bold">Host Machine (Python)</text>
+
+      <!-- Camera input -->
+      <rect x="35" y="55" width="85" height="45" rx="4" fill="#003366" stroke="#003366"/>
+      <text x="77" y="73" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Camera</text>
+      <text x="77" y="87" text-anchor="middle" fill="#aaddff" font-size="9">OpenCV capture</text>
+
+      <!-- Thread 1: Face -->
+      <rect x="140" y="55" width="175" height="55" rx="4" fill="#d4edda" stroke="#1a5c30" stroke-width="1.5"/>
+      <text x="227" y="72" text-anchor="middle" fill="#1a5c30" font-size="10" font-weight="bold">Thread 1: Face Recognition</text>
+      <text x="227" y="86" text-anchor="middle" fill="#556" font-size="9">face_recognition library</text>
+      <text x="227" y="100" text-anchor="middle" fill="#556" font-size="9">128-D face encoding → name</text>
+
+      <!-- Thread 2: Gesture -->
+      <rect x="140" y="120" width="175" height="55" rx="4" fill="#fff3cd" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="227" y="137" text-anchor="middle" fill="#7a4b00" font-size="10" font-weight="bold">Thread 2: Gesture</text>
+      <text x="227" y="151" text-anchor="middle" fill="#556" font-size="9">MediaPipe Hands</text>
+      <text x="227" y="165" text-anchor="middle" fill="#556" font-size="9">21-landmark → 9 classes</text>
+
+      <!-- Shared queue -->
+      <rect x="35" y="190" width="280" height="40" rx="4" fill="#fff" stroke="#aaa" stroke-width="1"/>
+      <text x="175" y="207" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Thread-safe result queue</text>
+      <text x="175" y="220" text-anchor="middle" fill="#556" font-size="9">Python queue.Queue — latest (identity, gesture) pair</text>
+
+      <!-- Camera arrow -->
+      <line x1="120" y1="78" x2="138" y2="78" stroke="#003366" stroke-width="1.5" marker-end="url(#aw2)"/>
+      <line x1="120" y1="78" x2="128" y2="78" stroke="#003366" stroke-width="1"/>
+      <line x1="128" y1="78" x2="128" y2="148" stroke="#003366" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="128" y1="148" x2="138" y2="148" stroke="#003366" stroke-width="1.5" marker-end="url(#aw2)"/>
+
+      <!-- to queue -->
+      <line x1="227" y1="110" x2="227" y2="188" stroke="#1a5c30" stroke-width="1.5" marker-end="url(#aw2)"/>
+      <line x1="227" y1="175" x2="227" y2="188" stroke="#7a4b00" stroke-width="1.5"/>
+
+      <!-- TCP link -->
+      <defs><marker id="aw2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#003366"/></marker></defs>
+      <line x1="330" y1="200" x2="380" y2="200" stroke="#003366" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#aw2)"/>
+      <text x="355" y="192" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">TCP Wi-Fi</text>
+      <text x="355" y="214" text-anchor="middle" fill="#556" font-size="9">JSON payload</text>
+
+      <!-- ESP32 box -->
+      <rect x="385" y="150" width="215" height="110" rx="6" fill="#003366" stroke="#003366"/>
+      <text x="492" y="172" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">ESP32 Server</text>
+      <text x="492" y="189" text-anchor="middle" fill="#aaddff" font-size="10">TCP socket listener</text>
+      <text x="492" y="204" text-anchor="middle" fill="#aaddff" font-size="10">Parse (identity, gesture)</text>
+      <text x="492" y="220" text-anchor="middle" fill="#aaddff" font-size="10">→ GPIO / relay / UART output</text>
+      <text x="492" y="235" text-anchor="middle" fill="#aaddff" font-size="10">→ Display / actuator command</text>
+      <text x="492" y="250" text-anchor="middle" fill="#7fc8f8" font-size="9">Wi-Fi STA mode / AP mode</text>
+    </svg>
+    <div class="caption"><strong>Fig. 1.</strong> System flow: camera feeds both recognition threads simultaneously; results merge in a thread-safe queue; TCP sender dispatches latest result to ESP32 server every ~100 ms.</div>
+  </div>
+
+  <h2 class="section-title">Face Recognition Module</h2>
+  <p>
+    Face recognition uses the <code>face_recognition</code> Python library, which wraps a pre-trained
+    deep convolutional network (dlib's ResNet-based model) to produce 128-dimensional face encodings.
+    Enrolled faces are stored as a set of reference encodings; at runtime, the encoding of each detected
+    face in the camera frame is compared to all references using Euclidean distance. A distance threshold
+    (typically 0.6) determines match/no-match.
+  </p>
+  <p>
+    The library handles face detection (HOG-based or CNN), face alignment (landmark-based warping), and
+    encoding in a single pipeline. On a modern CPU this runs at 2–5 FPS for a 720p frame with one face;
+    the thread decouples this from the main application loop, preventing UI lockup.
+  </p>
+
+  <h2 class="section-title">Gesture Recognition Module</h2>
+  <p>
+    Hand gesture classification uses MediaPipe Hands, which provides 21 3D hand landmarks (wrist + 4 joints
+    per finger) in real time from a single camera. The 21 landmarks (63 coordinates: x, y, z for each) are
+    normalised relative to the wrist position and wrist-to-middle-finger distance, then fed to a classifier.
+  </p>
+
+  <table>
+    <tr><th>#</th><th>Gesture Class</th><th>Landmark Signature</th></tr>
+    <tr><td>0</td><td>Open palm</td><td>All fingers extended, spread</td></tr>
+    <tr><td>1</td><td>Fist</td><td>All fingers curled</td></tr>
+    <tr><td>2</td><td>Point (1 finger)</td><td>Index extended, others curled</td></tr>
+    <tr><td>3</td><td>Peace / V sign</td><td>Index + middle extended</td></tr>
+    <tr><td>4</td><td>Three fingers</td><td>Index + middle + ring extended</td></tr>
+    <tr><td>5</td><td>Four fingers</td><td>All except thumb extended</td></tr>
+    <tr><td>6</td><td>Thumb up</td><td>Thumb extended, others curled</td></tr>
+    <tr><td>7</td><td>Thumb down</td><td>Thumb down, others curled</td></tr>
+    <tr><td>8</td><td>OK sign</td><td>Thumb + index touching, others extended</td></tr>
+  </table>
+
+  <h2 class="section-title">ESP32 Server</h2>
+  <p>
+    The ESP32 firmware (C, Arduino framework) runs a TCP server socket. On receiving a JSON payload
+    <code>{"id": "Muhammad", "gesture": "thumb_up"}</code>, it parses the fields and dispatches the
+    appropriate action: toggling a GPIO for relay control, writing to a serial UART for downstream
+    device control, or updating an I²C OLED display with the identity string.
+  </p>
+  <p>
+    The ESP32 operates in station mode (connects to the existing Wi-Fi network) or access point mode
+    (hosts its own network for direct laptop connection). Connection loss is handled by the client-side
+    reconnect loop with exponential backoff.
+  </p>
+
+  <h2 class="section-title">System Photos</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/identity_face.jpg" alt="Face recognition output" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> Live face recognition output: bounding box with name label overlaid. The recognition thread runs at 2–5 FPS independent of the main camera loop.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/identity_gesture.jpg" alt="Gesture recognition output" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> Hand landmark overlay from MediaPipe Hands. All 21 landmarks are tracked in 3D; the resulting coordinate set is classified into one of 9 gesture classes.</div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

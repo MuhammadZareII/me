@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semiconductor Process Modeling WebApp — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html" class="active">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-embedded.html">Embedded &amp; Firmware</a><span>›</span>
+    <span class="current">Semiconductor Process Modeling WebApp</span>
+  </div>
+</div>
+
+<div class="page-hero hero-embedded">
+  <div class="container">
+    <span class="layer-badge layer-embedded">Layer 3 — Embedded &amp; Firmware</span>
+    <h1>Semiconductor Process Modeling WebApp</h1>
+    <p>HTML/JS frontend with Python backend for modeling proton-exchange and thermal oxidation semiconductor fabrication processes. Accepts Excel or live sensor data; outputs process curves in real time.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">Python</span><span class="stat-label">Backend</span></div>
+    <div class="stat"><span class="stat-value">HTML / JS</span><span class="stat-label">Frontend</span></div>
+    <div class="stat"><span class="stat-value">2 Processes</span><span class="stat-label">Proton Exchange + Oxidation</span></div>
+    <div class="stat"><span class="stat-value">Real-time</span><span class="stat-label">Live Sensor Input</span></div>
+    <div class="stat"><span class="stat-value">Excel</span><span class="stat-label">Batch Input Support</span></div>
+  </div>
+
+  <div class="note-box">
+    This tool was developed for process monitoring during semiconductor device fabrication. No public GitHub
+    repository — the design is maintained locally.
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    Semiconductor fabrication involves tightly controlled process steps — each with time, temperature, and
+    chemical concentration parameters that determine the final device characteristics. This web application
+    provides a browser-based interface for modeling two fabrication processes: proton exchange (PE) in
+    lithium niobate waveguide fabrication, and thermal oxidation of silicon.
+  </p>
+  <p>
+    The tool was designed to sit at a process station: a process engineer opens it in a browser, enters or
+    uploads process parameters, and receives immediately plotted results showing how the waveguide refractive
+    index depth profile or oxide thickness evolves under the given recipe. For live process runs, it can
+    connect to a serial temperature sensor and update the output in real time as the furnace heats.
+  </p>
+
+  <h2 class="section-title">Processes Modeled</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Proton Exchange (PE) — LiNbO₃ Waveguides</h3>
+  <p>
+    In proton exchange, LiNbO₃ (lithium niobate) is immersed in a proton source (typically benzoic acid)
+    at elevated temperature. Hydrogen ions (H⁺) replace Li⁺ ions in the crystal lattice, locally increasing
+    the extraordinary refractive index and forming a waveguide.
+  </p>
+  <p>
+    The refractive index depth profile follows a diffusion model. The diffusion equation for the H⁺
+    concentration c(z, t) under constant surface boundary condition c(0,t) = c_s:
+  </p>
+  <div class="eq">
+    c(z, t) = c_s · erfc(z / 2√(D·t))
+  </div>
+  <p>
+    where D(T) = D₀·exp(−E_a / k_B T) is the diffusion coefficient (Arrhenius temperature dependence),
+    t is the exchange time, and z is the depth. The resulting refractive index change Δn_e ∝ c(z,t).
+    The app plots Δn_e(z) for user-supplied temperature T and time t, and computes the mode depth
+    (1/e field penetration) for comparison against target waveguide specifications.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Thermal Oxidation of Silicon</h3>
+  <p>
+    Thermal oxidation grows SiO₂ on a silicon wafer by exposing it to O₂ or H₂O at 800–1200 °C.
+    The oxide thickness x_ox(t) follows the Deal-Grove model:
+  </p>
+  <div class="eq">
+    x_ox² + A·x_ox = B·(t + τ)
+  </div>
+  <p>
+    where A and B are temperature-dependent parabolic and linear rate constants, and τ accounts for
+    initial oxide already present. The linear rate (B/A) dominates for thin oxides; the parabolic
+    rate (B) dominates for thick oxides as diffusion through the growing oxide limits the reaction.
+    The app plots x_ox vs. t for specified temperature and atmosphere (dry O₂ or wet H₂O), overlaying
+    the linear and parabolic regime boundaries.
+  </p>
+
+  <h2 class="section-title">Architecture</h2>
+
+  <!-- SVG Architecture diagram -->
+  <div class="diagram-wrap">
+    <svg width="580" height="190" viewBox="0 0 580 190" font-family="'Times New Roman', Times, serif" font-size="11">
+      <rect x="0" y="0" width="580" height="190" fill="#f0f4f8" rx="6"/>
+
+      <!-- Browser box -->
+      <rect x="20" y="30" width="220" height="140" rx="6" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="130" y="50" text-anchor="middle" fill="#003366" font-size="12" font-weight="bold">Browser (Frontend)</text>
+
+      <rect x="35" y="58" width="190" height="35" rx="4" fill="#fff" stroke="#aaa" stroke-width="1"/>
+      <text x="130" y="73" text-anchor="middle" fill="#003366" font-size="10">HTML + JS Form</text>
+      <text x="130" y="86" text-anchor="middle" fill="#556" font-size="9">Process params / Excel upload</text>
+
+      <rect x="35" y="100" width="190" height="58" rx="4" fill="#fff" stroke="#aaa" stroke-width="1"/>
+      <text x="130" y="116" text-anchor="middle" fill="#003366" font-size="10">Chart.js / Plotly</text>
+      <text x="130" y="130" text-anchor="middle" fill="#556" font-size="9">Real-time profile plots</text>
+      <text x="130" y="144" text-anchor="middle" fill="#556" font-size="9">Mode depth / Oxide thickness</text>
+
+      <!-- Arrows -->
+      <defs><marker id="aw" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#003366"/></marker></defs>
+      <line x1="240" y1="90" x2="290" y2="90" stroke="#003366" stroke-width="1.5" marker-end="url(#aw)"/>
+      <line x1="290" y1="110" x2="240" y2="110" stroke="#003366" stroke-width="1.5" marker-end="url(#aw)"/>
+      <text x="265" y="87" text-anchor="middle" fill="#556" font-size="9">POST JSON</text>
+      <text x="265" y="127" text-anchor="middle" fill="#556" font-size="9">JSON resp.</text>
+
+      <!-- Python backend -->
+      <rect x="295" y="30" width="260" height="140" rx="6" fill="#d4edda" stroke="#1a5c30" stroke-width="1.5"/>
+      <text x="425" y="50" text-anchor="middle" fill="#1a5c30" font-size="12" font-weight="bold">Python Backend (Flask)</text>
+
+      <rect x="310" y="58" width="230" height="30" rx="4" fill="#fff" stroke="#aaa" stroke-width="1"/>
+      <text x="425" y="71" text-anchor="middle" fill="#003366" font-size="10">openpyxl — Excel parsing</text>
+      <text x="425" y="83" text-anchor="middle" fill="#556" font-size="9">Batch process recipe input</text>
+
+      <rect x="310" y="93" width="230" height="30" rx="4" fill="#fff" stroke="#aaa" stroke-width="1"/>
+      <text x="425" y="106" text-anchor="middle" fill="#003366" font-size="10">SciPy / NumPy — erfc, Deal-Grove</text>
+      <text x="425" y="118" text-anchor="middle" fill="#556" font-size="9">Diffusion + oxidation models</text>
+
+      <rect x="310" y="128" width="230" height="30" rx="4" fill="#fff" stroke="#aaa" stroke-width="1"/>
+      <text x="425" y="141" text-anchor="middle" fill="#003366" font-size="10">pyserial — live sensor input</text>
+      <text x="425" y="153" text-anchor="middle" fill="#556" font-size="9">Real-time temperature feed</text>
+    </svg>
+    <div class="caption"><strong>Fig. 1.</strong> Architecture: browser sends process parameters to Flask backend; backend computes diffusion/oxidation models; results returned as JSON for real-time chart update.</div>
+  </div>
+
+  <h2 class="section-title">Screenshots</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/webapp_ui.png" alt="WebApp UI" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> Browser interface: parameter input form for proton exchange — temperature, exchange time, acid concentration. Excel upload button for batch runs.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/webapp_results.png" alt="WebApp results" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> Output panel: plotted refractive index depth profile Δn_e(z) for the specified PE recipe, with mode depth marked at the 1/e point.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>Context:</strong> This tool sits at the intersection of my M.Sc. coursework in micro/nano
+    electronics (specifically optoelectronics device fabrication) and my Python development work.
+    It is an example of bridging physics models — diffusion equations, Arrhenius kinetics — with a
+    practical engineering tool that a process engineer can use directly at a workstation.
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

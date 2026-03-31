@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SMPS Design — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html" class="active">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>&#x203A;</span>
+    <a href="../layer-circuit.html">Circuit &amp; Hardware</a><span>&#x203A;</span>
+    <span class="current">Switched-Mode Power Supply Design</span>
+  </div>
+</div>
+
+<div class="page-hero hero-circuit">
+  <div class="container">
+    <span class="layer-badge layer-circuit">Layer 2 &mdash; Circuit &amp; Hardware</span>
+    <span class="domain-tag domain-power">Power Electronics</span>
+    <h1>Switched-Mode Power Supply Design</h1>
+    <p>Undergraduate final-year project. Two design iterations: a first version with a custom feedforward+feedback control loop, and a final version built around the TI UC3842 current-mode PWM controller with external UCC27324D gate driver. Cadence PSpice simulation throughout.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">UC3842</span><span class="stat-label">Final PWM Controller (TI)</span></div>
+    <div class="stat"><span class="stat-value">UCC27324D</span><span class="stat-label">External Gate Driver (TI)</span></div>
+    <div class="stat"><span class="stat-value">Cadence PSpice</span><span class="stat-label">Simulation</span></div>
+    <div class="stat"><span class="stat-value">V0.3 &rarr; V0.4</span><span class="stat-label">Design Iterations</span></div>
+    <div class="stat"><span class="stat-value">Bench Verified</span><span class="stat-label">Hardware Tested</span></div>
+  </div>
+
+  <div class="note-box">
+    Undergraduate final-year project &mdash; designed, simulated, fabricated, and bench-tested. PCB files and
+    PSpice netlists maintained locally. The design report (<em>DC-DC Converter</em>) is available for reference.
+    No public GitHub repository.
+  </div>
+
+  <h2 class="section-title">Two Iterations, One Lesson</h2>
+  <p>
+    An SMPS converts power efficiently by switching a transistor between saturation and cut-off, using
+    reactive elements to filter the resulting pulsed energy into regulated DC. The efficiency gain over
+    linear regulators comes at a real engineering cost: the switching action couples noise everywhere,
+    magnetics must be designed carefully, and the closed-loop control must be stable across line and load
+    variations. Getting this right took two distinct design iterations.
+  </p>
+  <p>
+    The project is also a lesson in how real hardware design works: you do not go from schematic to success
+    in one pass. You find parts, simulate, order, build, measure, discover that something does not match
+    the model, change the design, and repeat. The design flow below reflects that reality.
+  </p>
+
+  <h2 class="section-title">Iteration 1 (V0.3) &mdash; Custom Control Loop</h2>
+  <p>
+    The first complete iteration built a custom control architecture: a combined feedforward and feedback
+    loop. The feedforward path compensates for line voltage variations before they affect the output; the
+    feedback path closes the voltage regulation loop with a classical Type-II compensator. The converter
+    power stage and compensation network were designed analytically, simulated in Cadence PSpice (also
+    validated in Proteus for a second opinion on switching behaviour), and then physically constructed.
+  </p>
+  <p>
+    Loop compensation was designed using Bode analysis: the plant transfer function (duty-cycle to output
+    voltage, including inductor, capacitor, and ESR) was derived analytically, then the compensator zeros
+    and poles were placed to achieve the target phase margin of 45&deg; minimum and gain margin of 10 dB.
+    The iterative nature of this process &mdash; simulate, measure, adjust, re-simulate &mdash; was the
+    most time-consuming part of the project. A feedforward + feedback loop is also more sensitive to
+    component tolerances than a purely feedback design, which motivated the second iteration.
+  </p>
+
+  <h2 class="section-title">Iteration 2 (V0.4) &mdash; TI UC3842 + UCC27324D</h2>
+  <p>
+    The final implemented version replaces the custom control loop with Texas Instruments' UC3842 integrated
+    current-mode PWM controller and a UCC27324D dual gate driver. This is a well-established industrial approach:
+    the UC3842 handles current-mode control internally (inner current loop is already closed at the IC level),
+    leaving only the voltage error amplifier external for the outer voltage loop. Current-mode control has
+    superior line rejection, simpler loop compensation, and inherent cycle-by-cycle current limiting.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/smps_bode.png" alt="SMPS Bode plot" />
+    <span class="fig-num">Fig. 1.</span>
+    <span class="fig-caption">Simulated open-loop Bode plot of the compensated voltage loop in the V0.4 design. Current-mode control with UC3842 shapes the power-stage response; the external error amplifier compensator provides the remaining phase boost at the crossover frequency.</span>
+  </figure>
+
+  <p>
+    The UCC27324D gate driver (4 A peak, 9 ns rise/fall) drives the power MOSFET directly from the UC3842
+    output stage, improving switching speed and reducing gate drive loss. The combination is a proven TI
+    reference topology &mdash; the value of V0.4 was in implementing it from the datasheet, understanding
+    each external component (bootstrap, soft-start, current-sense resistor, compensation network), and
+    verifying the actual switching behaviour on the bench.
+  </p>
+
+  <h2 class="section-title">The Real Design Flow</h2>
+
+  <!-- SVG: iterative design flow -->
+  <div class="diagram-wrap">
+    <svg width="640" height="200" viewBox="0 0 640 200" font-family="'Times New Roman', serif" font-size="11">
+      <rect x="0" y="0" width="640" height="200" fill="#f0f4f8" rx="6"/>
+      <text x="320" y="18" text-anchor="middle" fill="#003366" font-size="12" font-weight="bold">SMPS Design Flow &mdash; Iterative Reality</text>
+
+      <defs>
+        <marker id="afs" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="#003366"/>
+        </marker>
+        <marker id="afc" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="#cc4400"/>
+        </marker>
+      </defs>
+
+      <!-- Main flow boxes -->
+      <rect x="10"  y="40" width="90" height="45" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="55"  y="58" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Specs</text>
+      <text x="55"  y="72" text-anchor="middle" fill="#556" font-size="9">Vin, Vout, Iout</text>
+
+      <rect x="118" y="40" width="100" height="45" rx="4" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="168" y="58" text-anchor="middle" fill="#003366" font-size="10" font-weight="bold">Part Search</text>
+      <text x="168" y="72" text-anchor="middle" fill="#556" font-size="9">Available ICs &amp; FETs</text>
+
+      <rect x="236" y="40" width="100" height="45" rx="4" fill="#d4edda" stroke="#1a5c30" stroke-width="1.5"/>
+      <text x="286" y="58" text-anchor="middle" fill="#1a5c30" font-size="10" font-weight="bold">PSpice Sim</text>
+      <text x="286" y="72" text-anchor="middle" fill="#556" font-size="9">Power stage &amp; loop</text>
+
+      <rect x="354" y="40" width="100" height="45" rx="4" fill="#fff3cd" stroke="#7a4b00" stroke-width="1.5"/>
+      <text x="404" y="58" text-anchor="middle" fill="#7a4b00" font-size="10" font-weight="bold">Build &amp; Test</text>
+      <text x="404" y="72" text-anchor="middle" fill="#556" font-size="9">Scope &amp; DMM</text>
+
+      <rect x="472" y="40" width="100" height="45" rx="4" fill="#003366" stroke="#003366"/>
+      <text x="522" y="60" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Verified</text>
+      <text x="522" y="74" text-anchor="middle" fill="#aaddff" font-size="9">Meets spec</text>
+
+      <!-- Forward arrows -->
+      <line x1="100" y1="62" x2="116"  y2="62" stroke="#003366" stroke-width="1.5" marker-end="url(#afs)"/>
+      <line x1="218" y1="62" x2="234"  y2="62" stroke="#003366" stroke-width="1.5" marker-end="url(#afs)"/>
+      <line x1="336" y1="62" x2="352"  y2="62" stroke="#003366" stroke-width="1.5" marker-end="url(#afs)"/>
+      <line x1="454" y1="62" x2="470"  y2="62" stroke="#003366" stroke-width="1.5" marker-end="url(#afs)"/>
+
+      <!-- Feedback loop: Test &rarr; Part Search (when part not available / doesn't match) -->
+      <path d="M 404 85 L 404 120 L 168 120 L 168 87" fill="none" stroke="#cc4400" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#afc)"/>
+      <text x="286" y="140" text-anchor="middle" fill="#cc4400" font-size="9" font-style="italic">Part unavailable or behaviour doesn't match datasheet &rarr; iterate</text>
+
+      <!-- Feedback loop: PSpice &rarr; back to sim (when sim reveals issue) -->
+      <path d="M 336 50 L 336 30 L 236 30 L 236 38" fill="none" stroke="#003366" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#afs)"/>
+      <text x="286" y="27" text-anchor="middle" fill="#556" font-size="9" font-style="italic">Adjust model, re-simulate</text>
+
+      <!-- V0.3 / V0.4 labels -->
+      <rect x="10" y="155" width="200" height="35" rx="4" fill="#fff3cd" stroke="#7a4b00" stroke-width="1"/>
+      <text x="110" y="170" text-anchor="middle" fill="#7a4b00" font-size="10" font-weight="bold">V0.3 &mdash; Custom feedforward+feedback</text>
+      <text x="110" y="183" text-anchor="middle" fill="#556" font-size="9">Type-II compensator, PSpice + Proteus</text>
+
+      <rect x="225" y="155" width="215" height="35" rx="4" fill="#d4edda" stroke="#1a5c30" stroke-width="1"/>
+      <text x="332" y="170" text-anchor="middle" fill="#1a5c30" font-size="10" font-weight="bold">V0.4 &mdash; TI UC3842 + UCC27324D</text>
+      <text x="332" y="183" text-anchor="middle" fill="#556" font-size="9">Current-mode control, external gate driver</text>
+    </svg>
+    <div class="caption"><strong>Fig. 2.</strong> The actual SMPS design flow: iterative, component-constrained, and driven by what you can actually buy and simulate. The clean linear flow (specs &rarr; bench) is only visible in retrospect.</div>
+  </div>
+
+  <h2 class="section-title">Bench Results</h2>
+
+  <figure class="ieee-fig">
+    <img src="../images/smps_switching.jpg" alt="Switching waveforms" />
+    <span class="fig-num">Fig. 3.</span>
+    <span class="fig-caption">Oscilloscope capture of the MOSFET gate drive and drain voltage during switching transitions in the V0.4 design. Gate drive from the UCC27324D produces clean rise/fall edges. Snubber network suppresses ringing at the drain to within acceptable bounds.</span>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/smps_output.jpg" alt="Output voltage transient" />
+    <span class="fig-num">Fig. 4.</span>
+    <span class="fig-caption">Output voltage response to a load step. Settling behaviour reflects the loop bandwidth and phase margin of the outer voltage loop &mdash; consistent with Bode plot predictions from simulation.</span>
+  </figure>
+
+  <h2 class="section-title">What the Project Taught</h2>
+  <p>
+    The V0.3 to V0.4 progression captures something important: the difference between knowing how a circuit
+    should work and knowing how to make one that actually works. V0.3 demonstrated the control theory.
+    V0.4 demonstrated component integration &mdash; understanding why an IC like the UC3842 exists, what
+    problems it solves versus a discrete implementation, and how its datasheet translates into physical
+    component values. The iterative cycle of simulate, build, measure, change was repeated many times
+    across both versions. That process &mdash; not any single design choice &mdash; was the education.
+  </p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;&middot;&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

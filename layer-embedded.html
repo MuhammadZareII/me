@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Embedded &amp; Firmware — Muhammad Zareii</title>
+  <link rel="stylesheet" href="css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="layer-physical.html">Physical &amp; Sim</a>
+      <a href="layer-circuit.html">Circuit &amp; HW</a>
+      <a href="layer-embedded.html" class="active">Embedded &amp; FW</a>
+      <a href="layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero hero-embedded">
+  <div class="container">
+    <span class="layer-badge layer-embedded">Layer 3 of 4</span>
+    <h1>Embedded &amp; Firmware</h1>
+    <p>RTOS design, microcontroller firmware, communication protocols, edge intelligence — making hardware actually do something useful.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="info-box">
+    <strong>Layer philosophy:</strong> A circuit without firmware is inert. Embedded systems are where the
+    physical and the computational meet: the firmware must respect the timing constraints of the hardware
+    (sensor acquisition rates, bus latencies, watchdog windows) while implementing the logic and protocols
+    that give the device its function. The projects here span production-grade RTOS firmware (paid contract),
+    process engineering tools (semiconductor manufacturing), and IoT edge systems (ESP32 + computer vision).
+    Each one required understanding both the hardware it runs on and the system it is part of.
+  </div>
+
+  <h2 class="section-title">Projects in this Layer</h2>
+
+  <div class="project-grid">
+
+    <div class="project-card">
+        <img src="images/stm32_hardware.png" alt="STM32 Datalogger" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-embedded">Embedded</span>
+          <h3><a href="projects/stm32-datalogger.html" class="stretched-link">STM32H743 FreeRTOS Datalogger</a></h3>
+          <p>Paid contract project. 6-task priority-scheduled RTOS firmware on STM32H743 (480 MHz). 100 Hz IMU via PCA9548A mux, 5 Hz GPS, 70-byte binary packets, raw SD sector writes with triple-redundant write pointers, RS232 telemetry. Evolved from V1→V5 after real field failures.</p>
+          <div class="tags">
+            <span class="tag">STM32H743</span><span class="tag">FreeRTOS</span><span class="tag">C</span><span class="tag">PCA9548A</span><span class="tag">SD / Raw I/O</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/stm32-rtos-datalogger" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/webapp_ui.png" alt="Semiconductor WebApp" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-embedded">Embedded</span>
+          <h3><a href="projects/semiconductor-webapp.html" class="stretched-link">Semiconductor Process Modeling WebApp</a></h3>
+          <p>Browser-based tool for proton-exchange (LiNbO₃) and thermal oxidation (Si) process modeling. HTML/JS frontend + Python (Flask) backend. Accepts Excel batch input or pyserial live sensor feed; real-time Deal-Grove and diffusion model plots.</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">JavaScript</span><span class="tag">SciPy</span><span class="tag">Process Modeling</span>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img src="images/identity_face.jpg" alt="Wireless Identity" class="project-card-img" />
+        <div class="project-card-body">
+          <span class="layer-badge layer-embedded">Embedded</span>
+          <h3><a href="projects/wireless-identity.html" class="stretched-link">Wireless Identity Recognition System</a></h3>
+          <p>Dual-threaded Python client: face recognition (face_recognition library, 128-D encoding) + 9-class gesture recognition (MediaPipe Hands, 21-landmark). TCP → ESP32 server over Wi-Fi. ESP32 dispatches GPIO/relay/UART actions based on received identity + gesture.</p>
+          <div class="tags">
+            <span class="tag">ESP32</span><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">TCP/Wi-Fi</span><span class="tag">C</span>
+          </div>
+          <div class="project-card-footer" style="margin-top:.8rem;">
+            <a href="https://github.com/muhammadzareii/iot_fun-main" target="_blank" class="btn btn-brand btn-sm" onclick="event.stopPropagation()">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="js/lightbox.js"></script>
+</body>
+</html>

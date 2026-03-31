@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FDTD Active Plasmonics — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html" class="active">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-physical.html">Physical &amp; Simulation</a><span>›</span>
+    <span class="current">FDTD Active Plasmonics</span>
+  </div>
+</div>
+
+<div class="page-hero hero-physical">
+  <div class="container">
+    <span class="layer-badge layer-physical">Layer 1 — Physical &amp; Simulation</span>
+    <h1>FDTD Active Plasmonics</h1>
+    <p>Semiclassical Maxwell-Bloch FDTD simulation of gain-modulated plasmonic waveguides and microcavities. Lorentz-Drude gold model, ~60% resonance amplitude enhancement.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">Maxwell-Bloch</span><span class="stat-label">FDTD Formulation</span></div>
+    <div class="stat"><span class="stat-value">Lorentz-Drude</span><span class="stat-label">Gold Model</span></div>
+    <div class="stat"><span class="stat-value">~60%</span><span class="stat-label">Resonance Amplitude Increase</span></div>
+    <div class="stat"><span class="stat-value">MSM + Cavity</span><span class="stat-label">Geometries</span></div>
+    <div class="stat"><span class="stat-value">MATLAB</span><span class="stat-label">Implementation</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source · MATLAB</p>
+      <a href="https://github.com/muhammadzareii/fdtd-active-plasmonics" target="_blank">github.com/muhammadzareii/fdtd-active-plasmonics</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    Surface plasmon polaritons (SPPs) are electromagnetic modes bound to a metal-dielectric interface,
+    with field amplitudes that decay exponentially into both media. They enable sub-diffraction-limit field
+    confinement — concentrating optical energy into volumes far smaller than a free-space wavelength — making
+    them attractive for nanoscale photonic devices. The fundamental limitation is propagation loss: the same
+    free electrons that support the plasmon also absorb it.
+  </p>
+  <p>
+    Active plasmonics addresses this by embedding optical gain material in the dielectric surrounding the
+    metal. Under pump illumination, stimulated emission from the gain medium compensates plasmonic absorption,
+    extending propagation length and — in a resonant cavity — enabling plasmonic lasing (spaser).
+  </p>
+  <p>
+    This project implements a full semiclassical Maxwell-Bloch FDTD solver to model this interaction. The
+    electromagnetic field (Maxwell's equations on a 2D Yee grid) is coupled to a quantum-mechanical two-level
+    population model (Bloch equations) describing the gain medium. Gold is modelled with a Lorentz-Drude
+    dispersion model that accurately captures its frequency-dependent permittivity across the visible spectrum.
+  </p>
+
+  <h2 class="section-title">Physical Model</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Lorentz-Drude Model for Gold</h3>
+  <p>
+    Gold's permittivity cannot be captured by a simple Drude model alone because interband transitions near
+    2.5 eV contribute a resonant dispersion. The Lorentz-Drude model adds a Lorentzian oscillator term:
+  </p>
+  <div class="eq">
+    ε(ω) = ε_∞ − ω_p² / (ω² + jγ_D·ω) + Δε·ω_L² / (ω_L² − ω² − jγ_L·ω)
+  </div>
+  <p>
+    where ω_p is the plasma frequency, γ_D is the Drude damping, and the Lorentzian term captures interband
+    effects. Parameters are fitted to Johnson &amp; Christy experimental data. In FDTD this is implemented via
+    an auxiliary differential equation (ADE) for the dispersive polarisation current.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Maxwell-Bloch Coupling</h3>
+  <p>
+    The gain medium is modelled as an ensemble of two-level atoms with transition frequency ω₀ and dipole
+    moment μ. The Bloch equations govern population inversion N = N₂ − N₁ and polarisation P:
+  </p>
+  <div class="eq">
+    dP/dt + (1/T₂)P = (μ²/ℏ)·N·E<br/>
+    dN/dt = −(N − N_eq)/T₁ + (E/ℏ)·dP/dt
+  </div>
+  <p>
+    P appears as a source term in Maxwell's curl equations (∂D/∂t = ∇×H − ∂P/∂t). T₁ is the population
+    relaxation time; T₂ is the dephasing time. N_eq is the equilibrium (pumped) inversion, which is the
+    control parameter: negative N_eq means net gain.
+  </p>
+
+  <h2 class="section-title">Geometries Simulated</h2>
+
+  <table>
+    <tr><th>Geometry</th><th>Description</th><th>Key Observable</th></tr>
+    <tr><td>MSM Waveguide</td><td>Metal–semiconductor–metal slab. Gain in semiconductor core.</td><td>Propagation length vs. pump level</td></tr>
+    <tr><td>Microcavity</td><td>Plasmonic resonator with gold boundaries. Gain medium filling.</td><td>Resonance amplitude, linewidth, lasing threshold</td></tr>
+    <tr><td>Nanoparticle-enhanced cavity</td><td>Gold nanoparticles in gain medium near resonator walls.</td><td>Field enhancement, ~60% amplitude increase</td></tr>
+  </table>
+
+  <h2 class="section-title">Results</h2>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/MSM_Waveguide.png" alt="MSM waveguide simulation" />
+      <div class="fig-caption"><strong>Fig. 1.</strong> MSM waveguide cross-section: electric field |E|² distribution. The SPP mode is tightly confined to the metal-semiconductor interfaces.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/Microcavity_Field_Distribution.png" alt="Microcavity field distribution" />
+      <div class="fig-caption"><strong>Fig. 2.</strong> Microcavity field distribution under gain pumping. Standing-wave pattern builds up as gain compensates radiation losses.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/Comparison_Resonance_Spectra.png" alt="Resonance spectra comparison" />
+      <div class="fig-caption"><strong>Fig. 3.</strong> Comparison of resonance spectra: passive cavity (no gain) vs. active cavity with nanoparticle-enhanced gain. ~60% amplitude increase at resonance with negligible linewidth change at sub-threshold pump levels.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>Key result:</strong> Introducing gold nanoparticles into the gain medium near the cavity walls increases
+    the local field by the nanoparticle plasmonic enhancement factor, which is then squared in stimulated
+    emission rate (which scales as |E|²). This produces the observed ~60% resonance amplitude increase at
+    pump levels well below the lasing threshold — a purely stimulated-emission-driven effect, not lasing.
+  </div>
+
+  <h2 class="section-title">Implementation Notes</h2>
+  <p>
+    The solver uses a standard 2D Yee grid (Δx = Δy = 2 nm, Δt = CFL-stable at 0.95×ΔtCFL). The Lorentz-Drude
+    ADE and Bloch equations are each integrated with a predictor-corrector scheme to maintain second-order
+    temporal accuracy. Total-field/scattered-field (TFSF) source injection launches a broadband pulse;
+    spectral analysis is performed via discrete Fourier transform computed on-the-fly during the time advance.
+    Perfectly Matched Layer (PML) absorbing boundaries are applied on all four sides.
+  </p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BIC Photonic Cell Classifier — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html" class="active">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>&#x203A;</span>
+    <a href="../layer-physical.html">Physical &amp; Simulation</a><span>&#x203A;</span>
+    <span class="current">BIC Photonic Cell Classifier</span>
+  </div>
+</div>
+
+<div class="page-hero hero-physical">
+  <div class="container">
+    <span class="layer-badge layer-physical">Layer 1 &mdash; Physical &amp; Simulation</span>
+    <span class="domain-tag domain-bio">Biomedical</span>
+    <span class="domain-tag domain-sensor">Photonic Sensor</span>
+    <h1>BIC Photonic Cell Classifier</h1>
+    <p>Quasi-bound-state-in-the-continuum (qBIC) Si nanocube resonator for label-free discrimination of benign and malignant prostate epithelial cells, combining COMSOL FDTD with Kramers&ndash;Kronig spectroscopy and SVM classification.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">Q &gt; 1000</span><span class="stat-label">Resonator Q-Factor</span></div>
+    <div class="stat"><span class="stat-value">655&ndash;725 nm</span><span class="stat-label">Working Wavelength Range</span></div>
+    <div class="stat"><span class="stat-value">Si / SiO&#x2082;</span><span class="stat-label">Material System</span></div>
+    <div class="stat"><span class="stat-value">82 samples</span><span class="stat-label">35 BPE + 47 MPE</span></div>
+    <div class="stat"><span class="stat-value">Dual-dip</span><span class="stat-label">Temperature Compensation</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Open source &middot; Python + COMSOL</p>
+      <a href="https://github.com/MuhammadZareII/bic-cell-classifier" target="_blank">github.com/MuhammadZareII/bic-cell-classifier</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    Bound states in the continuum (BIC) are resonant states that exist within the radiation continuum
+    but remain perfectly confined &mdash; zero radiative linewidth and theoretically infinite Q-factor &mdash;
+    due to complete destructive interference between all radiation channels. Introducing a small symmetry break
+    converts the ideal BIC into a <em>quasi-BIC</em> (qBIC) with a very high but finite Q-factor, creating a
+    sharp, observable transmission dip.
+  </p>
+  <p>
+    This project exploits that sharp dip for label-free biological sensing. The target is discriminating
+    <strong>benign prostate epithelium (BPE)</strong> from <strong>malignant prostate epithelium (MPE)</strong>
+    &mdash; cancer versus non-cancer cells &mdash; based on the refractive index (RI) difference they induce
+    in the surrounding medium. No fluorescent labels, no surface functionalization, no sample destruction.
+    The sensor reads RI directly from resonance shifts.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fig3_transmission_spectrum.png" alt="BIC transmission spectrum showing dual resonance dips" />
+    <span class="fig-num">Fig. 1.</span>
+    <span class="fig-caption">COMSOL-simulated BIC transmission spectrum. Two quasi-BIC resonance dips appear at distinct wavelengths within the 655&ndash;725 nm working range. Q &gt; 1000 at the sharper dip. Both dips have TSB &gt; 0; they respond with different sensitivity to RI and temperature changes, enabling temperature-compensated sensing.</span>
+  </figure>
+
+  <h2 class="section-title">Why Two Resonance Dips?</h2>
+  <p>
+    A temperature change shifts the refractive index of any liquid medium independently of the analyte &mdash;
+    creating an ambiguity: is the resonance shift from the cells, or from a temperature drift? A single dip
+    cannot separate these two effects. Two dips at different wavelengths have different sensitivities to RI
+    and to temperature. Their shift ratio solves a 2&times;2 system that decouples the two contributions,
+    giving a temperature-compensated RI measurement without any external thermometer.
+  </p>
+
+  <h2 class="section-title">Symmetry-Breaking Mechanism</h2>
+  <p>
+    An ideal periodic array of Si nanocubes supports a perfect BIC: no radiation, no observable dip.
+    The <strong>translational symmetry break (TSB)</strong> is a controlled lateral offset &delta; between
+    adjacent cube pairs. This breaks the in-plane symmetry, coupling the dark mode to radiation, and the
+    resonance becomes visible. The Q-factor scales as Q &prop; 1/&delta;&sup2;, so the sensitivity&ndash;linewidth
+    trade-off is tunable by design.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/bic_physical_off.png" alt="BIC nanocube array at non-resonant wavelength (TSB > 0) — qBIC mode not excited" />
+    <span class="fig-num">Fig. 2.</span>
+    <span class="fig-caption">Si nanocube array (TSB &gt; 0) illuminated at a non-resonant wavelength &mdash; between the two quasi-BIC dips. The qBIC mode is not excited; the field shows no anomalous confinement. Contrasting this panel with Fig.&nbsp;3 isolates the resonance-driven field enhancement from the underlying array geometry.</span>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/bic_physical_on.png" alt="BIC nanocube array at resonance wavelength (TSB > 0) showing strong qBIC field confinement" />
+    <span class="fig-num">Fig. 3.</span>
+    <span class="fig-caption">Same nanocube geometry (TSB &gt; 0) illuminated at a resonance wavelength. The quasi-BIC mode is excited; field energy concentrates strongly between and around the nanocubes. The only difference from Fig.&nbsp;2 is the illumination wavelength, demonstrating that the strong field confinement is resonance-driven, not geometric.</span>
+  </figure>
+
+  <h2 class="section-title">Sensor Design</h2>
+
+  <table>
+    <tr><th>Parameter</th><th>Value</th></tr>
+    <tr><td>Structure</td><td>Si nanocubes on SiO&#x2082; substrate</td></tr>
+    <tr><td>Nanocube width</td><td>130 nm (at 20 &deg;C)</td></tr>
+    <tr><td>Array periodicity</td><td>400 &times; 200 nm</td></tr>
+    <tr><td>Substrate thickness</td><td>150 nm</td></tr>
+    <tr><td>Simulation medium</td><td>Seawater-like reference (n = 1.35, salinity 0.35 %)</td></tr>
+    <tr><td>Working wavelength range</td><td>655 &ndash; 725 nm</td></tr>
+    <tr><td>Best Q-factor achieved</td><td>&gt; 1 000</td></tr>
+    <tr><td>Symmetry-breaking mechanism</td><td>Translational symmetry break (TSB) &mdash; lateral offset &delta; between cube pairs</td></tr>
+    <tr><td>Biological target</td><td>RI difference between BPE (benign) and MPE (malignant) prostate epithelium</td></tr>
+  </table>
+
+  <h2 class="section-title">Kramers&ndash;Kronig Spectral Conversion</h2>
+  <p>
+    Standard spectral databases, including the ATR-FTIR dataset used here, report absorbance A(&nu;&#771;). But
+    the BIC resonance responds physically to the real part of the complex refractive index n(&nu;&#771;) of the
+    surrounding medium. The Kramers&ndash;Kronig (K&ndash;K) relations convert between the two, following
+    from causality of the optical response:
+  </p>
+  <div class="eq">
+    n(&nu;&#771;) &minus; 1 = (2/&pi;) P.V. &int;<sub>0</sub><sup>&infin;</sup> &nu;&#771;&prime;&middot;k(&nu;&#771;&prime;) / (&nu;&#771;&prime;&sup2; &minus; &nu;&#771;&sup2;) d&nu;&#771;&prime;
+  </div>
+  <p>
+    where k(&nu;&#771;) is the extinction coefficient derived from absorbance, and P.V. is the Cauchy principal value.
+    The implementation uses Maclaurin's formula for the self-singular integral at &nu;&#771; = &nu;&#771;&prime;.
+    This converts every absorbance spectrum in the dataset into a refractive-index spectrum &mdash; the feature space
+    that physically corresponds to what the BIC sensor measures.
+  </p>
+
+  <figure class="ieee-fig">
+    <img src="../images/fig2_discriminant_wavenumbers.png" alt="ANOVA F-statistic for BPE vs MPE discrimination" />
+    <span class="fig-num">Fig. 4.</span>
+    <span class="fig-caption">ANOVA F-statistic across wavenumbers from the K&ndash;K-converted RI spectra. Peaks identify spectral regions where BPE and MPE are most separable in RI space &mdash; the physically informative features for the SVM classifier.</span>
+  </figure>
+
+  <h2 class="section-title">COMSOL Parametric Sweeps</h2>
+  <p>
+    All COMSOL FDTD simulations characterise the sensor in the same seawater-like reference medium.
+    What differs between simulation files is the <em>sweep parameter</em> &mdash; these are sensor
+    characterisation studies, not different sample environments. The named sweep files are:
+  </p>
+
+  <table>
+    <tr><th>Simulation file</th><th>Sweep parameter</th><th>Purpose</th></tr>
+    <tr><td><code>bic_spectrum_single.csv</code></td><td>&mdash;</td><td>Reference transmission at fixed geometry</td></tr>
+    <tr><td><code>bic_tsb_sweep.csv</code></td><td>TSB magnitude &delta; (nm)</td><td>Q-factor vs. symmetry break; maps Q &prop; 1/&delta;&sup2;</td></tr>
+    <tr><td><code>seawater_refined.csv</code></td><td>TSB magnitude &delta; (nm)</td><td>Refined TSB sweep in the reference seawater medium</td></tr>
+    <tr><td><code>bic_displacement_sweep.csv</code></td><td>Cube displacement d (nm)</td><td>Spectral shift as nanocube position varies</td></tr>
+    <tr><td><code>bic_nenv_sweep.csv</code></td><td>Environmental RI n<sub>env</sub></td><td>Sensitivity: &Delta;&lambda;&#x2080; / &Delta;n &mdash; the core sensing figure of merit</td></tr>
+  </table>
+
+  <figure class="ieee-fig">
+    <img src="../images/fig5_spectra_by_displacement.png" alt="BIC transmission spectra vs cube displacement" />
+    <span class="fig-num">Fig. 5.</span>
+    <span class="fig-caption">BIC transmission spectra as nanocube displacement d varies. Both resonance wavelength &lambda;&#x2080; and Q-factor respond measurably &mdash; geometry changes translate into detectable spectral shifts, confirming the sensor&rsquo;s operating principle.</span>
+  </figure>
+
+  <figure class="ieee-fig">
+    <img src="../images/fig6_q_vs_displacement.png" alt="Q-factor vs TSB displacement" />
+    <span class="fig-num">Fig. 6.</span>
+    <span class="fig-caption">Q-factor and resonance wavelength &lambda;&#x2080; versus TSB displacement &delta;. The Q &prop; 1/&delta;&sup2; dependence predicted by coupled-mode theory is confirmed. A larger TSB broadens the dip (lower Q) but increases signal visibility.</span>
+  </figure>
+
+  <h2 class="section-title">Classification: BPE vs. MPE</h2>
+  <p>
+    The dataset is 82 ATR-FTIR absorbance spectra from prostate tissue: 35 benign prostate epithelium (BPE)
+    and 47 malignant prostate epithelium (MPE). After K&ndash;K conversion, PCA reduces the high-dimensional
+    RI spectra to principal components capturing maximum variance. An SVM classifier with RBF kernel is
+    trained on PC scores and validated by 5-fold stratified cross-validation.
+  </p>
+
+  <figure class="ieee-fig" style="max-width:440px;">
+    <img src="../images/fig7_classification.png" alt="SVM confusion matrix: BPE vs MPE" />
+    <span class="fig-num">Fig. 7.</span>
+    <span class="fig-caption">5-fold cross-validation confusion matrix for PCA+SVM on K&ndash;K RI features. Rows: true class (BPE / MPE); columns: predicted class. Off-diagonal entries are misclassifications.</span>
+  </figure>
+
+  <h2 class="section-title">Pipeline Architecture</h2>
+
+  <div class="diagram-wrap">
+    <svg width="700" height="190" viewBox="0 0 700 190" font-family="'Times New Roman', serif" font-size="12">
+      <rect x="0" y="0" width="700" height="190" fill="#f0f4f8" rx="6"/>
+      <text x="350" y="20" text-anchor="middle" fill="#003366" font-size="13" font-weight="bold">BIC Cell Classifier &mdash; End-to-End Pipeline</text>
+      <defs>
+        <marker id="arr2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <polygon points="0,0 7,3.5 0,7" fill="#003366"/>
+        </marker>
+      </defs>
+      <rect x="10"  y="45" width="115" height="60" rx="6" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="67"  y="67" text-anchor="middle" fill="#003366" font-weight="bold" font-size="11">ATR-FTIR</text>
+      <text x="67"  y="82" text-anchor="middle" fill="#556" font-size="10">82 spectra</text>
+      <text x="67"  y="96" text-anchor="middle" fill="#556" font-size="10">BPE / MPE</text>
+      <rect x="148" y="45" width="125" height="60" rx="6" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="210" y="67" text-anchor="middle" fill="#003366" font-weight="bold" font-size="11">Kramers&ndash;Kronig</text>
+      <text x="210" y="82" text-anchor="middle" fill="#556" font-size="10">A(&#957;&#771;) &#x2192; n(&#957;&#771;)</text>
+      <rect x="296" y="45" width="130" height="60" rx="6" fill="#d4edda" stroke="#1a5c30" stroke-width="1.5"/>
+      <text x="361" y="67" text-anchor="middle" fill="#1a5c30" font-weight="bold" font-size="11">COMSOL FDTD</text>
+      <text x="361" y="82" text-anchor="middle" fill="#556" font-size="10">BIC spectra T(&#955;)</text>
+      <text x="361" y="96" text-anchor="middle" fill="#556" font-size="10">dual-dip analysis</text>
+      <rect x="449" y="45" width="115" height="60" rx="6" fill="#e3edf7" stroke="#003366" stroke-width="1.5"/>
+      <text x="507" y="71" text-anchor="middle" fill="#003366" font-weight="bold" font-size="11">PCA + SVM</text>
+      <text x="507" y="86" text-anchor="middle" fill="#556" font-size="10">5-fold CV</text>
+      <rect x="587" y="45" width="105" height="60" rx="6" fill="#003366" stroke="#003366" stroke-width="1.5"/>
+      <text x="639" y="71" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">BPE / MPE</text>
+      <text x="639" y="86" text-anchor="middle" fill="#aaddff" font-size="10">Classification</text>
+      <line x1="125" y1="75" x2="146" y2="75" stroke="#003366" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="273" y1="75" x2="294" y2="75" stroke="#003366" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="426" y1="75" x2="447" y2="75" stroke="#003366" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <line x1="564" y1="75" x2="585" y2="75" stroke="#003366" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="350" y="135" text-anchor="middle" fill="#1a5c30" font-size="10" font-style="italic">Dual-dip: two equations (&Delta;&lambda;&#x2081;, &Delta;&lambda;&#x2082;) &#x2192; two unknowns (&Delta;n<tspan font-style="normal">_analyte</tspan>, &Delta;T) &#x2192; temperature compensation</text>
+    </svg>
+    <div class="caption"><strong>Fig. 8.</strong> End-to-end pipeline: ATR-FTIR absorbance &rarr; K&ndash;K conversion to RI &rarr; COMSOL BIC dual-dip characterisation &rarr; PCA+SVM classification of BPE vs. MPE.</div>
+  </div>
+
+  <h2 class="section-title">Project Structure</h2>
+  <pre>bic-taste-sensor/               (original repo name, project was renamed)
+&#x251C;&#x2500;&#x2500; data/
+&#x2502;   &#x251C;&#x2500;&#x2500; MOESM2_ESM-C.xlsx          # ATR-FTIR absorbance spectra (82 samples: BPE/MPE)
+&#x2502;   &#x251C;&#x2500;&#x2500; bic_spectrum_single.csv    # COMSOL: reference transmission at fixed geometry
+&#x2502;   &#x251C;&#x2500;&#x2500; bic_tsb_sweep.csv          # COMSOL: transmission vs. TSB magnitude delta
+&#x2502;   &#x251C;&#x2500;&#x2500; seawater_refined.csv       # COMSOL: refined TSB sweep in seawater reference
+&#x2502;   &#x251C;&#x2500;&#x2500; bic_displacement_sweep.csv # COMSOL: transmission vs. cube displacement d
+&#x2502;   &#x2514;&#x2500;&#x2500; bic_nenv_sweep.csv         # COMSOL: sensitivity sweep - delta-lambda vs delta-n
+&#x251C;&#x2500;&#x2500; src/
+&#x2502;   &#x251C;&#x2500;&#x2500; config.py                  # Paths, sensor constants, plot style
+&#x2502;   &#x251C;&#x2500;&#x2500; kk.py                      # Kramers-Kronig converter (Maclaurin discretisation)
+&#x2502;   &#x2514;&#x2500;&#x2500; sensor.py                  # COMSOL loader, dip detection, Q-factor extraction
+&#x251C;&#x2500;&#x2500; results/figures/               # All publication-quality figures (300 DPI)
+&#x2514;&#x2500;&#x2500; generate_figures.py            # Reproduce all figures from raw data</pre>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;&middot;&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>
