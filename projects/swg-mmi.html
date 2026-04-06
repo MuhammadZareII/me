@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SWG-MMI Mode Demultiplexer — Muhammad Zareii</title>
+  <link rel="stylesheet" href="../css/style.css?v=3" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="../index.html" style="color:#fff;">M. <span style="color:var(--accent);">Zareii</span></a></div>
+    <nav class="site-nav">
+      <a href="../index.html">Home</a>
+      <a href="../layer-physical.html" class="active">Physical &amp; Sim</a>
+      <a href="../layer-circuit.html">Circuit &amp; HW</a>
+      <a href="../layer-embedded.html">Embedded &amp; FW</a>
+      <a href="../layer-intelligence.html">Intelligence</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a><span>›</span>
+    <a href="../layer-physical.html">Physical &amp; Simulation</a><span>›</span>
+    <span class="current">SWG-MMI Mode Demultiplexer</span>
+  </div>
+</div>
+
+<div class="page-hero hero-physical">
+  <div class="container">
+    <span class="layer-badge layer-physical">Layer 1 — Physical &amp; Simulation</span>
+    <h1>SWG-MMI Mode Demultiplexer</h1>
+    <p>Analytical simulation of a silicon-on-insulator sub-wavelength grating MMI mode demultiplexer.
+       Full-device 2D field reconstruction using Effective Medium Theory, Effective Index Method, and MMI self-imaging.
+       Validated against Lumerical FDTD — scripts available upon request.</p>
+  </div>
+</div>
+
+<main>
+<div class="container" style="padding-top:2rem; padding-bottom:3rem;">
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">36 µm</span><span class="stat-label">Device Footprint</span></div>
+    <div class="stat"><span class="stat-value">300 nm</span><span class="stat-label">Bandwidth (1.40–1.70 µm)</span></div>
+    <div class="stat"><span class="stat-value">EMT + EIM</span><span class="stat-label">Dispersion Model</span></div>
+    <div class="stat"><span class="stat-value">Lumerical</span><span class="stat-label">FDTD Validation</span></div>
+    <div class="stat"><span class="stat-value">SOI 220 nm</span><span class="stat-label">Platform</span></div>
+  </div>
+
+  <div class="github-block">
+    <svg height="28" viewBox="0 0 16 16" width="28" fill="#c9d1d9"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <div>
+      <p style="color:#8b949e; font-size:.82rem; margin-bottom:.2rem;">Python / NumPy · Lumerical FDTD scripts available on request</p>
+      <a href="https://github.com/muhammadzareii/swg-mmi-mode-demux" target="_blank">github.com/muhammadzareii/swg-mmi-mode-demux</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Overview</h2>
+  <p>
+    Mode-division multiplexing (MDM) is a strategy for increasing the data capacity of a photonic interconnect
+    without increasing bandwidth or power — by transmitting independent data streams on orthogonal spatial modes
+    (TE₀, TE₁, TE₂, …) through the same waveguide simultaneously. A mode demultiplexer is the key passive component:
+    it routes each mode to its own port, separating the streams for individual detection.
+  </p>
+  <p>
+    This project analytically simulates a compact SOI mode demultiplexer based on the González-Andrade 2018 design.
+    The device combines four passive elements — a Y-junction, a differential phase shifter, a sub-wavelength grating
+    (SWG) MMI coupler, and tapered transitions — to convert TE₁ to TE₀ and route TE₀ and TE₁ inputs to separate
+    output ports over a 300 nm wavelength range (1.40–1.70 µm). Total device length is approximately 36 µm on a
+    standard 220 nm SOI platform.
+  </p>
+  <p>
+    Rather than running a commercial FDTD solver, the simulation implements the full analytical design chain from
+    first principles: Effective Medium Theory extracts the SWG bulk properties, the Effective Index Method with
+    a bisection dispersion solver computes waveguide propagation constants, the MMI self-imaging condition calibrates
+    the beat length, and the 2D field distributions are reconstructed section-by-section using cosine mode
+    superposition with correct excitation amplitudes. The result matches the published paper figures without
+    any numerical integration of Maxwell's equations.
+  </p>
+
+  <h2 class="section-title">Device Architecture</h2>
+  <div class="fig-grid" style="grid-template-columns: 1fr;">
+    <div class="fig-item">
+      <img src="../images/swg_mmi_device.png" alt="SWG-MMI device top-view schematic" />
+      <div class="fig-caption"><strong>Fig. S1.</strong> Full device top-view schematic. Signal enters at Port 3 (right, single multimode waveguide) and is demultiplexed to Port 1 and Port 2 (left, single-mode wire waveguides). The four sections — Y-junction, phase shifter, and SWG-MMI with tapered stubs — are labelled with their key dimensions.</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Section</th><th>Function</th><th>Key Dimensions</th></tr>
+    <tr><td>Y-Junction</td><td>Splits TE₀ and TE₁ by symmetry — in-phase → stem, anti-phase → branches</td><td>W_stem = 1.0 µm, θ/2 = 12°, L = 7.14 µm</td></tr>
+    <tr><td>Phase Shifter</td><td>Adds Δφ = +90° between arms via width mismatch</td><td>W_upper = 0.70 µm, W_lower = 0.50 µm, L = 3.41 µm</td></tr>
+    <tr><td>Input Tapers</td><td>Adiabatic transition from wire to MMI port width</td><td>L_taper = 5.7 µm per stub</td></tr>
+    <tr><td>SWG-MMI Coupler</td><td>2×2 self-imaging coupler; cross-imaging at 3L_π/2</td><td>W = 3.25 µm, L = 14.06 µm, Λ = 190 nm, DC = 50%</td></tr>
+  </table>
+
+  <h2 class="section-title">Physical Model</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Sub-Wavelength Grating — Effective Medium Theory</h3>
+  <p>
+    The SWG inside the MMI coupler has a period Λ = 190 nm, far below the 1.55 µm operating wavelength. At sub-wavelength
+    periods, light cannot diffract off the individual teeth — instead the grating acts as a homogeneous uniaxial
+    anisotropic medium described by zeroth-order EMT:
+  </p>
+  <div class="eq">
+    n_∥² = DC · n_Si² + (1 − DC) · n_SiO₂²&nbsp;&nbsp;→&nbsp;&nbsp;n_∥ = 2.659
+  </div>
+  <div class="eq">
+    1/n_⊥² = DC/n_Si² + (1 − DC)/n_SiO₂²&nbsp;&nbsp;→&nbsp;&nbsp;n_⊥ = 1.891
+  </div>
+  <p>
+    The lower index contrast of the SWG effective medium compared to solid silicon reduces the sensitivity of the
+    MMI beat length to wavelength — this is the mechanism behind the 300 nm operating bandwidth.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">Effective Index Method and Propagation Constants</h3>
+  <p>
+    The SOI waveguide dispersion (220 nm Si core, SiO₂ substrate, air top cladding) is solved with the Effective
+    Index Method. The slab dispersion equation for TE modes is:
+  </p>
+  <div class="eq">
+    tan(κ·d) = κ(γ₁ + γ₂) / (κ² − γ₁γ₂)
+  </div>
+  <p>
+    where κ² = n_core²k₀² − β² and γ² = β² − n_clad²k₀². Propagation constants β₀ and β₁ for the two lowest MMI
+    modes are found by bisection (pure NumPy, no scipy). The MMI beat length Lπ = π/(β₀ − β₁) is calibrated from
+    the published L_MMI = 3Lπ/2 = 14.06 µm, giving Lπ_SWG = 9.373 µm at 1.55 µm.
+  </p>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">MMI Self-Imaging and Mode Decomposition</h3>
+  <p>
+    Inside the MMI, the field is decomposed into two cosine modes excited at the input port positions (±W_MMI/6
+    from the centre, for optimal 2×2 coupling):
+  </p>
+  <div class="eq">
+    E(x, z) = c₀ · cos(πx/W) · exp(iβ₀z) + c₁ · cos(3πx/W) · exp(iβ₁z)
+  </div>
+  <p>
+    For TE₀ input (in-phase excitation at both ports), c₀ = A_top + A_bot and c₁ = A_top − A_bot, producing
+    a constructive image at the cross port at z = 3Lπ/2. For TE₁ input (anti-phase), the sign of c₁ reverses,
+    routing power to the bar port. The phase shifter corrects the residual π/2 phase so that the Y-junction
+    produces clean mode-selective output.
+  </p>
+
+  <h2 class="section-title">Results</h2>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">S-Parameter Spectrum</h3>
+  <div class="fig-grid" style="grid-template-columns: 1fr;">
+    <div class="fig-item">
+      <img src="../images/swg_mmi_sparams.png" alt="MMI S-parameters and full device performance" />
+      <div class="fig-caption"><strong>Fig. 4 / 6.</strong> Simulated S-parameters of the SWG-MMI coupler and full device insertion loss / crosstalk vs. wavelength (1.40–1.70 µm). The SWG's reduced index contrast extends the self-imaging bandwidth well beyond a conventional solid-Si MMI.</div>
+    </div>
+  </div>
+
+  <h3 style="margin:1.2rem 0 .5rem; color:var(--brand);">2D Field Distributions</h3>
+  <div class="fig-grid">
+    <div class="fig-item">
+      <img src="../images/swg_mmi_field_te0.png" alt="TE0 field distribution" />
+      <div class="fig-caption"><strong>Fig. 7.</strong> TE₀ input at Port 3: reconstructed |Ey|² field through the full device at λ = 1.40, 1.55, 1.70 µm. Self-imaging in the MMI routes power to a single output port. The field is plotted with z vertical (Ports 1&amp;2 at bottom, Port 3 at top), jet colourmap.</div>
+    </div>
+    <div class="fig-item">
+      <img src="../images/swg_mmi_field_te1.png" alt="TE1 field distribution" />
+      <div class="fig-caption"><strong>Fig. 8.</strong> TE₁ input at Port 3: the antisymmetric field after the Y-junction, phase correction, and MMI self-imaging routes power to the complementary output port — demonstrating clean mode demultiplexing across the full 300 nm bandwidth.</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>Key result:</strong> TE₀ and TE₁ inputs at Port 3 are routed to different output ports (Port 1 and Port 2)
+    across a 300 nm bandwidth, reproducing the published field maps analytically. The sub-wavelength grating inside
+    the MMI is the bandwidth-extension mechanism: by lowering the effective index contrast, it reduces the wavelength
+    sensitivity of the self-imaging condition.
+  </div>
+
+  <h2 class="section-title">Implementation Notes</h2>
+  <p>
+    The simulation is entirely analytical — no time-domain integration, no meshing, no PML boundaries. Each device
+    section (input stubs, tapered transitions, MMI, phase shifter, Y-junction) is modelled with an appropriate
+    field profile: Gaussian and Hermite-Gaussian for single-mode waveguides, cosine mode superposition for the MMI,
+    and a cross-faded transition profile through the Y-junction. The resulting 2D complex field E_y(x, z) is assembled
+    section-by-section across a 200 × 800 grid at each wavelength.
+  </p>
+  <p>
+    The dispersion solver uses bisection on the TE slab equation — the only non-trivial numerical step. No scipy
+    is used anywhere; a manual 1D Gaussian convolution is implemented in NumPy for field smoothing. All 12 publication-
+    quality figures (Figs 3–9, FigS1–FigS5) are generated by three independent scripts covering device physics,
+    geometry diagrams, and field reconstruction. The analytical results are validated against full Lumerical FDTD
+    simulations; those scripts are available upon request.
+  </p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Muhammad Zareii &mdash; <a href="mailto:zareii.muhammad@gmail.com">zareii.muhammad@gmail.com</a>
+    &nbsp;·&nbsp; <a href="https://github.com/muhammadzareii" target="_blank">github.com/muhammadzareii</a></p>
+  </div>
+</footer>
+
+<script src="../js/lightbox.js"></script>
+</body>
+</html>
